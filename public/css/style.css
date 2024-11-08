@@ -1,0 +1,30 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f4f8;
+}
+.content {
+    display: flex;
+    max-width: 1200px;
+    margin: 20px auto;
+}
+.map-container {
+    width: 65%;
+    padding-right: 10px;
+}
+#map {
+    height: 600px;
+    width: 100%;
+    border-radius: 8px;
+}
+.results {
+    width: 35%;
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+}
+.result-item {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+}
