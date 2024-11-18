@@ -5,12 +5,16 @@ class Database {
 
     private $host = 'localhost';
     private $db = 'petbesties';
-    private $user = 'root';
-    private $pass = '';
+    private $user = 'admin';
+    private $pass = 'SN2x@XukD7fzHQz/';
 
     private function __construct() {
-        $this->conn = new PDO("mysql:host={$this->host};dbname={$this->db}", $this->user, $this->pass);
-        $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        try {
+            $this->conn = new PDO("mysql:host={$this->host};dbname={$this->db}", $this->user, $this->pass);
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            echo 'Connection failed: ' . $e->getMessage();
+        }
     }
 
     public static function getInstance() {

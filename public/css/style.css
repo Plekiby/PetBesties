@@ -4,27 +4,38 @@ body {
     padding: 0;
     background-color: #f0f4f8;
 }
-.content {
+
+header {
+    background-color: #009688;
+    color: #fff;
+    padding: 15px;
+    text-align: center;
+}
+
+nav {
     display: flex;
-    max-width: 1200px;
-    margin: 20px auto;
-}
-.map-container {
-    width: 65%;
-    padding-right: 10px;
-}
-#map {
-    height: 600px;
-    width: 100%;
-    border-radius: 8px;
-}
-.results {
-    width: 35%;
-    background-color: #ffffff;
+    justify-content: center;
+    background-color: #00796b;
     padding: 10px;
-    border-radius: 8px;
 }
-.result-item {
-    border-bottom: 1px solid #ddd;
-    padding: 10px 0;
+
+.nav-list {
+    list-style: none;
+    display: flex;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-list li {
+    margin: 0 15px;
+}
+
+.nav-list a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.nav-list a:hover {
+    text-decoration: underline;
 }

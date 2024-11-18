@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PetBesties</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <link rel="stylesheet" href="css/style.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -106,24 +105,22 @@
 </head>
 
 <body>
-    <?php include __DIR__ . '/header.php'; ?>
-
     <div class="filter-bar">
     <form method="GET" action="">
         <div>
-            <label><input type="checkbox" name="promenade" value="1" <?= isset($_GET['promenade']) ? 'checked' : '' ?>> Promenade</label>
-            <label><input type="checkbox" name="hebergement" value="1" <?= isset($_GET['hebergement']) ? 'checked' : '' ?>> Hébergement</label>
+            <label><input type="checkbox" name="promenade" value="1" > Promenade</label>
+            <label><input type="checkbox" name="hebergement" value="1" > Hébergement</label>
         </div>
         <div>
             <label>Prix max :</label>
-            <input type="range" name="prix_max" min="0" max="100" value="<?= isset($_GET['prix_max']) ? htmlspecialchars($_GET['prix_max']) : '50' ?>">
+            <input type="range" name="prix_max" min="0" max="100" value="">
         </div>
         <div>
             <label>Type d'animal :</label>
-            <label><input type="checkbox" name="chien" value="1" <?= isset($_GET['chien']) ? 'checked' : '' ?>> Chien</label>
-            <label><input type="checkbox" name="chat" value="1" <?= isset($_GET['chat']) ? 'checked' : '' ?>> Chat</label>
-            <label><input type="checkbox" name="oiseau" value="1" <?= isset($_GET['oiseau']) ? 'checked' : '' ?>> Oiseau</label>
-            <label><input type="checkbox" name="rongeur" value="1" <?= isset($_GET['rongeur']) ? 'checked' : '' ?>> Rongeur</label>
+            <label><input type="checkbox" name="chien" value="1" > Chien</label>
+            <label><input type="checkbox" name="chat" value="1" > Chat</label>
+            <label><input type="checkbox" name="oiseau" value="1" > Oiseau</label>
+            <label><input type="checkbox" name="rongeur" value="1" > Rongeur</label>
         </div>
         <button type="submit">Filtrer</button>
     </form>
@@ -134,17 +131,21 @@
         <div id="map"></div>
     </div>
     <div class="results">
-        <?php foreach ($prestataires as $prestataire): ?>
-            <div class="result-item">
-                <img src="<?= htmlspecialchars($prestataire['photo']); ?>" alt="Photo de <?= htmlspecialchars($prestataire['nom']); ?>">
-                <div class="info">
-                    <h4><?= htmlspecialchars($prestataire['nom']); ?></h4>
-                    <p><?= htmlspecialchars($prestataire['ville']); ?></p>
-                    <p>À partir de <?= htmlspecialchars($prestataire['tarif']); ?> € par promenade</p>
-                    <p>Note : <?= htmlspecialchars($prestataire['avis']); ?> (<?= htmlspecialchars($prestataire['nb_avis']); ?> avis)</p>
+        <?php if (!empty($prestataires)): ?>
+            <?php foreach ($prestataires as $prestataire): ?>
+                <div class="result-item">
+                    <img src="<?= htmlspecialchars($prestataire['photo']); ?>" alt="Photo de <?= htmlspecialchars($prestataire['nom']); ?>">
+                    <div class="info">
+                        <h4><?= htmlspecialchars($prestataire['nom']); ?></h4>
+                        <p><?= htmlspecialchars($prestataire['ville']); ?></p>
+                        <p>À partir de <?= htmlspecialchars($prestataire['tarif']); ?> € par promenade</p>
+                        <p>Note : <?= htmlspecialchars($prestataire['avis']); ?> (<?= htmlspecialchars($prestataire['nb_avis']); ?> avis)</p>
+                    </div>
                 </div>
-            </div>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>Aucun prestataire trouvé.</p>
+        <?php endif; ?>
     </div>
 </div>
 
@@ -160,12 +161,14 @@
         }).addTo(map);
 
         // Ajout des marqueurs pour chaque prestataire
-        const locations = <?= json_encode($prestataires); ?>;
+        const locations = <?= json_encode($prestataires ?? []); ?>;
 
-        locations.forEach((location) => {
-            L.marker([location.latitude, location.longitude]).addTo(map)
-                .bindPopup(`<b>${location.nom}</b><br>${location.tarif} € par promenade`);
-        });
+        if (locations.length > 0) {
+            locations.forEach((location) => {
+                L.marker([location.latitude, location.longitude]).addTo(map)
+                    .bindPopup(`<b>${location.nom}</b><br>${location.tarif} € par promenade`);
+            });
+        }
     </script>
     <?php include __DIR__ . '/footer.php'; ?>
 
