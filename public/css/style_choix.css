@@ -1,0 +1,120 @@
+/* Choix du statut */
+
+/* Corps de la page */
+body {
+    background-color: #4e918f;
+    color: white;
+    line-height: 1.6;
+}
+
+/* En-tête */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    background-color: white;
+    color: black;
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+}
+
+header .logo img {
+    width: 70px;
+    margin-right: 10px;
+}
+
+header nav {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+header nav a {
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+header .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+header .btn.primary {
+    background-color: #5b3b5b;
+    color: white;
+}
+
+header .btn.secondary {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+}
+
+/* Contenu principal */
+main {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+main h1 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+.form-container {
+    background-color: white;
+    color: black;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 400px;
+    margin: 0 auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-container input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Bouton principal */
+.form-container .btn {
+    background-color: #5b3b5b;
+    color: white;
+    cursor: pointer;
+}
+
+/* Double bouton pour le choix du statut */
+.double-button {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.double-button .btn {
+    flex: 1;
+    text-align: center;
+}
+
+.double-button .btn.secondary {
+    background-color: #e0e0e0;
+    color: black;
+}
+
+.double-button .btn.primary {
+    background-color: #5b3b5b;
+    color: white;
+}
