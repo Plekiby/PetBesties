@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Mes candidatures</title>
-    <link rel="stylesheet" type="text/css" href="mescandidatures.css">
+    <link rel="stylesheet" type="text/css" href="petbesties/public/css/mescandidatures.css">
 </head>
 <body>
     <h1 class="titre">Mes candidatures</h1>
