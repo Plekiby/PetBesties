@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mot de Passe Oublié</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/petbesties/public/css/style_mdp.css">
 </head>
 <body>
     <header>
         <div class="logo">
-            <img src="/Users/Oscar/Desktop/ISEP/A1/APP/Site WEB/logo.png" alt="PetBesties Logo">
+            <img src="/petbesties/public/images/logo.png" alt="PetBesties Logo">
             <span>PetBesties</span>
         </div>
         <nav>

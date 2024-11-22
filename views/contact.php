@@ -3,87 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PetBesties - Contactez-nous</title>
-    <link rel="stylesheet" type="text/css" href="style_contact.css">
+    <title>Contactez-nous</title>
+    <link rel="stylesheet" href="style_contact.css">
 </head>
 <body>
     <header>
-        <div class="logo">
-            <img src="/Users/Oscar/Desktop/ISEP/A1/APP/Site WEB/logo.png" alt="PetBesties Logo">
-        </div>
-        <nav>
-            <ul>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="/Users/Oscar/Desktop/ISEP/A1/APP/Site WEB/logo.png" alt="PetBesties">
+            </div>
+            <ul class="menu">
                 <li><a href="#">PetSitter</a></li>
                 <li><a href="#">PetOwner</a></li>
                 <li><a href="#">Contact</a></li>
-                <li><a href="#" class="signup">S'inscrire</a></li>
-                <li><a href="#" class="login">Connexion</a></li>
             </ul>
+            <div class="actions">
+                <button class="btn">S'inscrire</button>
+                <button class="btn">Connexion</button>
+            </div>
         </nav>
     </header>
+
     <main>
-        <section class="contact-form">
+        <section class="contact-section">
             <h1>Contactez-nous</h1>
-            <form>
+            <form class="contact-form">
                 <label for="prenom">Prénom</label>
-                <input type="text" id="prenom" name="prenom">
-                
+                <input type="text" id="prenom" placeholder="...">
+
                 <label for="nom">Nom</label>
-                <input type="text" id="nom" name="nom">
-                
+                <input type="text" id="nom" placeholder="...">
+
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email">
-                
+                <input type="email" id="email" placeholder="...">
+
                 <label for="message">Message</label>
-                <textarea id="message" name="message"></textarea>
-                
-                <button type="submit">Envoyer</button>
+                <textarea id="message" placeholder="..."></textarea>
+
+                <button type="submit" class="submit-btn">Envoyer</button>
             </form>
         </section>
     </main>
+
     <footer>
         <div class="footer-content">
-            <div class="social-media">
-                <a href="#"><img src="icon1.png" alt="Icon 1"></a>
-                <a href="#"><img src="icon2.png" alt="Icon 2"></a>
-                <a href="#"><img src="icon3.png" alt="Icon 3"></a>
-                <a href="#"><img src="icon4.png" alt="Icon 4"></a>
+            <div class="social-icons">
+                <a href="#"><img src="icon-instagram.png" alt="Instagram"></a>
+                <a href="#"><img src="icon-youtube.png" alt="YouTube"></a>
+                <a href="#"><img src="icon-linkedin.png" alt="LinkedIn"></a>
             </div>
-            <div class="links">
-                <div class="use-cases">
-                    <h3>Use cases</h3>
+            <div class="footer-links">
+                <div>
+                    <h4>Use cases</h4>
                     <ul>
-                        <li><a href="#">UI design</a></li>
-                        <li><a href="#">UX design</a></li>
-                        <li><a href="#">Wireframing</a></li>
-                        <li><a href="#">Diagramming</a></li>
-                        <li><a href="#">Brainstorming</a></li>
-                        <li><a href="#">Online whiteboard</a></li>
-                        <li><a href="#">Team collaboration</a></li>
+                        <li>UI design</li>
+                        <li>UX design</li>
+                        <li>Wireframing</li>
+                        <li>Diagramming</li>
+                        <li>Brainstorming</li>
+                        <li>Online whiteboard</li>
+                        <li>Team collaboration</li>
                     </ul>
                 </div>
-                <div class="explore">
-                    <h3>Explore</h3>
+                <div>
+                    <h4>Explore</h4>
                     <ul>
-                        <li><a href="#">Design</a></li>
-                        <li><a href="#">Prototyping</a></li>
-                        <li><a href="#">Development features</a></li>
-                        <li><a href="#">Design systems</a></li>
-                        <li><a href="#">Collaboration features</a></li>
-                        <li><a href="#">Design process</a></li>
-                        <li><a href="#">FigJam</a></li>
+                        <li>Design</li>
+                        <li>Prototyping</li>
+                        <li>Development features</li>
+                        <li>Design systems</li>
+                        <li>Collaboration features</li>
+                        <li>Design process</li>
+                        <li>FigJam</li>
                     </ul>
                 </div>
-                <div class="resources">
-                    <h3>Resources</h3>
+                <div>
+                    <h4>Resources</h4>
                     <ul>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Best practices</a></li>
-                        <li><a href="#">Colors</a></li>
-                        <li><a href="#">Color wheel</a></li>
-                        <li><a href="#">Support</a></li>
-                        <li><a href="#">Developers</a></li>
-                        <li><a href="#">Resource library</a></li>
+                        <li>Blog</li>
+                        <li>Best practices</li>
+                        <li>Colors</li>
+                        <li>Color wheel</li>
+                        <li>Support</li>
+                        <li>Developers</li>
+                        <li>Resource library</li>
                     </ul>
                 </div>
             </div>
@@ -91,3 +94,4 @@
     </footer>
 </body>
 </html>
+

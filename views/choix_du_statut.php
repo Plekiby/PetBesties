@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Choix du Statut</title>
-    <link rel="stylesheet" href="style_choix.css">
+    <link rel="stylesheet" href="/petbesties/public/css/style_choix.css">
 </head>
 <body>
     <header>
