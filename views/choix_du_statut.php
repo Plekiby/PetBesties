@@ -7,79 +7,37 @@
     <link rel="stylesheet" href="/petbesties/public/css/style_choix.css">
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <img src="/Users/Oscar/Desktop/ISEP/A1/APP/Site WEB/logo.png" alt="PetBesties Logo">
-            <span>PetBesties</span>
-        </div>
-        <nav>
-            <a href="#">Trouver PetSitter</a>
-            <a href="#">Devenir PetOwner</a>
-            <a href="#">Contact</a>
-            <button class="btn secondary">S'inscrire</button>
-            <button class="btn primary">Connexion</button>
-        </nav>
-    </header>
-    
-    <main>
+    <main class="status-selection">
         <h1>Choix du Statut</h1>
-        <div class="form-container">
-            <form>
-                <label for="email">Email</label>
-                <input type="email" id="email" placeholder="jane@example.com" required>
+        <form class="status-form">
+            <input type="email" placeholder="jane@example.com" class="input-field" required>
+            <input type="password" placeholder="********" class="input-field" required>
 
-                <label for="password">Mot de passe</label>
-                <input type="password" id="password" placeholder="********" required>
+            <div class="status-toggle">
+                <label class="toggle-option">
+                    <input type="radio" name="status" value="PetOwner" checked>
+                    <span>PetOwner</span>
+                </label>
+                <label class="toggle-option">
+                    <input type="radio" name="status" value="PetSitter">
+                    <span>PetSitter</span>
+                </label>
+            </div>
 
-                <div class="double-button">
-                    <button type="button" class="btn primary">PetSitter</button>
-                    <button type="button" class="btn secondary">PetOwner</button>
-                </div>
-
-                <button type="submit" class="btn primary">Next</button>
-            </form>
-        </div>
+            <button type="submit" class="btn-next">NEXT</button>
+        </form>
+        <p class="terms">
+            En me connectant ou en m'inscrivant, j'accepte les 
+            <a href="#">Conditions Générales de Service</a> et la 
+            <a href="#">Politique de Confidentialité</a> de PetBesties. 
+            Je consens à recevoir des e-mails et des communications marketing de la part de PetBesties et de ses affiliés et je confirme avoir 18 ans ou plus.
+        </p>
     </main>
-
-    <footer>
-        <div class="footer-links">
-            <div>
-                <h4>Use cases</h4>
-                <ul>
-                    <li>UI design</li>
-                    <li>UX design</li>
-                    <li>Wireframing</li>
-                    <li>Diagramming</li>
-                    <li>Brainstorming</li>
-                    <li>Online whiteboard</li>
-                    <li>Team collaboration</li>
-                </ul>
-            </div>
-            <div>
-                <h4>Explore</h4>
-                <ul>
-                    <li>Design</li>
-                    <li>Prototyping</li>
-                    <li>Development features</li>
-                    <li>Design systems</li>
-                    <li>Collaboration features</li>
-                    <li>Design process</li>
-                    <li>FigJam</li>
-                </ul>
-            </div>
-            <div>
-                <h4>Resources</h4>
-                <ul>
-                    <li>Blog</li>
-                    <li>Best practices</li>
-                    <li>Colors</li>
-                    <li>Color wheel</li>
-                    <li>Support</li>
-                    <li>Developers</li>
-                    <li>Resource library</li>
-                </ul>
-            </div>
-        </div>
-    </footer>
 </body>
 </html>
+
+
+
+
+
+

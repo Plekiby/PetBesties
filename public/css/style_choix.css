@@ -1,120 +1,208 @@
-/* Choix du statut */
-
-/* Corps de la page */
+/* styles.css */
 body {
-    background-color: #4e918f;
-    color: white;
-    line-height: 1.6;
-}
-
-/* En-tête */
-header {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #2b8b89;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    padding: 20px 50px;
-    background-color: white;
-    color: black;
+    height: 100vh;
+    color: #fff;
 }
 
-header .logo {
-    display: flex;
-    align-items: center;
-}
-
-header .logo img {
-    width: 70px;
-    margin-right: 10px;
-}
-
-header nav {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-header nav a {
-    color: black;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-header .btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-header .btn.primary {
-    background-color: #5b3b5b;
-    color: white;
-}
-
-header .btn.secondary {
-    background-color: white;
-    color: black;
-    border: 1px solid black;
-}
-
-/* Contenu principal */
-main {
+.status-selection {
     text-align: center;
-    padding: 50px 20px;
-}
-
-main h1 {
-    font-size: 2.5rem;
-    margin-bottom: 30px;
-}
-
-.form-container {
-    background-color: white;
-    color: black;
-    padding: 30px;
-    border-radius: 10px;
+    width: 100%;
     max-width: 400px;
-    margin: 0 auto;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    box-sizing: border-box;
 }
 
-.form-container form {
+h1 {
+    font-size: 2.8rem;
+    font-weight: bold;
+    margin-bottom: 2.5rem;
+    color: #ffffff;
+    animation: fadeInDown 1s ease-out;
+}
+
+.status-form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 1.5rem;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 20px;
+    color: #333;
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.15);
+    animation: fadeInUp 1s ease-out;
 }
 
-.form-container input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+.input-field {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-sizing: border-box;
+    transition: all 0.3s ease-in-out;
+    background-color: #f9f9f9;
 }
 
-/* Bouton principal */
-.form-container .btn {
-    background-color: #5b3b5b;
-    color: white;
-    cursor: pointer;
+.input-field:focus {
+    outline: none;
+    border-color: #2b8b89;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(43, 139, 137, 0.4);
 }
 
-/* Double bouton pour le choix du statut */
-.double-button {
+/* New modern toggle styling */
+.status-toggle {
     display: flex;
-    gap: 10px;
     justify-content: space-between;
+    border: 1px solid #ddd;
+    background-color: #f3f3f3;
+    border-radius: 15px;
+    padding: 5px;
+    width: 100%;
+    max-width: 300px;
+    position: relative;
+    transition: background-color 0.3s ease-in-out;
 }
 
-.double-button .btn {
+.status-toggle:hover {
+    background-color: #eaeaea;
+}
+
+.toggle-option {
     flex: 1;
     text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    color: #666;
+    position: relative;
+    transition: color 0.3s ease-in-out;
 }
 
-.double-button .btn.secondary {
-    background-color: #e0e0e0;
-    color: black;
+.toggle-option input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
 }
 
-.double-button .btn.primary {
-    background-color: #5b3b5b;
-    color: white;
+.toggle-option span {
+    display: block;
+    padding: 1rem 0;
+    border-radius: 15px;
+    transition: all 0.3s ease-in-out;
+    background-color: transparent;
+}
+
+.toggle-option input:checked + span {
+    background-color: #2b8b89;
+    color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Ultra-modern button styling */
+.btn-modern {
+    width: 100%;
+    max-width: 300px;
+    padding: 1rem 1.5rem;
+    background: #2b8b89;
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    overflow: hidden;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.btn-modern:hover {
+    transform: translateY(-3px);
+    background-color: #236c6b;
+    box-shadow: 0px 12px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn-modern:active {
+    transform: translateY(1px);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.btn-modern::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.4s ease, height 0.4s ease;
+}
+
+.btn-modern:hover::before {
+    width: 300%;
+    height: 300%;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Subtle Terms and Conditions */
+.terms {
+    font-size: 0.8rem;
+    margin-top: 1.5rem;
+    line-height: 1.4;
+    color: #ddd;
+    animation: fadeIn 2s ease-out;
+}
+
+.terms a {
+    color: #fff;
+    text-decoration: underline;
+    transition: color 0.3s ease-in-out;
+}
+
+.terms a:hover {
+    color: #b0e3e0;
+}
+
+/* Animations */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
