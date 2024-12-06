@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mot de Passe Oublié</title>
-    <link rel="stylesheet" href="/Petbesties/public/css/style_mdp.css">
+    <link rel="stylesheet" href="/Petbesties_1/public/css/style_mdp.css">
 </head>
 <body>
     <main>
