@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
 
-<link rel="stylesheet" type="text/css" href="../public/css/CSSAccueil.css">
+<link rel="stylesheet" type="text/css" href="/Petbesties/public/css/CSSAccueil.css">
 
 <body>
     <main>
         <section class="hero">
             <div class="hero-content">
-                <img src="../public/images/Imagepageaccueil.png" alt="Chien et chat câlinés">
+                <img src="/Petbesties/public/images/Imagepageaccueil.png" alt="Chien et chat câlinés">
                 <h1>Trouvez le PetSitter proche de chez vous !</h1>
                 <div class="search-container">
                     <input type="text" placeholder="Code Postal">
@@ -47,11 +47,11 @@
         </section>
         <section class="confiance">
             <div>
-                <img src="../public/images/Trustpilot.png" alt="trustpilot">
+                <img src="/Petbesties/public/images/Trustpilot.png" alt="trustpilot">
             </div>
         </section>
         <section class="side-image">
-            <img src="../public/images/Photochiencoté.png" alt="Chien illustratif à gauche">
+            <img src="/Petbesties/public/images/Photochiencoté.png" alt="Chien illustratif à gauche">
         </section>
        
         <section class="latest-reviews">
