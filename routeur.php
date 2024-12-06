@@ -59,4 +59,9 @@ $router->add('/profil', function() {
     include __DIR__ . '/views/footer.php';
 });
 
+
+
+
+
+
 ?>

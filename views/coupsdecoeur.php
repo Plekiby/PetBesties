@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="coupsdecoeur.css">
 </head>
 <body>
-    <h1 class="titre">Mes coups de coeur</h1>
+    <h1 class="titreh">Mes coups de coeur</h1>
     <div class="premier_carre">
         <div class="sous-carre">
             <div class="profil">
