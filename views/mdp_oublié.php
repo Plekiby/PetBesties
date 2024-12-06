@@ -4,23 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mot de Passe Oublié</title>
-    <link rel="stylesheet" href="/petbesties/public/css/style_mdp.css">
+    <link rel="stylesheet" href="/Petbesties/public/css/style_mdp.css">
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <img src="/petbesties/public/images/logo.png" alt="PetBesties Logo">
-            <span>PetBesties</span>
-        </div>
-        <nav>
-            <a href="#">Trouver PetSitter</a>
-            <a href="#">Devenir PetOwner</a>
-            <a href="#">Contact</a>
-            <button class="btn secondary">S'inscrire</button>
-            <button class="btn primary">Connexion</button>
-        </nav>
-    </header>
-    
     <main>
         <h1>Mot de passe oublié</h1>
         <div class="form-container">
@@ -43,46 +29,5 @@
             </p>
         </div>
     </main>
-
-    <footer>
-        <div class="footer-links">
-            <div>
-                <h4>Use cases</h4>
-                <ul>
-                    <li>UI design</li>
-                    <li>UX design</li>
-                    <li>Wireframing</li>
-                    <li>Diagramming</li>
-                    <li>Brainstorming</li>
-                    <li>Online whiteboard</li>
-                    <li>Team collaboration</li>
-                </ul>
-            </div>
-            <div>
-                <h4>Explore</h4>
-                <ul>
-                    <li>Design</li>
-                    <li>Prototyping</li>
-                    <li>Development features</li>
-                    <li>Design systems</li>
-                    <li>Collaboration features</li>
-                    <li>Design process</li>
-                    <li>FigJam</li>
-                </ul>
-            </div>
-            <div>
-                <h4>Resources</h4>
-                <ul>
-                    <li>Blog</li>
-                    <li>Best practices</li>
-                    <li>Colors</li>
-                    <li>Color wheel</li>
-                    <li>Support</li>
-                    <li>Developers</li>
-                    <li>Resource library</li>
-                </ul>
-            </div>
-        </div>
-    </footer>
 </body>
 </html>
