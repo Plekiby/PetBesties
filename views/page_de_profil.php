@@ -11,7 +11,7 @@
 <div class="profile-container">
     <div class="profile-header">
         <div class="profile-image">
-            <!-- Image de profil (ajoutez votre propre image ici) -->
+            
             <img src="/petbesties/public/images/image_profil.png" alt="Profile Image">
             <button class="add-image">+ Add an Image</button>
         </div>
