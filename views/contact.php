@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contactez-nous</title>
-    <link rel="stylesheet" href="/Petbesties_1/public/css/style_contact.css">
+    <link rel="stylesheet" href="/Petbesties/public/css/style_contact.css">
 </head>
 <body>
     <header>
