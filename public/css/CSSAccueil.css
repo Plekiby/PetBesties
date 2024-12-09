@@ -6,7 +6,7 @@ body {
 }
     /* Section hero */
 .hero {
-    background-color: #2b897f;
+    background-color: #128f8b;
     text-align: center;
     padding: 40px 20px;
 }
@@ -42,13 +42,13 @@ body {
     border-radius: 20px;
     outline: none;
     transition: all 0.3s ease;
-    color: #2b897f;
+    color: #128f8b;
 }
 
 .search-container input[type="text"]:focus {
     border-color: #1a5e50;
     background-color: #f0f0f0;
-    color: #2b897f;
+    color: #128f8b;
 }
 
 /* Placeholder */
@@ -62,7 +62,7 @@ body {
     height: 42px;
     padding: 0 20px;
     background-color: white;
-    color: #2b897f;
+    color: #128f8b;
     border: 2px solid white;
     border-radius: 20px;
     font-size: 16px;
@@ -142,7 +142,7 @@ body {
     
     /* Partie inférieure verte */
     .card-body {
-        background-color: #2b897f; /* Couleur verte */
+        background-color: #128f8b; /* Couleur verte */
         padding: 20px;
         text-align: left;
         color: #ffffff;
