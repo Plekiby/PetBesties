@@ -28,9 +28,8 @@ body {
 
 .navigation {
     margin-top: 15px;
-    position: fixed; 
-    right: 200px; 
-    top: 15px; 
+    margin-right: 30px;
+   
 }
 
 .navigation a {
