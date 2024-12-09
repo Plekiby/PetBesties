@@ -59,4 +59,11 @@ $router->add('/profil', function() {
     include __DIR__ . '/views/footer.php';
 });
 
+$router->add('/prestations', function() {
+    // Inclure les vues avec les données transmises
+    include __DIR__ . '/views/header.php';
+    include __DIR__ . '/views/prestations.php'; // La vue utilise $prestataires
+    include __DIR__ . '/views/footer.php';
+});
+
 ?>
