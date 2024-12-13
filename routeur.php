@@ -35,14 +35,14 @@ $router->add('/', function() {
 });
 
 
-$router->add('/prestataires', function() {
-    require_once __DIR__ . '/controllers/PrestataireController.php';
-    $controller = new PrestataireController();
-    $prestataires = $controller->index();
+$router->add('/petowner', function() {
+    require_once __DIR__ . '/controllers/AnnonceController.php';
+    $controller = new AnnonceController();
+    $annonces = $controller->index();
 
     // Inclure les vues avec les données transmises
     include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/prestataireList.php'; // La vue utilise $prestataires
+    include __DIR__ . '/views/petOwnerAnnonce.php'; // La vue utilise $annonces
     include __DIR__ . '/views/footer.php';
 });
 

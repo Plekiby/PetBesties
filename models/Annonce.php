@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../db/database.php';
 
-class Prestataire {
+class Annonce {
     private $conn;
 
     public function __construct() {
@@ -10,13 +10,16 @@ class Prestataire {
 
     public function fetchAll() {
         try {
-            $sql = "SELECT * FROM prestataires";
+            $sql = "SELECT a.*, u.prenom_utilisateur, u.nom_utilisateur, ad.latitude, ad.longitude
+                    FROM annonce a
+                    JOIN utilisateur u ON a.Id_utilisateur = u.Id_utilisateur
+                    JOIN adresse ad ON u.Id_Adresse = ad.Id_Adresse";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             // Logger l'erreur en production au lieu d'afficher directement
-            error_log('Erreur lors de la récupération des prestataires : ' . $e->getMessage());
+            error_log('Erreur lors de la récupération des annonces : ' . $e->getMessage());
             return [];
         }
     }

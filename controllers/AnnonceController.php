@@ -1,19 +1,19 @@
 <?php
-require_once __DIR__ . '/../models/Prestataire.php';
+require_once __DIR__ . '/../models/Annonce.php';
 
-class PrestataireController {
+class AnnonceController {
     private $model;
 
     public function __construct() {
-        $this->model = new Prestataire();
+        $this->model = new Annonce();
     }
 
     public function index() {
         // Appeler le modèle pour récupérer les données
-        $prestataires = $this->model->fetchAll();
+        $annonces = $this->model->fetchAll();
 
         // Retourner les données pour la vue
-        return $prestataires;
+        return $annonces;
     }
 }
 ?>
