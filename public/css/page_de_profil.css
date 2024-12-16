@@ -1,56 +1,135 @@
+/* =======================
+   1. Règles Générales
+   ======================= */
+   * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
 
+/* =======================
+   2. Conteneur Principal
+   ======================= */
 .profile-container {
     width: 1400px;
     background-color: #ffffff;
     border-radius: 15px;
     padding: 20px;
+    margin: 0 auto;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 40px;
     overflow: hidden;
     transition: transform 0.3s ease-in-out;
 }
-.profile-container:hover{
+
+.profile-container:hover {
     transform: scale(1.02); 
 }
 
+/* =======================
+   3. En-tête du Profil
+   ======================= */
 .profile-header {
     display: flex;
     align-items: center;
-    gap: 20px;
+    justify-content: space-between; /* Espacement équilibré */
+    gap: 50px; /* Espacement entre les blocs */
+    gap: 100px;
     margin-bottom: 30px;
 }
 
 .profile-image img {
-    width: 80px;
-    height: 80px;
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
     object-fit: cover;
-    
 }
-.profil-image img:hover {
+
+.profile-image img:hover {
     border-color: #ddd;
 }
 
+/* =======================
+   4. Bouton Ajouter Image
+   ======================= */
 .add-image {
     display: inline-block;
-    color: #128f8b;
-    background-color: #4d3653;
+    color: #ffffff;
+    background-color: #128f8b;
     border: none;
     padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 0.9em;
     transition: background-color 0.3s ease;
+}
 
+.add-image:hover {
+    background-color: #4d3653;
+    color: #ffffff;
 }
-.add-image:hover{
-    background-color:#e6e1e6;
+
+/* =======================
+   5. Nom du Profil
+   ======================= */
+.profile-name {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin-top: 20px;
 }
-.profile-name h1, .profile-name h2 {
+.profile-name .profile-label {
+    color: #4d3653; /* Couleur violet */
+    font-size: 16px; /* Taille du texte */
+    font-weight: bold; /* Texte en gras */
+    margin-bottom: 5px; /* Espacement sous chaque titre */
+    display: block; /* Place chaque titre sur une nouvelle ligne */
+    text-align: center; /* Centre les titres */
+}
+
+.profile-name input {
+    width: 250px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
     color: #4d3653;
+    background-color: #f9f9f9;
 }
 
+.profile-name button {
+    background-color: #128f8b;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top : 5px;
+    transition: background-color 0.3s;
+}
+
+.profile-name button:hover {
+    background-color: #4d3653;
+    color : #ffffff;
+
+}
+
+#name-error {
+    font-size: 14px;
+    color: rgb(124, 39, 39);
+    margin-top: 5px;
+}
+
+/* =======================
+   6. Type de Profil
+   ======================= */
 .profile-type button {
     padding: 8px 16px;
     border: 1px solid #128f8b;
@@ -62,16 +141,19 @@
     transition: background-color 0.3s, color 0.3s;
 }
 
+.profile-type button:hover {
+    background-color: #4d3653;
+    color: #ffffff;
+}
 
 .profile-type .active {
     background-color: #128f8b;
     color: #ffffff;
 }
-.profile-type button:hover {
-    background-color: #4d3653; 
-    color: #ffffff; 
-}
 
+/* =======================
+   7. Description du Profil
+   ======================= */
 .profile-description {
     margin-top: 30px;
     background-color: #4d3653;
@@ -82,50 +164,79 @@
 
 .profile-description p {
     margin-bottom: 10px;
-    color: #e6e6e6;;
+    color: #ffffff;
     text-align: justify;
 }
 
-.submit {
-    background-color: #128f8b;
-    color: #ffffff;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-.submit:hover{
-    background-color: #f5b4f5;
+/* Style pour le message de confirmation */
+#confirmation-message {
+    margin-top: 10px;
+    font-size: 14px;
 }
 
-.date-picker {
-    margin: 30px 0;
+/* =======================
+   8. Formulaire Mission
+   ======================= */
+.mission-form {
     display: flex;
     flex-direction: column;
-    color: #4d3653;
-}
-
-.date-picker label {
-    font-size: 1.5em;
-    margin-bottom: 15px;
-}
-
-.date-picker input {
-    padding: 8px;
-    border: 1px solid #ddd;
+    gap: 10px;
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
     border-radius: 5px;
+    font-family: Arial, sans-serif; 
+    font-size: 14px; 
+    color: #4d3653
+
+}
+
+.mission-form label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    
+}
+
+.mission-form input,
+.mission-form select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.mission-form button {
+    background-color: #128f8b;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.mission-form button:hover {
+    background-color: #4d3653;
+}
+
+#mission-result {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+/* =======================
+   9. Annonces
+   ======================= */
+.annonces {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
 }
 
 .annonces h3 {
     color: #4d3653;
     margin-bottom: 15px;
-}
-
-.annonces {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
 }
 
 .annonce {
@@ -154,4 +265,22 @@
 .annonce p {
     color: #4d3653;
     font-size: 0.9em;
+}
+
+/* =======================
+   10. Bouton Soumettre
+   ======================= */
+.submit {
+    background-color: #128f8b;
+    color: #ffffff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit:hover {
+    background-color: #ffffff;
+    color : #128f8b;
 }

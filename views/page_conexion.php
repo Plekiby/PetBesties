@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Connexion</title>
-  <link rel="stylesheet" href="page_conexion.css">
+  <link rel="stylesheet" href="/petBesties/public/css/page_conexion.css">
 </head>
 <body>
   <div class="container">
