@@ -35,14 +35,14 @@ $router->add('/', function() {
 });
 
 
-$router->add('/petowner', function() {
-    require_once __DIR__ . '/controllers/AnnonceController.php';
-    $controller = new AnnonceController();
-    $annonces = $controller->index();
+$router->add('/prestataires', function() {
+    require_once __DIR__ . '/controllers/PrestataireController.php';
+    $controller = new PrestataireController();
+    $prestataires = $controller->index();
 
     // Inclure les vues avec les données transmises
     include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/petOwnerAnnonce.php'; // La vue utilise $annonces
+    include __DIR__ . '/views/prestataireList.php'; // La vue utilise $prestataires
     include __DIR__ . '/views/footer.php';
 });
 
@@ -53,26 +53,45 @@ $router->add('/profil', function() {
     include __DIR__ . '/views/footer.php';
 });
 
-$router->add('/prestations', function() {
-    // Inclure les vues avec les données transmises
-    include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/prestations.php'; // La vue utilise $prestataires
-    include __DIR__ . '/views/footer.php';
-});
-
-
 $router->add('/candidatures', function() {
+    $userId = 1; // Replace with the actual current user ID
+
+    require_once __DIR__ . '/controllers/AnnonceController.php';
+    $controller = new AnnonceController();
+    $annonces = $controller->index();
+
+    require_once __DIR__ . '/controllers/PostuleController.php';
+    $controllerpostu = new PostuleController();
+    $candidatures = $controllerpostu->index($userId);
+
+    require_once __DIR__ . '/controllers/UtilisateurController.php';
+    $controlleruti = new UtilisateurController();
+
     // Inclure les vues avec les données transmises
     include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/mescandidatures.php'; // La vue utilise $prestataires
+    include __DIR__ . '/views/mescandidatures.php'; // La vue utilise $annonces et $candidatures
     include __DIR__ . '/views/footer.php';
 });
 
 $router->add('/coups_de_coeur', function() {
     // Inclure les vues avec les données transmises
+    require_once __DIR__ . '/controllers/AimeController.php';
+    $controlleraime = new AimeController();
+    $favoris = $controlleraime->index();
     include __DIR__ . '/views/header.php';
     include __DIR__ . '/views/coupsdecoeur.php'; // La vue utilise $prestataires
     include __DIR__ . '/views/footer.php';
 });
+
+$router->add('/historique', function() {
+    // Inclure les vues avec les données transmises
+    include __DIR__ . '/views/header.php';
+    include __DIR__ . '/views/monhistorique.php'; // La vue utilise $prestataires
+    include __DIR__ . '/views/footer.php';
+});
+
+
+
+
 
 ?>
