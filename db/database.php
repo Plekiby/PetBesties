@@ -3,10 +3,10 @@ class Database {
     private static $instance = null;
     private $conn;
 
-    private $host = 'localhost';
-    private $db = 'petbesties';
-    private $user = 'admin';
-    private $pass = 'SN2x@XukD7fzHQz/';
+    private $host = 'mysql-appg1d.alwaysdata.net';
+    private $db = 'appg1d_petbesties';
+    private $user = 'appg1d';
+    private $pass = 'Ght92vtt?';
 
     private function __construct() {
         try {
