@@ -1,0 +1,107 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Body and Main Styling */
+body {
+    background-color: #4e918f;
+    color: white;
+    line-height: 1.6;
+    text-align: center;
+    padding: 50px 20px;
+}
+
+main h1 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+.form-container {
+    background-color: white;
+    color: black;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 400px;
+    margin: 0 auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-container input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-container .btn {
+    background-color: #5b3b5b;
+    color: white;
+    cursor: pointer;
+}
+
+.form-container .disclaimer {
+    font-size: 0.8rem;
+    color: gray;
+    margin-top: 20px;
+    line-height: 1.4;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
