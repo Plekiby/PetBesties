@@ -8,12 +8,14 @@ class PostuleController {
         $this->model = new Postule();
     }
 
-    public function index() {
-        // Appeler le modèle pour récupérer les données
-        $candidatures = $this->model->fetchAll();
+    public function index($userId) {
+        $sentCandidatures = $this->model->fetchSent($userId);
+        $receivedCandidatures = $this->model->fetchReceived($userId);
 
-        // Retourner les données pour la vue
-        return $candidatures;
+        return [
+            'sent' => $sentCandidatures,
+            'received' => $receivedCandidatures
+        ];
     }
 }
 ?>

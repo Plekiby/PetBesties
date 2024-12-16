@@ -54,20 +54,23 @@ $router->add('/profil', function() {
 });
 
 $router->add('/candidatures', function() {
+    $userId = 1; // Replace with the actual current user ID
+
     require_once __DIR__ . '/controllers/AnnonceController.php';
     $controller = new AnnonceController();
     $annonces = $controller->index();
 
     require_once __DIR__ . '/controllers/PostuleController.php';
     $controllerpostu = new PostuleController();
-    $candidatures = $controllerpostu->index();
+    $candidatures = $controllerpostu->index($userId);
 
     require_once __DIR__ . '/controllers/UtilisateurController.php';
     $controlleruti = new UtilisateurController();
 
     // Inclure les vues avec les données transmises
     include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/mescandidatures.php'; // La vue utilise $prestataires
+    include __DIR__ . '/views/mescandidatures.php'; // La vue utilise $annonces et $candidatures
+    include __DIR__ . '/views/footer.php';
 });
 
 $router->add('/coups_de_coeur', function() {
