@@ -46,5 +46,4 @@
         <?php endif; ?>
     </div>   
 </body>
-<?php include __DIR__ . '/footer.php'; ?>
 </html>
