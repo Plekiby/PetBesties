@@ -36,15 +36,28 @@ main h1 {
     gap: 15px;
 }
 
+.form-container label {
+    display: block;
+    text-align: left;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
 .form-container input {
+    width: 100%;
     padding: 10px;
+    margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
 .form-container .btn {
+    width: 100%;
+    padding: 10px;
     background-color: #5b3b5b;
     color: white;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
 }
 

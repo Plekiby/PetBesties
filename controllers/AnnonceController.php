@@ -15,5 +15,13 @@ class AnnonceController {
         // Retourner les données pour la vue
         return $annonces;
     }
+
+    public function getAnnoncesByType($type) {
+        // Appeler le modèle pour récupérer les données filtrées
+        $annonces = $this->model->fetchByUserType($type);
+
+        // Retourner les données pour la vue
+        return $annonces;
+    }
 }
 ?>

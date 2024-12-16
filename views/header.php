@@ -1,3 +1,8 @@
+<?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,15 +19,40 @@
   </div>
 
   <nav class="navigation">
-    <a href="#">🐕 PetSitter</a>
-    <a href="#">🐾 PetOwner</a>
-    <a href="#">Contact</a>
+    <div class="dropdown">
+        <a href="#" class="dropbtn">🐕 PetSitter</a>
+        <div class="dropdown-content">
+            <a href="/PetBesties/petsitter">Voir les annonces</a>
+        </div>
+    </div>
+    <div class="dropdown">
+        <a href="#" class="dropbtn">🐾 PetOwner</a>
+        <div class="dropdown-content">
+            <a href="/PetBesties/petowner">Voir les annonces</a>
+        </div>
+    </div>
+    <a href="/PetBesties/contact">Contact</a>
   </nav>
 
-  <button class="profile-button">Profil</button>
+  <?php if (isset($_SESSION['user_id'])): ?>
+    <div class="dropdown">
+        <button class="profile-button">Profil</button>
+        <div class="dropdown-content">
+            <a href="/PetBesties/profil">Profil</a>
+            <a href="/PetBesties/candidatures">Mes candidatures</a>
+            <a href="/PetBesties/historique">Mon historique</a>
+            <a href="/PetBesties/coups_de_coeur">Coups de coeur</a>
+            <a href="/PetBesties/contact">Contact</a>
+            <a href="/PetBesties/logout">Déconnexion</a>
+        </div>
+    </div>
+  <?php else: ?>
+    <a href="/PetBesties/connexion" class="profile-button">Connexion</a>
+    <a href="/PetBesties/inscription" class="profile-button">Inscription</a>
+  <?php endif; ?>
 </header>
 
-   
-
+</body>
+</html>
 </body>
 </html>

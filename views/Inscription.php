@@ -6,17 +6,21 @@
   <title>Inscription</title>
   <link rel="stylesheet" href="/Petbesties/public/css/style_Inscription.css">
 </head>
+
 <body>
-  <div class="page">
+
     <h1 class="title">Inscription</h1>
     <div class="container">
-      <form class="form">
-        <input type="text" placeholder="Prénom" required>
-        <input type="text" placeholder="Nom" required>
-        <input type="number" placeholder="Âge" required>
-        <input type="text" placeholder="Code postal" required>
-        <input type="email" placeholder="Adresse mail" required>
-        <input type="password" placeholder="Créer un mot de passe" required>
+      <form class="form" method="POST" action="/PetBesties/inscription">
+        <input type="text" name="prenom" placeholder="Prénom" required>
+        <input type="text" name="nom" placeholder="Nom" required>
+        <input type="text" name="telephone" placeholder="Téléphone" required>
+        <input type="email" name="email" placeholder="Adresse mail" required>
+        <input type="password" name="mdp" placeholder="Créer un mot de passe" required>
+        <input type="text" name="adresse_numero" placeholder="Numéro" required>
+        <input type="text" name="adresse_rue" placeholder="Rue" required>
+        <input type="text" name="adresse_nom" placeholder="Ville" required>
+        <input type="text" name="adresse_complement" placeholder="Complément">
         <button type="submit">NEXT</button>
       </form>
       <p class="footer-text">
@@ -28,7 +32,6 @@
         18 ans ou plus.
       </p>
     </div>
-  </div>
 </body>
 </html>
 
