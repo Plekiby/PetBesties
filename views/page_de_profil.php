@@ -8,14 +8,14 @@
     </head>
 <body>
 
-<div class="profile-container">
-    <div class="profile-header">
-        <div class="profile-image">
-        <img id = "profile-pic" src="/petbesties/public/images/image_profil.png" alt="Profile Image">
-        <button id = "upload-btn" class="add-image">+ Add an Image</button>
-        <!-- Input caché pour sélectionner un fichier image -->
-        <input type="file" id="file-input" style="display:none;" accept="image/*">
-    </div>
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="profile-image">
+            <img id = "profile-pic" src="/petbesties/public/images/image_profil.png" alt="Profile Image">
+            <button id = "upload-btn" class="add-image">+ Add an Image</button>
+            <!-- Input caché pour sélectionner un fichier image -->
+            <input type="file" id="file-input" style="display:none;" accept="image/*">
+        </div>
 
 
         <div class="profile-name">
@@ -34,7 +34,7 @@
 
     <div class="profile-description">
     <p id="bio-description">"Please select your identity as either a Pet Owner or a Pet Sitter, so we can update your bio accordingly. Your choice will help us tailor your profile to better suit your needs."!</p>
-    <button id = "submit-bio " class="submit">Soumettre</button>
+    <button id = "submit-bio" class="submit">Soumettre</button>
     <p id="confirmation-message" style="color: green; display: none;">Le statut de votre bio a été bien modifié !</p>
     </div>
 
@@ -162,21 +162,38 @@
     // ==========================
 // 1. Gestion de l'upload d'image avec prévisualisation
 // ==========================
-    document.getElementById("upload-btn").addEventListener("click", function() {
-        document.getElementById("file-input").click(); // Ouvre le sélecteur de fichiers
+document.addEventListener("DOMContentLoaded", function() {
+    const profilePic = document.getElementById("profile-pic");
+    const uploadBtn = document.getElementById("upload-btn");
+    const fileInput = document.getElementById("file-input");
+
+    // Charger l'image depuis localStorage au démarrage
+    const savedImage = localStorage.getItem("profileImage");
+    if (savedImage) {
+        profilePic.src = savedImage; // Si une image est sauvegardée, l'afficher
+    }
+
+    // Événement pour ouvrir le sélecteur de fichiers
+    uploadBtn.addEventListener("click", function() {
+        fileInput.click();
     });
 
-    document.getElementById("file-input").addEventListener("change", function(event) {
-        const file = event.target.files[0]; // Récupère le fichier sélectionné
+    // Événement pour lire et afficher l'image sélectionnée
+    fileInput.addEventListener("change", function(event) {
+        const file = event.target.files[0];
         if (file) {
-            const reader = new FileReader(); // Crée un lecteur de fichier
+            const reader = new FileReader();
             reader.onload = function(e) {
-                document.getElementById("profile-pic").src = e.target.result; // Met à jour l'image avec l'aperçu
+                const imageURL = e.target.result; // Base64 de l'image
+                profilePic.src = imageURL;
+
+                // Sauvegarder l'image dans localStorage
+                localStorage.setItem("profileImage", imageURL);
             }
-            reader.readAsDataURL(file); // Lit le fichier et génère une URL
+            reader.readAsDataURL(file);
         }
     });
-
+});
 
 // code pour la partie formulaire 
 
