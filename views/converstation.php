@@ -7,6 +7,18 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<?php
+require 'db_connection.php';
+$conversationId = $_POST['conversation_id'];
+$userId = $_POST['user_id'];
+$content = $_POST['content'];
+
+$stmt = $pdo->prepare("INSERT INTO message (Id_Conversation, Id_Utilisateur, contenu_message) 
+                       VALUES (?, ?, ?)");
+$stmt->execute([$conversationId, $userId, $content]);
+echo "Message envoyé !";
+?>
+
     <div class="container">
         <!-- Liste des messages à gauche -->
         <div class="messages-list">
@@ -66,5 +78,67 @@
         // Par défaut afficher la première conversation
         window.onload = () => showConversation('paul');
     </script>
+        <script>
+        // Detecte l'appui sur une touche du clavier
+        document.addEventListener("keypress", keyPressed); 
+        // Envoi le message si appui sur enter
+        function keyPressed(event) { 
+            if (event.keyCode === 13) {
+                postMessage();
+            }
+        }
+        // Envoi le message et le nom vers le fichier API
+        function postMessage() {
+            var name =  encodeURIComponent(document.getElementById('name').value);
+            var message =  encodeURIComponent(document.getElementById('message').value);
+            var requestURL = 'API.php?name=' + name + '&message=' + message;
+            var request = new XMLHttpRequest();
+            request.open('GET', requestURL);
+            request.send();
+            document.getElementById('message').value = '';
+        }
+        // Affiche le contenu retourné du fichier API
+        function displayChat() {
+            var requestURL = 'API.php?display';
+            var request = new XMLHttpRequest();
+            request.open('GET', requestURL);
+            request.send();
+            request.onload = function() {
+                document.getElementById("chat").innerHTML = request.responseText;
+            }
+        }
+        // Actualise le chat à intervalle de 200 millisecondes
+        setInterval(displayChat, 200);
+    </script>
+    
+    </script>
+    <script>
+    function loadMessages(conversationId) {
+    $.ajax({
+        url: 'fetch_messages.php',
+        method: 'GET',
+        data: { conversation_id: conversationId },
+        success: function(data) {
+            $('#messageArea').html(data); // Afficher les messages
+        }
+    });
+    }
+    </script>
+    <?php
+require 'db_connection.php'; // Connexion à la base
+$conversationId = $_GET['conversation_id'];
+$stmt = $pdo->prepare("SELECT m.contenu_message, m.date_message, u.prenom_utilisateur 
+                       FROM message m 
+                       JOIN utilisateur u ON m.Id_Utilisateur = u.Id_utilisateur
+                       WHERE m.Id_Conversation = ?");
+$stmt->execute([$conversationId]);
+$messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($messages as $message) {
+    echo "<p><strong>{$message['prenom_utilisateur']}:</strong> {$message['contenu_message']} <em>{$message['date_message']}</em></p>";
+}
+?>
+
+    
 </body>
 </html>
