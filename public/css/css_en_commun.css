@@ -1,0 +1,142 @@
+/* Styles généraux */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    background-color: #fff;
+    color:#4d3653;
+}
+
+/* Titres */
+h1.titre-principal {
+    font-size: 28px;
+    color: #050505;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h2.titre-secondaire {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+h3.titre-tertiaire {
+    font-size: 24px;
+    color: #5d6d7e;
+    margin-bottom: 20px;
+}
+
+/* Paragraphes */
+.paragraphe-commun {
+    font-size: 1rem;
+    margin: 15px 0;
+    color: #050505;
+    text-align: justify;
+}
+
+/* Images */
+.image-commun {
+    max-width: 100%;
+    height: auto;
+    border: 2px solid #128f8b;
+    border-radius: 10px;
+    margin: 20px 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Boutons */
+.bouton-commun {
+    background-color: #4d3653;
+    color: #fff;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+}
+
+.bouton-commun:hover {
+    background-color: #128f8b;
+}
+
+/* Listes */
+.liste-commun {
+    margin: 15px 0;
+    padding-left: 20px;
+}
+
+.liste-commun li {
+    margin: 5px 0;
+}
+
+/* Liens */
+.lien-commun {
+    color: #2980b9;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.lien-commun:hover {
+    color: #050505;
+    text-decoration: underline;
+}
+
+/* Tableaux */
+.tableau-commun {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+.tableau-commun th, .tableau-commun td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.tableau-commun th {
+    background-color: #128f8b;
+    color: white;
+}
+
+/* Formulaires */
+.formulaire-commun input[type="text"],
+.formulaire-commun input[type="email"],
+.formulaire-commun textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.formulaire-commun input[type="submit"] {
+    background-color: #4d3653;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.formulaire-commun input[type="submit"]:hover {
+    background-color: #4d3653;
+}
+
+/* Sections */
+.section-commun {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 800px;
+}
