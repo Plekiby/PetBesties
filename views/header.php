@@ -39,6 +39,7 @@ if (session_status() == PHP_SESSION_NONE) {
         <button class="profile-button">Profil</button>
         <div class="dropdown-content">
             <a href="/PetBesties/profil">Profil</a>
+            <a href="/PetBesties/conversation">conversation</a>
             <a href="/PetBesties/candidatures">Mes candidatures</a>
             <a href="/PetBesties/historique">Mon historique</a>
             <a href="/PetBesties/coups_de_coeur">Coups de coeur</a>

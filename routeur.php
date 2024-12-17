@@ -94,6 +94,13 @@ $router->add('/prestations', function() {
     include __DIR__ . '/views/header.php';
     include __DIR__ . '/views/prestations.php'; // La vue utilise $prestataires
     include __DIR__ . '/views/footer.php';
+});4
+
+$router->add('/conversation', function() {
+    // Inclure les vues avec les données transmises
+    include __DIR__ . '/views/header.php';
+    include __DIR__ . '/views/conversation.php'; // La vue utilise $prestataires
+    include __DIR__ . '/views/footer.php';
 });
 
 
@@ -161,6 +168,8 @@ $router->add('/inscription', function() {
     include __DIR__ . '/views/Inscription.php';
     include __DIR__ . '/views/footer.php';
 });
+
+
 
 $router->add('/connexion', function() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
