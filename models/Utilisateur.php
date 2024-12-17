@@ -68,6 +68,20 @@ class Utilisateur {
         }
     }
 
+    public function fetchOne($id) {
+        try {
+            $sql = "SELECT * FROM utilisateur WHERE Id_utilisateur = $id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            // Logger l'erreur en production au lieu d'afficher directement
+            error_log('Erreur lors de la récupération des utilisateurs : ' . $e->getMessage());
+            return [];
+        }
+    }
+
+
     public function beginTransaction() {
         $this->conn->beginTransaction();
     }

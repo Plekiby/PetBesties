@@ -24,6 +24,14 @@ class UtilisateurController {
         return $utilisateur;
     }
 
+    public function fetchOne($id) {
+        // Appeler le modèle pour récupérer les données
+        $utilisateur = $this->model->selectOne($id);
+
+        // Retourner les données pour la vue
+        return $utilisateur;
+    }
+
     public function register($data) {
         // Enable error reporting during development
         ini_set('display_errors', 1);

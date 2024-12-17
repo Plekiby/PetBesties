@@ -18,10 +18,26 @@
         </div>
 
 
+
+        <!-- code html qui recupere les identifiants du user-->
+        <div class="profile-details">
+            <label for="profile-first-name"></label>
+            <input type="text" id="profile-first-name" value="First Name" readonly>
+
+            <label for="profile-last-name"></label>
+            <input type="text" id="profile-last-name" value="Last Name" readonly>
+
+            <label for="profile-email"></label>
+            <input type="email" id="profile-email" value="email@example.com" readonly>
+
+            <label for="profile-phone"></label>
+            <input type="text" id="profile-phone" value="Phone Number" readonly>
+        </div>
+
         <div class="profile-name">
             <input type="text" id="first-name" placeholder="Prénom" />
             <input type="text" id="last-name" placeholder="Nom" />
-            <button id="validate-name">Valider</button>
+            <button id="validate-name">Modify</button>
             <p id="name-error" style="color: red; display: none;"></p>
         </div>
 
@@ -33,8 +49,8 @@
     </div> 
 
     <div class="profile-description">
-    <p id="bio-description">"Please select your identity as either a Pet Owner or a Pet Sitter, so we can update your bio accordingly. Your choice will help us tailor your profile to better suit your needs."!</p>
-    <button id = "submit-bio" class="submit">Soumettre</button>
+    <p id="bio-description">"Please select your identity as either a Pet Owner or a Pet Sitter, so we can update your bio accordingly. Your choice will help us tailor your profile to better suit your needs.!"</p>
+    <button id = "submit-bio" class="submit">Submit</button>
     <p id="confirmation-message" style="color: green; display: none;">Le statut de votre bio a été bien modifié !</p>
     </div>
 
@@ -249,6 +265,28 @@ document.addEventListener("DOMContentLoaded", function() {
     // Appelle la fonction loadAnnonces dès que la page est chargée
     window.onload = loadAnnonces;*/
 
+
+
+
+    // Fonction pour récupérer les données utilisateur depuis la session
+
+    document.addEventListener("DOMContentLoaded", function() {
+    // Requête AJAX pour récupérer les données utilisateur
+        fetch('/PetBesties/routeur.php/profil/data')
+            .then(response => response.json()) // Convertir la réponse en JSON
+            .then(data => {
+                if (data.error) {
+                    console.error("Erreur:", data.error);
+                } else {
+                // Insérer les valeurs dans les champs HTML
+                    document.getElementById("profile-first-name").value = data.first_name || "First Name";
+                    document.getElementById("profile-last-name").value = data.last_name || "Last Name";
+                    document.getElementById("profile-email").value = data.email || "email@example.com";
+                    document.getElementById("profile-phone").value = data.phone || "Phone Number";
+                }
+            })
+            .catch(error => console.error("Erreur lors de la récupération des données:", error));
+    });
 
    
 

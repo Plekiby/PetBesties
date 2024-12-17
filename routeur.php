@@ -67,12 +67,25 @@ $router->add('/petsitter', function() {
     include __DIR__ . '/views/petSitterAnnonce.php'; // Nouvelle vue pour PetSitter
     include __DIR__ . '/views/footer.php';
 });
-
+// fct get values users momo 
 $router->add('/profil', function() {
-    // Inclure les vues avec les données transmises
-    include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/page_de_profil.php'; // La vue utilise $prestataires
-    include __DIR__ . '/views/footer.php';
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (isset($_SESSION['user_id'])) {
+        $userId = $_SESSION['user_id'];
+        require_once __DIR__ . '/controllers/UtilisateurController.php';
+        $controlleruti = new UtilisateurController();
+        $utilisateur = $controlleruti->fetchOne($userId);
+
+        // Inclure les vues avec les données transmises
+        include __DIR__ . '/views/header.php';
+        include __DIR__ . '/views/page_de_profil.php'; // La vue utilise $prestataires
+        include __DIR__ . '/views/footer.php';
+    } else {
+        exit;
+    }
+    
 });
 
 $router->add('/contact', function() {
@@ -194,6 +207,33 @@ $router->add('/logout', function() {
     session_destroy();
     header('Location: /PetBesties/');
     exit;
+});
+
+// partie code mohamed recuperer les donnees de conexion 
+
+$router->add('/api/user-data', function() {
+    session_start();
+    header('Content-Type: application/json');
+
+    if (!isset($_SESSION['user_id'])) {
+        echo json_encode(["error" => "Utilisateur non connecté"]);
+        exit;
+    }
+
+    // Connexion à la base de données
+    $pdo = new PDO("mysql:host=localhost;dbname=petbesties", "username", "password");
+    $user_id = $_SESSION['user_id'];
+
+    // Récupération des informations utilisateur
+    $query = $pdo->prepare("SELECT first_name, last_name, email, phone FROM users WHERE id = ?");
+    $query->execute([$user_id]);
+    $user = $query->fetch(PDO::FETCH_ASSOC);
+
+    if ($user) {
+        echo json_encode($user);
+    } else {
+        echo json_encode(["error" => "Utilisateur non trouvé"]);
+    }
 });
 
 ?>
