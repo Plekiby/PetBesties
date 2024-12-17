@@ -68,6 +68,59 @@ class Utilisateur {
         }
     }
 
+    public function fetchOne($id) {
+        try {
+            $sql = "SELECT * FROM utilisateur WHERE Id_utilisateur = $id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            // Logger l'erreur en production au lieu d'afficher directement
+            error_log('Erreur lors de la récupération des utilisateurs : ' . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function update($id, $prenom, $nom, $email, $telephone) {
+        try {
+            $sql = "UPDATE utilisateur 
+                    SET prenom_utilisateur = :prenom, 
+                        nom_utilisateur = :nom, 
+                        email_utilisateur = :email, 
+                        telephone_utilisateur = :telephone 
+                    WHERE Id_utilisateur = :id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':prenom', $prenom);
+            $stmt->bindParam(':nom', $nom);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':telephone', $telephone);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log('Erreur lors de la mise à jour de l\'utilisateur : ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function login($email, $password) {
+        try {
+            $sql = "SELECT * FROM utilisateur WHERE email_utilisateur = :email LIMIT 1";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($user && password_verify($password, $user['mdp_utilisateur'])) {
+                return $user;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            error_log('Erreur lors de la connexion : ' . $e->getMessage());
+            return false;
+        }
+    }
+
     public function beginTransaction() {
         $this->conn->beginTransaction();
     }
