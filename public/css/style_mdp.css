@@ -1,107 +1,104 @@
-/* Reset */
-* {
+/* Général */
+body {
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
-
-/* Body and Main Styling */
-body {
-    background-color: #4e918f;
-    color: white;
     line-height: 1.6;
-    text-align: center;
-    padding: 50px 20px;
+    background-color: #fff;
+    color: #4d3653;
 }
 
-main h1 {
-    font-size: 2.5rem;
+/* Titre principal */
+h1 {
+    font-size: 2.8rem;
+    font-weight: bold;
     margin-bottom: 30px;
+    color: #ffffff !important; /* Forcer la couleur blanche */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
+/* Conteneur du formulaire */
 .form-container {
-    background-color: white;
-    color: black;
-    padding: 30px;
-    border-radius: 10px;
-    max-width: 400px;
+    max-width: 600px;
     margin: 0 auto;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.form-container form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+/* Champs de formulaire */
+.form-container label {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    display: block;
 }
 
 .form-container input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+    box-sizing: border-box;
 }
 
-.form-container .btn {
-    background-color: #5b3b5b;
-    color: white;
-    cursor: pointer;
+.form-container input:focus {
+    outline: none;
+    border-color: #4d3653;
 }
 
-.form-container .disclaimer {
-    font-size: 0.8rem;
-    color: gray;
+/* Bouton submit stylisé avec une priorité plus forte */
+.form-container button.btn {
+    background: linear-gradient(135deg, #4d3653, #3b7370) !important;
+    color: white !important;
+    font-size: 1.2rem !important;
+    font-weight: bold !important;
+    padding: 16px 30px !important;
+    border: none !important;
+    border-radius: 12px !important;
+    cursor: pointer !important;
+    transition: all 0.4s ease-in-out !important;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.5px !important;
+    width: 100%;
     margin-top: 20px;
-    line-height: 1.4;
 }
 
+/* Effet au survol */
+.form-container button.btn:hover {
+    background: linear-gradient(135deg, #3b7370, #4d3653) !important;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3) !important;
+    transform: translateY(-4px) !important;
+}
 
+/* Effet au clic (enfoncement) */
+.form-container button.btn:active {
+    transform: translateY(2px) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+}
 
+/* Message d'erreur */
+.error-message {
+    color: #d9534f;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
+    display: none;
+    animation: fadeIn 0.5s ease-in-out;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* Animation pour le message d'erreur */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

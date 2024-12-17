@@ -4,25 +4,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inscription</title>
+  <!-- Inclusion du CSS spécifique à la page -->
   <link rel="stylesheet" href="/Petbesties/public/css/style_Inscription.css">
 </head>
 <body>
-  <div class="page">
-    <h1 class="title">Inscription</h1>
-    <div class="container">
-      <form class="form">
-        <input type="text" placeholder="Prénom" required>
-        <input type="text" placeholder="Nom" required>
-        <input type="number" placeholder="Âge" required>
-        <input type="text" placeholder="Code postal" required>
-        <input type="email" placeholder="Adresse mail" required>
-        <input type="password" placeholder="Créer un mot de passe" required>
-        <button type="submit">NEXT</button>
-      </form>
-      <p class="footer-text">
+  <div class="page section-commun">
+    <h1 class="title titre-principal">Inscription</h1>
+    <div class="container section-commun">
+      <!-- Formulaire d'inscription -->
+    <form class="form formulaire-commun" method="POST" action="inscription.php">
+    <input type="text" name="prenom_utilisateur" placeholder="Prénom" required>
+    <input type="text" name="nom_utilisateur" placeholder="Nom" required>
+    <input type="email" name="email_utilisateur" placeholder="Adresse email" required>
+    <input type="password" name="mdp_utilisateur" placeholder="Mot de passe" required>
+    <input type="text" name="telephone_utilisateur" placeholder="Téléphone" optional>
+    <input type="number" name="type_utilisateur" placeholder="Type utilisateur (1 pour utilisateur classique)" optional>
+    <input type="text" name="rib_utilisateur" placeholder="RIB" optional>
+    <input type="number" name="age" placeholder="Âge" required>
+    <input type="text" name="code_postal" placeholder="Code postal" required>
+    <button type="submit" class="bouton-commun">NEXT</button>
+    </form>
+
+
+      <p class="footer-text paragraphe-commun">
         En me connectant ou en m'inscrivant, j'accepte les 
-        <a href="#">Conditions Générales de Service</a> et la 
-        <a href="#">Politique de Confidentialité</a> de PetBesties. 
+        <a href="#" class="lien-commun">Conditions Générales de Service</a> et la 
+        <a href="#" class="lien-commun">Politique de Confidentialité</a> de PetBesties. 
         Je consens à recevoir des e-mails et des communications marketing 
         de la part de PetBesties et de ses affiliés et je confirme avoir 
         18 ans ou plus.
@@ -31,4 +38,3 @@
   </div>
 </body>
 </html>
-
