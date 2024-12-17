@@ -209,7 +209,9 @@ $router->add('/logout', function() {
     exit;
 });
 
-// partie code mohamed recuperer les donnees de conexion 
+//////////////////////////////////
+// Partie API
+//////////////////////////////////
 
 $router->add('/api/user-data', function() {
     session_start();
@@ -235,6 +237,24 @@ $router->add('/api/user-data', function() {
         echo json_encode($data);
     } else {
         echo json_encode(["error" => "Utilisateur non trouvé"]);
+    }
+});
+
+$router->add('/api/update-user', function() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        session_start();
+        require_once __DIR__ . '/controllers/UtilisateurController.php';
+        $controller = new UtilisateurController();
+        $result = $controller->updateProfile($_SESSION['user_id'], $_POST);
+        
+        if ($result) {
+            echo json_encode(["success" => true]);
+        } else {
+            echo json_encode(["success" => false, "error" => "Mise à jour échouée."]);
+        }
+    } else {
+        http_response_code(405);
+        echo json_encode(["error" => "Méthode non autorisée"]);
     }
 });
 

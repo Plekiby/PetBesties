@@ -38,17 +38,23 @@
 
         <!-- code html qui recupere les identifiants du user-->
         <div class="profile-details">
-            <label for="profile-first-name"></label>
-            <input type="text" id="profile-first-name" value="First Name" readonly>
+            <form id="update-profile-form">
+                <label for="profile-first-name">Prénom</label>
+                <input type="text" id="profile-first-name" name="prenom" value="First Name">
 
-            <label for="profile-last-name"></label>
-            <input type="text" id="profile-last-name" value="Last Name" readonly>
+                <label for="profile-last-name">Nom</label>
+                <input type="text" id="profile-last-name" name="nom" value="Last Name">
 
-            <label for="profile-email"></label>
-            <input type="email" id="profile-email" value="email@example.com" readonly>
+                <label for="profile-email">Email</label>
+                <input type="email" id="profile-email" name="email" value="email@example.com">
 
-            <label for="profile-phone"></label>
-            <input type="text" id="profile-phone" value="Phone Number" readonly>
+                <label for="profile-phone">Téléphone</label>
+                <input type="text" id="profile-phone" name="telephone" value="Phone Number">
+
+                <button type="submit" id="save-profile">Sauvegarder</button>
+                <p id="update-success" style="color: green; display: none;">Informations mises à jour avec succès !</p>
+                <p id="update-error" style="color: red; display: none;"></p>
+            </form>
         </div>
 
         <div class="profile-name">
@@ -305,9 +311,33 @@ document.addEventListener("DOMContentLoaded", function() {
             .catch(error => console.error("Erreur lors de la récupération des données:", error));
     });
 
-   
-
-
+    document.getElementById('update-profile-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        
+        fetch('/PetBesties/api/update-user', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.success){
+                document.getElementById('update-success').style.display = 'block';
+                document.getElementById('update-error').style.display = 'none';
+            } else {
+                document.getElementById('update-error').textContent = data.error;
+                document.getElementById('update-error').style.display = 'block';
+                document.getElementById('update-success').style.display = 'none';
+            }
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+            document.getElementById('update-error').textContent = 'Une erreur est survenue.';
+            document.getElementById('update-error').style.display = 'block';
+            document.getElementById('update-success').style.display = 'none';
+        });
+    });
 
 </script>
 

@@ -105,5 +105,21 @@ class UtilisateurController {
         }
         return false;
     }
+
+    public function updateProfile($id, $data) {
+        // Valider les données nécessaires
+        if (empty($data['prenom']) || empty($data['nom']) || empty($data['email']) || empty($data['telephone'])) {
+            return false;
+        }
+
+        // Nettoyer les données
+        $prenom = htmlspecialchars(strip_tags($data['prenom']));
+        $nom = htmlspecialchars(strip_tags($data['nom']));
+        $email = filter_var($data['email'], FILTER_SANITIZE_EMAIL);
+        $telephone = htmlspecialchars(strip_tags($data['telephone']));
+
+        // Mettre à jour les informations utilisateur
+        return $this->model->update($id, $prenom, $nom, $email, $telephone);
+    }
 }
 ?>

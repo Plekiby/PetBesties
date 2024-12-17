@@ -22,7 +22,7 @@ class Adresse {
             $stmt->execute();
             return $this->conn->lastInsertId();
         } catch (PDOException $e) {
-            echo 'Erreur lors de la création de l\'adresse : ' . $e->getMessage();
+            error_log('Erreur lors de la création de l\'adresse : ' . $e->getMessage());
             return false;
         }
     }

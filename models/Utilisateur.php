@@ -82,6 +82,26 @@ class Utilisateur {
         }
     }
 
+    public function update($id, $prenom, $nom, $email, $telephone) {
+        try {
+            $sql = "UPDATE utilisateur 
+                    SET prenom_utilisateur = :prenom, 
+                        nom_utilisateur = :nom, 
+                        email_utilisateur = :email, 
+                        telephone_utilisateur = :telephone 
+                    WHERE Id_utilisateur = :id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':prenom', $prenom);
+            $stmt->bindParam(':nom', $nom);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':telephone', $telephone);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log('Erreur lors de la mise à jour de l\'utilisateur : ' . $e->getMessage());
+            return false;
+        }
+    }
 
     public function beginTransaction() {
         $this->conn->beginTransaction();
