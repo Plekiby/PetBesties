@@ -1,8 +1,26 @@
+/* ...existing styles... */
+
+.profile-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.profile-details input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* ...existing styles... */
+
 /* =======================
    Profil - Détails Utilisateur
    ======================= */
    .profile-details {
     display: flex;
+    max-width: 500px;
+    margin: 0 auto ;
     flex-direction: column;
     gap: 1px;
     background-color: #f9f9f9;
@@ -18,13 +36,25 @@
     margin-bottom: 5px;
 }
 
+.profile-details button {
+    background-color: #128f8b;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top : 5px;
+    transition: background-color 0.3s;
+}
+
 .profile-details input {
     width: 250px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 14px;
-    color: #4d3653;
+    color: #000000;
     background-color: #f9f9f9;
     transition: background-color 0.3s ease;
 }

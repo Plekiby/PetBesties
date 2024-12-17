@@ -6,21 +6,7 @@
     <title>PetBesties Profile</title>
     <link rel="stylesheet" type="text/css" href="/petbesties/public/css/page_de_profil.css">
     <style>
-    /* ...existing styles... */
-
-    .profile-details {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .profile-details input {
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
-
-    /* ...existing styles... */
+    
 </style>
     </head>
 <body>
@@ -39,19 +25,19 @@
         <!-- code html qui recupere les identifiants du user-->
         <div class="profile-details">
             <form id="update-profile-form">
-                <label for="profile-first-name">Prénom</label>
-                <input type="text" id="profile-first-name" name="prenom" value="First Name">
+                <label for="profile-first-name">First Name</label>
+                <input type="text" id="profile-first-name" name="prenom" value="First Name"><br>
 
-                <label for="profile-last-name">Nom</label>
-                <input type="text" id="profile-last-name" name="nom" value="Last Name">
+                <label for="profile-last-name">Last Name</label> 
+                <input type="text" id="profile-last-name" name="nom" value="Last Name"><br>
 
                 <label for="profile-email">Email</label>
-                <input type="email" id="profile-email" name="email" value="email@example.com">
+                <input type="email" id="profile-email" name="email" value="email@example.com"><br>
 
-                <label for="profile-phone">Téléphone</label>
-                <input type="text" id="profile-phone" name="telephone" value="Phone Number">
+                <label for="profile-phone">Phone_number</label>
+                <input type="text" id="profile-phone" name="telephone" value="Phone Number"><br>
 
-                <button type="submit" id="save-profile">Sauvegarder</button>
+                <button type="submit" id="save-profile">Save</button>
                 <p id="update-success" style="color: green; display: none;">Informations mises à jour avec succès !</p>
                 <p id="update-error" style="color: red; display: none;"></p>
             </form>
