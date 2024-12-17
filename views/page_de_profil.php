@@ -270,23 +270,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Fonction pour récupérer les données utilisateur depuis la session
 
-    document.addEventListener("DOMContentLoaded", function() {
-    // Requête AJAX pour récupérer les données utilisateur
-        fetch('/PetBesties/routeur.php/profil/data')
-            .then(response => response.json()) // Convertir la réponse en JSON
-            .then(data => {
-                if (data.error) {
-                    console.error("Erreur:", data.error);
-                } else {
-                // Insérer les valeurs dans les champs HTML
-                    document.getElementById("profile-first-name").value = data.first_name || "First Name";
-                    document.getElementById("profile-last-name").value = data.last_name || "Last Name";
-                    document.getElementById("profile-email").value = data.email || "email@example.com";
-                    document.getElementById("profile-phone").value = data.phone || "Phone Number";
-                }
-            })
-            .catch(error => console.error("Erreur lors de la récupération des données:", error));
-    });
 
    
 

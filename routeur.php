@@ -209,32 +209,6 @@ $router->add('/logout', function() {
     exit;
 });
 
-// partie code mohamed recuperer les donnees de conexion 
-
-$router->add('/api/user-data', function() {
-    session_start();
-    header('Content-Type: application/json');
-
-    if (!isset($_SESSION['user_id'])) {
-        echo json_encode(["error" => "Utilisateur non connecté"]);
-        exit;
-    }
-
-    // Connexion à la base de données
-    $pdo = new PDO("mysql:host=localhost;dbname=petbesties", "username", "password");
-    $user_id = $_SESSION['user_id'];
-
-    // Récupération des informations utilisateur
-    $query = $pdo->prepare("SELECT first_name, last_name, email, phone FROM users WHERE id = ?");
-    $query->execute([$user_id]);
-    $user = $query->fetch(PDO::FETCH_ASSOC);
-
-    if ($user) {
-        echo json_encode($user);
-    } else {
-        echo json_encode(["error" => "Utilisateur non trouvé"]);
-    }
-});
 
 ?>
 
