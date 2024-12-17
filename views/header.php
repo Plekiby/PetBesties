@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -50,9 +50,11 @@ if (session_status() == PHP_SESSION_NONE) {
     <a href="/PetBesties/connexion" class="profile-button">Connexion</a>
     <a href="/PetBesties/inscription" class="profile-button">Inscription</a>
   <?php endif; ?>
+
+  <?php if(isset($error)) { ?>
+    <div class="error"><?php echo $error; ?></div>
+  <?php } ?>
 </header>
 
-</body>
-</html>
 </body>
 </html>

@@ -54,7 +54,7 @@ class Adresse {
             $stmt->bindParam(':latitude', $data['latitude']);
             $stmt->bindParam(':longitude', $data['longitude']);
             $stmt->execute();
-            return $this->conn->lastInsertId();
+            return $this->conn->lastInsertId(); // Retourner l'ID de l'adresse créée
         } catch (PDOException $e) {
             error_log('Erreur lors de la création de l\'adresse : ' . $e->getMessage());
             return false;

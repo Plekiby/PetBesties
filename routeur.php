@@ -171,10 +171,8 @@ $router->add('/inscription', function() {
         'telephone' => $_POST['telephone'],
         'type' => 1,
         'rib' => '',
-        'adresse_numero' => $_POST['adresse_numero'],
-        'adresse_rue' => $_POST['adresse_rue'],
-        'adresse_nom' => $_POST['adresse_nom'],
-        'adresse_complement' => $_POST['adresse_complement']
+        'age' => isset($_POST['age']) ? $_POST['age'] : 0,
+        'code_postal' => isset($_POST['code_postal']) ? $_POST['code_postal'] : '00000'
     ];
 
     if ($controller->register($data)) {

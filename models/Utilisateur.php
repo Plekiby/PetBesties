@@ -35,10 +35,13 @@ class Utilisateur {
         }
     }
 
-    public function create($prenom, $nom, $email, $mdp, $telephone, $type, $rib, $adresseId) {
+    public function create($prenom, $nom, $email, $mdp, $telephone, $type, $rib, $age, $code_postal) {
         try {
-            $sql = "INSERT INTO utilisateur (prenom_utilisateur, nom_utilisateur, email_utilisateur, mdp_utilisateur, telephone_utilisateur, type_utilisateur, rib_utilisateur, Id_Adresse) 
-                    VALUES (:prenom, :nom, :email, :mdp, :telephone, :type, :rib, :adresseId)";
+            // Log the data being inserted
+            error_log("Creating user with prenom: $prenom, nom: $nom, email: $email, telephone: $telephone, type: $type, rib: $rib, age: $age, code_postal: $code_postal");
+
+            $sql = "INSERT INTO utilisateur (prenom_utilisateur, nom_utilisateur, email_utilisateur, mdp_utilisateur, telephone_utilisateur, type_utilisateur, rib_utilisateur, age, code_postal) 
+                    VALUES (:prenom, :nom, :email, :mdp, :telephone, :type, :rib, :age, :code_postal)";
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':prenom', $prenom);
             $stmt->bindParam(':nom', $nom);
@@ -47,11 +50,19 @@ class Utilisateur {
             $stmt->bindParam(':telephone', $telephone);
             $stmt->bindParam(':type', $type, PDO::PARAM_INT);
             $stmt->bindParam(':rib', $rib);
-            $stmt->bindParam(':adresseId', $adresseId, PDO::PARAM_INT);
-            $stmt->execute();
-            return $this->conn->lastInsertId();
+            $stmt->bindParam(':age', $age, PDO::PARAM_INT); // Assurez-vous que $age est défini ou utilisez une valeur par défaut
+            $stmt->bindParam(':code_postal', $code_postal, PDO::PARAM_STR); // Assurez-vous que $code_postal est défini ou utilisez une valeur par défaut
+            
+            if ($stmt->execute()) {
+                $newId = $this->conn->lastInsertId();
+                error_log("User created successfully with ID: " . $newId);
+                return $newId;
+            } else {
+                error_log("Failed to execute user creation query.");
+                return false;
+            }
         } catch (PDOException $e) {
-            echo 'Erreur lors de la création de l\'utilisateur : ' . $e->getMessage();
+            error_log('Erreur lors de la création de l\'utilisateur : ' . $e->getMessage());
             return false;
         }
     }
@@ -73,6 +84,7 @@ class Utilisateur {
         try {
             $sql = "SELECT * FROM utilisateur WHERE Id_utilisateur = $id";
             $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
@@ -99,6 +111,22 @@ class Utilisateur {
             return $stmt->execute();
         } catch (PDOException $e) {
             error_log('Erreur lors de la mise à jour de l\'utilisateur : ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function login($email, $password) {
+        try {
+            // Récupérer l'utilisateur par email
+            $user = $this->getByEmail($email);
+            if ($user && password_verify($password, $user['mdp_utilisateur'])) {
+                return $user;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            // Logger l'erreur en production au lieu d'afficher directement
+            error_log('Erreur lors de la connexion de l\'utilisateur : ' . $e->getMessage());
             return false;
         }
     }
