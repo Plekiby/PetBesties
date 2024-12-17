@@ -1,79 +1,121 @@
 /* styles.css */
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #4eaaa5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    color: #ffffff;
-  }
-  
-  .page {
-    text-align: center;
-    width: 100%;
-  }
-  
-  .title {
-    font-size: 2.5em;
-    font-weight: bold;
-    color: #ffffff;
-    margin-bottom: 30px;
-  }
-  
-  .container {
-    background-color: #ffffff;
-    padding: 30px 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
-  }
-  
-  .form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .form input {
-    margin-bottom: 15px;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    outline: none;
-  }
-  
-  .form button {
-    background-color: #5b445d;
-    color: #ffffff;
-    font-size: 16px;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .form button:hover {
-    background-color: #4a374b;
-  }
-  
-  .footer-text {
-    font-size: 12px;
-    color: #808080;
-    margin-top: 20px;
-    line-height: 1.4;
-  }
-  
-  .footer-text a {
-    color: #4eaaa5;
-    text-decoration: none;
-  }
-  
-  .footer-text a:hover {
-    text-decoration: underline;
-  }
-  
-  
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #4eaaa5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #ffffff;
+}
+
+.page {
+  text-align: center;
+  width: 100%;
+}
+
+.title {
+  font-size: 2.5em;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 30px;
+}
+
+.container {
+  background-color: #ffffff;
+  padding: 30px 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form input, .form select {
+  margin-bottom: 15px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+}
+
+.form button {
+  background-color: #5b445d;
+  color: #ffffff;
+  font-size: 16px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form button:hover {
+  background-color: #4a374b;
+}
+
+.footer-text {
+  font-size: 12px;
+  color: #808080;
+  margin-top: 20px;
+  line-height: 1.4;
+}
+
+.footer-text a {
+  color: #4eaaa5;
+  text-decoration: none;
+}
+
+.footer-text a:hover {
+  text-decoration: underline;
+}
+
+/* Container des boutons de choix */
+.choix-statut {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+  gap: 10px;
+}
+
+/* Style des boutons radio */
+.statut-option {
+  display: flex;
+  align-items: center;
+}
+
+.statut-option input[type="radio"] {
+  display: none; /* Cacher les boutons radio par défaut */
+}
+
+.bouton-statut {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #4eaaa5;
+  border: 2px solid #4eaaa5;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+/* État actif (quand l'input radio est sélectionné) */
+.statut-option input[type="radio"]:checked + .bouton-statut {
+  background-color: #4eaaa5;
+  color: #ffffff;
+  border-color: #4eaaa5;
+  font-weight: bold;
+}
+
+/* Effet hover */
+.bouton-statut:hover {
+  background-color: #4eaaa5;
+  color: #ffffff;
+}
