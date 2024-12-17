@@ -1,4 +1,3 @@
-
 <?php
 require_once __DIR__ . '/../db/database.php';
 
@@ -9,21 +8,36 @@ class Adresse {
         $this->conn = Database::getInstance()->getConnection();
     }
 
-    public function create($adresseData) {
+    public function fetchAll() {
         try {
-            $sql = "INSERT INTO adresse (numero_adresse, rue_adresse, nom_adresse, complement_adresse, latitude, longitude)
+            $sql = "SELECT * FROM adresse";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Erreur lors de la récupération des adresses : ' . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function createAdresse($numero, $rue, $nom, $complement, $latitude, $longitude) {
+        try {
+            $sql = "INSERT INTO adresse (numero_adresse, rue_adresse, nom_adresse, complement_adresse, latitude, longitude) 
                     VALUES (:numero, :rue, :nom, :complement, :latitude, :longitude)";
             $stmt = $this->conn->prepare($sql);
-            $stmt->bindParam(':numero', $adresseData['numero']);
-            $stmt->bindParam(':rue', $adresseData['rue']);
-            $stmt->bindParam(':nom', $adresseData['nom']);
-            $stmt->bindParam(':complement', $adresseData['complement']);
-            $stmt->bindParam(':latitude', $adresseData['latitude']);
-            $stmt->bindParam(':longitude', $adresseData['longitude']);
-            $stmt->execute();
-            return $this->conn->lastInsertId();
+            $stmt->bindParam(':numero', $numero);
+            $stmt->bindParam(':rue', $rue);
+            $stmt->bindParam(':nom', $nom);
+            $stmt->bindParam(':complement', $complement);
+            $stmt->bindParam(':latitude', $latitude);
+            $stmt->bindParam(':longitude', $longitude);
+            if ($stmt->execute()) {
+                return $this->conn->lastInsertId();
+            } else {
+                return false;
+            }
         } catch (PDOException $e) {
-            echo 'Erreur lors de la création de l\'adresse : ' . $e->getMessage();
+            error_log('Erreur lors de la création de l\'adresse : ' . $e->getMessage());
             return false;
         }
     }

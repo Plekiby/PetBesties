@@ -41,5 +41,41 @@ class Annonce {
             return [];
         }
     }
+
+    public function createAnnonce($titre, $description, $dateDebut, $duree, $tarif, $id_utilisateur, $gardiennage, $promenade, $adresseId) {
+        try {
+            $this->conn->beginTransaction();
+
+            $sql = "INSERT INTO annonce (titre_annonce, description_annonce, dateDebut_annonce, duree_annonce, tarif_annonce, Id_Statut, Id_utilisateur, datePublication_annonce, Id_Adresse) 
+                    VALUES (:titre, :description, :dateDebut, :duree, :tarif, :id_statut, :id_utilisateur, NOW(), :adresseId)";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':titre', $titre);
+            $stmt->bindParam(':description', $description);
+            $stmt->bindParam(':dateDebut', $dateDebut);
+            $stmt->bindParam(':duree', $duree);
+            $stmt->bindParam(':tarif', $tarif);
+            $stmt->bindValue(':id_statut', 1, PDO::PARAM_INT); // Assuming '1' is the default status
+            $stmt->bindParam(':id_utilisateur', $id_utilisateur, PDO::PARAM_INT);
+            $stmt->bindParam(':adresseId', $adresseId, PDO::PARAM_INT);
+            $stmt->execute();
+            $annonceId = $this->conn->lastInsertId();
+
+            // Insert into peut_etre table
+            $sqlPeutEtre = "INSERT INTO peut_etre (Id_Annonce, Id_Gardiennage, Id_Promenade) 
+                            VALUES (:annonceId, :gardiennage, :promenade)";
+            $stmtPeutEtre = $this->conn->prepare($sqlPeutEtre);
+            $stmtPeutEtre->bindParam(':annonceId', $annonceId, PDO::PARAM_INT);
+            $stmtPeutEtre->bindParam(':gardiennage', $gardiennage, PDO::PARAM_INT);
+            $stmtPeutEtre->bindParam(':promenade', $promenade, PDO::PARAM_INT);
+            $stmtPeutEtre->execute();
+
+            $this->conn->commit();
+            return true;
+        } catch (PDOException $e) {
+            $this->conn->rollBack();
+            error_log('Erreur lors de la création de l\'annonce : ' . $e->getMessage());
+            return false;
+        }
+    }
 }
 ?>

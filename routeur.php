@@ -10,8 +10,8 @@ error_reporting(E_ALL);
 class Router {
     private $routes = [];
 
-    public function add($path, $callback) {
-        $this->routes[$path] = $callback;
+    public function add($path, $callback, $method = 'GET') {
+        $this->routes[$method][$path] = $callback;
     }
 
     public function dispatch($requestUri) {
@@ -22,8 +22,9 @@ class Router {
         }
     
         $normalizedUri = trim($requestUri, '/'); 
+        $requestMethod = $_SERVER['REQUEST_METHOD'];
     
-        foreach ($this->routes as $path => $callback) {
+        foreach ($this->routes[$requestMethod] as $path => $callback) {
             $normalizedPath = trim($path, '/'); 
     
             if ($normalizedPath === $normalizedUri) {
@@ -67,12 +68,25 @@ $router->add('/petsitter', function() {
     include __DIR__ . '/views/petSitterAnnonce.php'; // Nouvelle vue pour PetSitter
     include __DIR__ . '/views/footer.php';
 });
-
+// fct get values users momo 
 $router->add('/profil', function() {
-    // Inclure les vues avec les données transmises
-    include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/page_de_profil.php'; // La vue utilise $prestataires
-    include __DIR__ . '/views/footer.php';
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (isset($_SESSION['user_id'])) {
+        $userId = $_SESSION['user_id'];
+        require_once __DIR__ . '/controllers/UtilisateurController.php';
+        $controlleruti = new UtilisateurController();
+        $utilisateur = $controlleruti->fetchOne($userId);
+
+        // Inclure les vues avec les données transmises
+        include __DIR__ . '/views/header.php';
+        include __DIR__ . '/views/page_de_profil.php'; // La vue utilise $prestataires
+        include __DIR__ . '/views/footer.php';
+    } else {
+        exit;
+    }
+    
 });
 
 $router->add('/contact', function() {
@@ -197,6 +211,67 @@ $router->add('/logout', function() {
     header('Location: /PetBesties/');
     exit;
 });
+
+//////////////////////////////////
+// Partie API
+//////////////////////////////////
+
+$router->add('/api/user-data', function() {
+    session_start();
+    header('Content-Type: application/json');
+
+    if (!isset($_SESSION['user_id'])) {
+        echo json_encode(["error" => "Utilisateur non connecté"]);
+        exit;
+    }
+
+    require_once __DIR__ . '/controllers/UtilisateurController.php';
+    $controller = new UtilisateurController();
+    $utilisateur = $controller->fetchOne($_SESSION['user_id']);
+
+    if ($utilisateur) {
+        // Adapter les noms de champs selon la base de données
+        $data = [
+            "prenom" => $utilisateur['prenom_utilisateur'],
+            "nom" => $utilisateur['nom_utilisateur'],
+            "email" => $utilisateur['email_utilisateur'],
+            "telephone" => $utilisateur['telephone_utilisateur']
+        ];
+        echo json_encode($data);
+    } else {
+        echo json_encode(["error" => "Utilisateur non trouvé"]);
+    }
+});
+
+$router->add('/api/update-user', function() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        session_start();
+        require_once __DIR__ . '/controllers/UtilisateurController.php';
+        $controller = new UtilisateurController();
+        $result = $controller->updateProfile($_SESSION['user_id'], $_POST);
+        
+        if ($result) {
+            echo json_encode(["success" => true]);
+        } else {
+            echo json_encode(["success" => false, "error" => "Mise à jour échouée."]);
+        }
+    } else {
+        http_response_code(405);
+        echo json_encode(["error" => "Méthode non autorisée"]);
+    }
+});
+
+$router->add('/poster_annonce', function() {
+    require_once __DIR__ . '/controllers/AnnonceController.php';
+    $controller = new AnnonceController();
+    $controller->showPostAnnonceForm();
+});
+
+$router->add('/poster_annonce', function() {
+    require_once __DIR__ . '/controllers/AnnonceController.php';
+    $controller = new AnnonceController();
+    $controller->postAnnonce();
+}, 'POST');
 
 ?>
 
