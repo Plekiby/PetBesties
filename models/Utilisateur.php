@@ -23,14 +23,15 @@ class Utilisateur {
 
     public function selectOne($id) {
         try {
-            $sql = "SELECT prenom_utilisateur, nom_utilisateur FROM utilisateur WHERE Id_utilisateur = $id";
+            $sql = "SELECT prenom_utilisateur, nom_utilisateur, email_utilisateur, telephone_utilisateur FROM utilisateur WHERE Id_utilisateur = :id";
             $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             // Logger l'erreur en production au lieu d'afficher directement
-            error_log('Erreur lors de la récupération des utilisateurs : ' . $e->getMessage());
-            return [];
+            error_log('Erreur lors de la récupération de l\'utilisateur : ' . $e->getMessage());
+            return false;
         }
     }
 

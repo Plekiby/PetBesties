@@ -220,17 +220,19 @@ $router->add('/api/user-data', function() {
         exit;
     }
 
-    // Connexion à la base de données
-    $pdo = new PDO("mysql:host=localhost;dbname=petbesties", "username", "password");
-    $user_id = $_SESSION['user_id'];
+    require_once __DIR__ . '/controllers/UtilisateurController.php';
+    $controller = new UtilisateurController();
+    $utilisateur = $controller->fetchOne($_SESSION['user_id']);
 
-    // Récupération des informations utilisateur
-    $query = $pdo->prepare("SELECT first_name, last_name, email, phone FROM users WHERE id = ?");
-    $query->execute([$user_id]);
-    $user = $query->fetch(PDO::FETCH_ASSOC);
-
-    if ($user) {
-        echo json_encode($user);
+    if ($utilisateur) {
+        // Adapter les noms de champs selon la base de données
+        $data = [
+            "prenom" => $utilisateur['prenom_utilisateur'],
+            "nom" => $utilisateur['nom_utilisateur'],
+            "email" => $utilisateur['email_utilisateur'],
+            "telephone" => $utilisateur['telephone_utilisateur']
+        ];
+        echo json_encode($data);
     } else {
         echo json_encode(["error" => "Utilisateur non trouvé"]);
     }

@@ -20,7 +20,7 @@ class UtilisateurController {
         // Appeler le modèle pour récupérer les données
         $utilisateur = $this->model->selectOne($id);
 
-        // Retourner les données pour la vue
+        // Retourner les données pour l'API
         return $utilisateur;
     }
 
