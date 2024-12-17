@@ -10,8 +10,8 @@ error_reporting(E_ALL);
 class Router {
     private $routes = [];
 
-    public function add($path, $callback) {
-        $this->routes[$path] = $callback;
+    public function add($path, $callback, $method = 'GET') {
+        $this->routes[$method][$path] = $callback;
     }
 
     public function dispatch($requestUri) {
@@ -22,8 +22,9 @@ class Router {
         }
     
         $normalizedUri = trim($requestUri, '/'); 
+        $requestMethod = $_SERVER['REQUEST_METHOD'];
     
-        foreach ($this->routes as $path => $callback) {
+        foreach ($this->routes[$requestMethod] as $path => $callback) {
             $normalizedPath = trim($path, '/'); 
     
             if ($normalizedPath === $normalizedUri) {
@@ -257,6 +258,18 @@ $router->add('/api/update-user', function() {
         echo json_encode(["error" => "Méthode non autorisée"]);
     }
 });
+
+$router->add('/poster_annonce', function() {
+    require_once __DIR__ . '/controllers/AnnonceController.php';
+    $controller = new AnnonceController();
+    $controller->showPostAnnonceForm();
+});
+
+$router->add('/poster_annonce', function() {
+    require_once __DIR__ . '/controllers/AnnonceController.php';
+    $controller = new AnnonceController();
+    $controller->postAnnonce();
+}, 'POST');
 
 ?>
 
