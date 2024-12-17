@@ -162,29 +162,31 @@ $router->add('/inscription', function() {
     include __DIR__ . '/views/footer.php';
 });
 
+// Add separate GET and POST routes for '/connexion'
+
 $router->add('/connexion', function() {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        require_once __DIR__ . '/controllers/UtilisateurController.php';
-        $controller = new UtilisateurController();
-        $email = $_POST['email'];
-        $password = $_POST['password'];
-        $user = $controller->login($email, $password);
-        if ($user) {
-            if (session_status() == PHP_SESSION_NONE) {
-                session_start();
-            }
-            $_SESSION['user_id'] = $user['Id_utilisateur'];
-            $_SESSION['user_email'] = $user['email_utilisateur'];
-            header('Location: /PetBesties/');
-            exit;
-        } else {
-            echo "Email ou mot de passe invalide.";
-        }
-    }
     include __DIR__ . '/views/header.php';
     include __DIR__ . '/views/connexion.php';
     include __DIR__ . '/views/footer.php';
-});
+}, 'GET');
+
+$router->add('/connexion', function() {
+    require_once __DIR__ . '/controllers/UtilisateurController.php';
+    $controller = new UtilisateurController();
+    
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
+    
+    if ($controller->login($email, $password)) {
+        header('Location: /PetBesties/profil');
+        exit;
+    } else {
+        $error = "Email ou mot de passe invalide.";
+        include __DIR__ . '/views/header.php';
+        include __DIR__ . '/views/connexion.php';
+        include __DIR__ . '/views/footer.php';
+    }
+}, 'POST');
 
 $router->add('/logout', function() {
     if (session_status() == PHP_SESSION_NONE) {

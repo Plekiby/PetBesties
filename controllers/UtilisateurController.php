@@ -89,13 +89,21 @@ class UtilisateurController {
         }
     }
 
+    // Ensure the login method correctly authenticates users
     public function login($email, $password) {
-        $user = $this->model->getByEmail($email);
-        if ($user && password_verify($password, $user['mdp_utilisateur'])) {
-            // Ne pas initialiser la session ici
-            return $user; // Modifiez cette ligne
+        // Delegate the login process to the Utilisateur model
+        $user = $this->model->login($email, $password);
+        if ($user) {
+            // Start session if not already started
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();
+            }
+            $_SESSION['user_id'] = $user['Id_utilisateur'];
+            $_SESSION['user_email'] = $user['email_utilisateur'];
+            return true;
+        } else {
+            return false;
         }
-        return false;
     }
 }
 ?>
