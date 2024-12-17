@@ -5,6 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PetBesties Profile</title>
     <link rel="stylesheet" type="text/css" href="/petbesties/public/css/page_de_profil.css">
+    <style>
+    /* ...existing styles... */
+
+    .profile-details {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .profile-details input {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    /* ...existing styles... */
+</style>
     </head>
 <body>
 
@@ -270,6 +287,23 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Fonction pour récupérer les données utilisateur depuis la session
 
+    document.addEventListener("DOMContentLoaded", function() {
+    // Requête AJAX pour récupérer les données utilisateur
+        fetch('/PetBesties/api/user-data')
+            .then(response => response.json()) // Convertir la réponse en JSON
+            .then(data => {
+                if (data.error) {
+                    console.error("Erreur:", data.error);
+                } else {
+                // Insérer les valeurs dans les champs HTML avec les bons noms de champs
+                    document.getElementById("profile-first-name").value = data.prenom || "Prénom";
+                    document.getElementById("profile-last-name").value = data.nom || "Nom";
+                    document.getElementById("profile-email").value = data.email || "email@example.com";
+                    document.getElementById("profile-phone").value = data.telephone || "Numéro de téléphone";
+                }
+            })
+            .catch(error => console.error("Erreur lors de la récupération des données:", error));
+    });
 
    
 

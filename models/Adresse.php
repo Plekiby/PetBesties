@@ -1,4 +1,3 @@
-
 <?php
 require_once __DIR__ . '/../db/database.php';
 
@@ -9,17 +8,17 @@ class Adresse {
         $this->conn = Database::getInstance()->getConnection();
     }
 
-    public function create($adresseData) {
+    public function create($data) {
         try {
-            $sql = "INSERT INTO adresse (numero_adresse, rue_adresse, nom_adresse, complement_adresse, latitude, longitude)
+            $sql = "INSERT INTO adresse (numero_adresse, rue_adresse, nom_adresse, complement_adresse, latitude, longitude) 
                     VALUES (:numero, :rue, :nom, :complement, :latitude, :longitude)";
             $stmt = $this->conn->prepare($sql);
-            $stmt->bindParam(':numero', $adresseData['numero']);
-            $stmt->bindParam(':rue', $adresseData['rue']);
-            $stmt->bindParam(':nom', $adresseData['nom']);
-            $stmt->bindParam(':complement', $adresseData['complement']);
-            $stmt->bindParam(':latitude', $adresseData['latitude']);
-            $stmt->bindParam(':longitude', $adresseData['longitude']);
+            $stmt->bindParam(':numero', $data['numero']);
+            $stmt->bindParam(':rue', $data['rue']);
+            $stmt->bindParam(':nom', $data['nom']);
+            $stmt->bindParam(':complement', $data['complement']);
+            $stmt->bindParam(':latitude', $data['latitude']);
+            $stmt->bindParam(':longitude', $data['longitude']);
             $stmt->execute();
             return $this->conn->lastInsertId();
         } catch (PDOException $e) {

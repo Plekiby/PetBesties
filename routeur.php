@@ -209,6 +209,34 @@ $router->add('/logout', function() {
     exit;
 });
 
+// partie code mohamed recuperer les donnees de conexion 
+
+$router->add('/api/user-data', function() {
+    session_start();
+    header('Content-Type: application/json');
+
+    if (!isset($_SESSION['user_id'])) {
+        echo json_encode(["error" => "Utilisateur non connecté"]);
+        exit;
+    }
+
+    require_once __DIR__ . '/controllers/UtilisateurController.php';
+    $controller = new UtilisateurController();
+    $utilisateur = $controller->fetchOne($_SESSION['user_id']);
+
+    if ($utilisateur) {
+        // Adapter les noms de champs selon la base de données
+        $data = [
+            "prenom" => $utilisateur['prenom_utilisateur'],
+            "nom" => $utilisateur['nom_utilisateur'],
+            "email" => $utilisateur['email_utilisateur'],
+            "telephone" => $utilisateur['telephone_utilisateur']
+        ];
+        echo json_encode($data);
+    } else {
+        echo json_encode(["error" => "Utilisateur non trouvé"]);
+    }
+});
 
 ?>
 

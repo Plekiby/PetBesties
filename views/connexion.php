@@ -1,3 +1,23 @@
+<?php
+session_start();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_once __DIR__ . '/../controllers/UtilisateurController.php';
+    $controller = new UtilisateurController();
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $user = $controller->login($email, $password);
+    if ($user) {
+        $_SESSION['user_id'] = $user['Id_utilisateur'];
+        $_SESSION['user_email'] = $user['email_utilisateur'];
+        header('Location: /PetBesties/profil');
+        exit;
+    } else {
+        $error = "Email ou mot de passe invalide.";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -16,6 +36,10 @@
 
                 <label for="password">Mot de passe</label>
                 <input type="password" id="password" name="password" placeholder="********" required>
+
+                <?php if (isset($error)): ?>
+                    <p style="color: red;"><?php echo htmlspecialchars($error); ?></p>
+                <?php endif; ?>
 
                 <button type="submit" class="btn">Next</button>
             </form>
