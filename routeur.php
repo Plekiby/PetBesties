@@ -65,9 +65,10 @@ $router->add('/petsitter', function() {
 
     // Inclure les vues avec les données transmises
     include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/petSitterAnnonce.php'; // Nouvelle vue pour PetSitter
+    include __DIR__ . '/views/petSitterAnnonce.php'; // La vue utilise $annonces
     include __DIR__ . '/views/footer.php';
 });
+
 // fct get values users momo 
 $router->add('/profil', function() {
     if (session_status() == PHP_SESSION_NONE) {
@@ -150,31 +151,42 @@ $router->add('/coups_de_coeur', function() {
     include __DIR__ . '/views/footer.php';
 });
 
+// Route GET pour afficher le formulaire d'inscription
 $router->add('/inscription', function() {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        require_once __DIR__ . '/controllers/UtilisateurController.php';
-        $controller = new UtilisateurController();
-        $data = [
-            'prenom' => $_POST['prenom'],
-            'nom' => $_POST['nom'],
-            'email' => $_POST['email'],
-            'mdp' => $_POST['mdp'],
-            'telephone' => $_POST['telephone'],
-            'type' => 1,
-            'rib' => '',
-            'adresseId' => 4
-        ];
-        if ($controller->register($data)) {
-            header('Location: /PetBesties/'); // Modifiez cette ligne
-            exit;
-        } else {
-            echo "Erreur lors de l'inscription.";
-        }
-    }
     include __DIR__ . '/views/header.php';
     include __DIR__ . '/views/Inscription.php';
     include __DIR__ . '/views/footer.php';
-});
+}, 'GET');
+
+// Route POST pour traiter la soumission du formulaire d'inscription
+$router->add('/inscription', function() {
+    require_once __DIR__ . '/controllers/UtilisateurController.php';
+    $controller = new UtilisateurController();
+
+    $data = [
+        'prenom' => $_POST['prenom'],
+        'nom' => $_POST['nom'],
+        'email' => $_POST['email'],
+        'mdp' => $_POST['mdp'],
+        'telephone' => $_POST['telephone'],
+        'type' => 1,
+        'rib' => '',
+        'adresse_numero' => $_POST['adresse_numero'],
+        'adresse_rue' => $_POST['adresse_rue'],
+        'adresse_nom' => $_POST['adresse_nom'],
+        'adresse_complement' => $_POST['adresse_complement']
+    ];
+
+    if ($controller->register($data)) {
+        header('Location: /PetBesties/');
+        exit;
+    } else {
+        $error = "Erreur lors de l'inscription.";
+        include __DIR__ . '/views/header.php';
+        include __DIR__ . '/views/Inscription.php';
+        include __DIR__ . '/views/footer.php';
+    }
+}, 'POST');
 
 // Add separate GET and POST routes for '/connexion'
 
@@ -261,17 +273,25 @@ $router->add('/api/update-user', function() {
     }
 });
 
+// Route GET pour afficher le formulaire de création d'annonce
 $router->add('/poster_annonce', function() {
     require_once __DIR__ . '/controllers/AnnonceController.php';
     $controller = new AnnonceController();
     $controller->showPostAnnonceForm();
-});
+}, 'GET');
 
+// Route POST pour traiter la soumission du formulaire de création d'annonce
 $router->add('/poster_annonce', function() {
     require_once __DIR__ . '/controllers/AnnonceController.php';
     $controller = new AnnonceController();
     $controller->postAnnonce();
 }, 'POST');
 
-?>
+// Route pour afficher une annonce spécifique après sa création
+$router->add('/annonce/{id}', function($id) {
+    require_once __DIR__ . '/controllers/AnnonceController.php';
+    $controller = new AnnonceController();
+    $controller->showAnnonce($id);
+});
+
 
