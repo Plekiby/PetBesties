@@ -165,7 +165,7 @@ $router->add('/inscription', function() {
             'adresseId' => 4
         ];
         if ($controller->register($data)) {
-            header('Location: /PetBesties/'); // Modifiez cette ligne
+            header('Location:/PetBesties/'); // Modifiez cette ligne
             exit;
         } else {
             echo "Erreur lors de l'inscription.";
@@ -174,6 +174,7 @@ $router->add('/inscription', function() {
     include __DIR__ . '/views/header.php';
     include __DIR__ . '/views/Inscription.php';
     include __DIR__ . '/views/footer.php';
+    
 });
 
 // Add separate GET and POST routes for '/connexion'

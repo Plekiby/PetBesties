@@ -1,18 +1,23 @@
-/* styles.css */
+/* Appliquer un espacement pour que le contenu de la page d'inscription ne soit pas caché par le header */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: #4eaaa5;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
   height: 100vh;
   color: #ffffff;
+  padding-top: 60px; /* Réserve de l'espace pour le header fixe */
 }
 
+/* Ajout d'un écart entre le header et la page d'inscription */
 .page {
   text-align: center;
   width: 100%;
+  flex: 1; /* Cela permet de pousser le footer vers le bas */
+  margin-top: 100px;
 }
 
 .title {
@@ -30,6 +35,7 @@ body {
   width: 100%;
   max-width: 400px;
   margin: 0 auto;
+  margin-bottom: 100px; 
 }
 
 .form {

@@ -13,14 +13,15 @@
     <div class="container section-commun">
       <!-- Formulaire d'inscription -->
       <form class="form formulaire-commun" method="POST" action="inscription.php">
-        <input type="text" name="prenom_utilisateur" placeholder="Prénom" required>
-        <input type="text" name="nom_utilisateur" placeholder="Nom" required>
-        <input type="email" name="email_utilisateur" placeholder="Adresse email" required>
-        <input type="password" name="mdp_utilisateur" placeholder="Mot de passe" required>
-        <input type="text" name="telephone_utilisateur" placeholder="Téléphone" optional>
-        
-        <!-- Choix du statut -->
-        <div class="choix-statut">
+        <input type="text" name="prenom" placeholder="Prénom" required>
+        <input type="text" name="nom" placeholder="Nom" required>
+        <input type="email" name="email" placeholder="Adresse email" required>
+        <input type="password" name="mdp" placeholder="Mot de passe" required>
+        <input type="text" name="telephone" placeholder="Téléphone" optional>
+        <input type="number" name="age" placeholder="Âge" required>
+        <input type="text" name="code_postal" placeholder="Code postal" required>
+                <!-- Choix du statut -->
+                <div class="choix-statut">
           <label class="statut-option">
             <input type="radio" name="type_utilisateur" value="PetSitter" required>
             <span class="bouton-statut">PetSitter</span>
@@ -30,9 +31,6 @@
             <span class="bouton-statut">PetOwner</span>
           </label>
         </div>
-        
-        <input type="number" name="age" placeholder="Âge" required>
-        <input type="text" name="code_postal" placeholder="Code postal" required>
         <button type="submit" class="bouton-commun">NEXT</button>
       </form>
 
