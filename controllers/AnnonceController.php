@@ -78,8 +78,27 @@ class AnnonceController {
                 // Récupérer et valider les données du formulaire
                 $type = $_POST['type_annonce'] ?? null; // Type: garde ou promenade
                 $animalId = $_POST['Id_Animal'] ?? null;
+                $addAnimal = isset($_POST['add_animal']) && $_POST['add_animal'] == 'on';
                 $adresseId = $_POST['Id_Adresse'] ?? null;
                 $details = $_POST['details_annonce'] ?? null;
+
+                // Handle new animal creation if requested
+                if ($addAnimal) {
+                    $nomAnimal = $_POST['nom_animal'] ?? null;
+                    $raceAnimal = $_POST['race_animal'] ?? null;
+
+                    if ($nomAnimal && $raceAnimal) {
+                        // Create the new animal
+                        $newAnimalId = $this->utilisateurModel->createAnimal($_SESSION['user_id'], $nomAnimal, $raceAnimal);
+                        if ($newAnimalId) {
+                            $animalId = $newAnimalId;
+                        } else {
+                            $error = "Erreur lors de la création de l'animal.";
+                        }
+                    } else {
+                        $error = "Nom et race de l'animal sont requis.";
+                    }
+                }
 
                 // Générer le titre basé sur le type et le nom de l'animal
                 if ($animalId && $type) {
@@ -114,7 +133,8 @@ class AnnonceController {
                         $_SESSION['user_id'],
                         $type,
                         $details,
-                        $adresseId
+                        $adresseId,
+                        $animalId // Pass the animal ID if needed
                     );
 
                     if ($result) {
@@ -206,6 +226,11 @@ class AnnonceController {
             }
         }
         return null;
+    }
+
+    // Ajouter une méthode pour créer un animal
+    public function createAnimal($userId, $nom, $race) {
+        return $this->utilisateurModel->createAnimal($userId, $nom, $race);
     }
 
 } // Correction de la fermeture de la classe

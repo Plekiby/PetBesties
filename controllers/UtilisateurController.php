@@ -1,14 +1,17 @@
 <?php
 require_once __DIR__ . '/../models/Utilisateur.php';
 require_once __DIR__ . '/../models/Adresse.php';
+require_once __DIR__ . '/../models/Animal.php';
 
 class UtilisateurController {
     private $model;
     private $adresseModel;
+    private $animalModel; // Added property
 
     public function __construct() {
         $this->model = new Utilisateur();
         $this->adresseModel = new Adresse();
+        $this->animalModel = new Animal(); // Instantiate Animal model
     }
 
     public function index() {
@@ -129,6 +132,10 @@ class UtilisateurController {
 
         // Mettre à jour les informations utilisateur
         return $this->model->update($id, $prenom, $nom, $email, $telephone);
+    }
+
+    public function createAnimal($userId, $nom, $race) {
+        return $this->model->createAnimal($userId, $nom, $race);
     }
 }
 ?>

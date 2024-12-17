@@ -174,6 +174,25 @@ class Utilisateur {
         }
     }
 
+    public function createAnimal($userId, $nom, $race) {
+        try {
+            $sql = "INSERT INTO animal (nom_animal, race_animal, Id_utilisateur) 
+                    VALUES (:nom, :race, :userId)";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':nom', $nom);
+            $stmt->bindParam(':race', $race);
+            $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+            if ($stmt->execute()) {
+                return $this->conn->lastInsertId();
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            error_log('Erreur lors de la création de l\'animal : ' . $e->getMessage());
+            return false;
+        }
+    }
+
     public function beginTransaction() {
         $this->conn->beginTransaction();
     }

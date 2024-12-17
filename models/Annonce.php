@@ -41,12 +41,12 @@ class Annonce {
         }
     }
 
-    public function createAnnonce($titre, $description, $dateDebut, $duree, $tarif, $id_utilisateur, $type, $details, $adresseId) {
+    public function createAnnonce($titre, $description, $dateDebut, $duree, $tarif, $id_utilisateur, $type, $details, $adresseId, $animalId) {
         try {
             $this->conn->beginTransaction();
 
-            $sql = "INSERT INTO annonce (titre_annonce, description_annonce, dateDebut_annonce, duree_annonce, tarif_annonce, Id_Statut, Id_utilisateur, datePublication_annonce, Id_Adresse, type_annonce) 
-                    VALUES (:titre, :description, :dateDebut, :duree, :tarif, :id_statut, :id_utilisateur, NOW(), :adresseId, :type_annonce)";
+            $sql = "INSERT INTO annonce (titre_annonce, description_annonce, dateDebut_annonce, duree_annonce, tarif_annonce, Id_Statut, Id_utilisateur, datePublication_annonce, Id_Adresse, type_annonce, Id_Animal) 
+                    VALUES (:titre, :description, :dateDebut, :duree, :tarif, :id_statut, :id_utilisateur, NOW(), :adresseId, :type_annonce, :animalId)";
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':titre', $titre);
             $stmt->bindParam(':description', $description);
@@ -57,6 +57,7 @@ class Annonce {
             $stmt->bindParam(':id_utilisateur', $id_utilisateur, PDO::PARAM_INT);
             $stmt->bindParam(':adresseId', $adresseId, PDO::PARAM_INT);
             $stmt->bindParam(':type_annonce', $type, PDO::PARAM_STR);
+            $stmt->bindParam(':animalId', $animalId, PDO::PARAM_INT);
             $stmt->execute();
             $annonceId = $this->conn->lastInsertId();
 
