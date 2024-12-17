@@ -33,6 +33,7 @@ body {
     height: 300px;
     padding: 20px;
     border-radius: 5px;
+    margin-bottom: 30px;
 }
 
 .sous-carre {
@@ -45,7 +46,7 @@ body {
     
 }
 
-.profil1, .profil2, .profil3, .profil4, .profil5 {
+.profil {
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -55,13 +56,11 @@ body {
     font-size: 16px;
     color: white;
     margin-right: 10px;
+    text-transform: uppercase;
+    overflow: hidden;         
+    box-sizing: border-box;
 }
 
-.profil1 { background-color: #d41107; }
-.profil2 { background-color: #ece809; }
-.profil3 { background-color: #044c09; }
-.profil4 { background-color: #0705ae; }
-.profil5 { background-color: #e60ea9; }
 
 
 .details h4 {
@@ -84,4 +83,5 @@ body {
     height: 300px;
     padding: 20px;
     border-radius: 5px;
+    margin-bottom: 30px;
 }

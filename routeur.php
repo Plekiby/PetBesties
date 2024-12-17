@@ -54,11 +54,11 @@ $router->add('/profil', function() {
 });
 
 $router->add('/candidatures', function() {
-    $userId = 1; // Replace with the actual current user ID
+    $userId = $_SESSION['user_id'] ?? 1;
 
     require_once __DIR__ . '/controllers/AnnonceController.php';
     $controller = new AnnonceController();
-    $annonces = $controller->index();
+    $annonces = $controller->index($userId);
 
     require_once __DIR__ . '/controllers/PostuleController.php';
     $controllerpostu = new PostuleController();
@@ -69,8 +69,7 @@ $router->add('/candidatures', function() {
 
     // Inclure les vues avec les données transmises
     include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/mescandidatures.php'; // La vue utilise $annonces et $candidatures
-    include __DIR__ . '/views/footer.php';
+    include __DIR__ . '/views/mescandidatures.php'; // La vue utilise $prestataires
 });
 
 $router->add('/coups_de_coeur', function() {
@@ -79,19 +78,23 @@ $router->add('/coups_de_coeur', function() {
     $controlleraime = new AimeController();
     $favoris = $controlleraime->index();
     include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/coupsdecoeur.php'; // La vue utilise $prestataires
+    include __DIR__ . '/views/coupsdecoeur.php'; 
     include __DIR__ . '/views/footer.php';
 });
 
 $router->add('/historique', function() {
-    // Inclure les vues avec les données transmises
-    include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/monhistorique.php'; // La vue utilise $prestataires
-    include __DIR__ . '/views/footer.php';
+session_start(); // Démarre la session pour récupérer l'ID utilisateur
+$userId = $_SESSION['user_id'] ?? 1;
+    
+require_once __DIR__ . '/controllers/HistoriqueController.php';
+$controller = new HistoriqueController();
+$historique = $controller->index($userId);
+    
+        include __DIR__ . '/views/header.php';
+        include __DIR__ . '/views/monhistorique.php';
+        include __DIR__ . '/views/footer.php';
 });
-
-
-
+    
 
 
 ?>
