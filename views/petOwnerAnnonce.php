@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PetBesties</title>
+    <title>Pet Owner Annonce</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
         body {
@@ -33,18 +33,19 @@
             max-width: 1200px;
             margin: 20px auto;
             padding: 10px;
+            gap: 20px; /* Ajouté pour espacer la carte et les résultats */
         }
 
         .map-container {
             flex: 2;
             height: 600px;
-            margin-right: 10px;
+            margin-right: 20px; /* Augmenté pour plus d'espace à droite */
         }
 
         .results {
             flex: 1;
             background-color: #ffffff;
-            padding: 10px;
+            padding: 20px; /* Augmenté pour plus de confort */
             border-radius: 8px;
             height: 600px;
             /* Hauteur fixe définie pour permettre le scroll */
@@ -64,6 +65,7 @@
             align-items: center;
             border-bottom: 1px solid #ddd;
             padding: 10px 0;
+            cursor: pointer;
         }
 
         .result-item:last-child {
@@ -89,6 +91,10 @@
         .result-item .info p {
             margin: 2px 0;
             color: #666;
+        }
+
+        .result-item:hover {
+            background-color: #f0f0f0;
         }
 
         .load-more {
@@ -128,23 +134,19 @@
 
 <div class="content">
     <div class="map-container">
-        <div id="map"></div>
+        <div id="map" style="height: 600px;"></div>
     </div>
     <div class="results">
-        <?php if (!empty($prestataires)): ?>
-            <?php foreach ($prestataires as $prestataire): ?>
-                <div class="result-item">
-                    <img src="<?= htmlspecialchars($prestataire['photo']); ?>" alt="Photo de <?= htmlspecialchars($prestataire['nom']); ?>">
-                    <div class="info">
-                        <h4><?= htmlspecialchars($prestataire['nom']); ?></h4>
-                        <p><?= htmlspecialchars($prestataire['ville']); ?></p>
-                        <p>À partir de <?= htmlspecialchars($prestataire['tarif']); ?> € par promenade</p>
-                        <p>Note : <?= htmlspecialchars($prestataire['avis']); ?> (<?= htmlspecialchars($prestataire['nb_avis']); ?> avis)</p>
-                    </div>
+        <?php if (!empty($annonces)): ?>
+            <?php foreach ($annonces as $annonce): ?>
+                <div class="result-item" onclick="map.setView([<?= htmlspecialchars($annonce['latitude']); ?>, <?= htmlspecialchars($annonce['longitude']); ?>], 15)">
+                    <h4><?= htmlspecialchars($annonce['titre_annonce']); ?></h4>
+                    <p><?= htmlspecialchars($annonce['prenom_utilisateur']) . ' ' . htmlspecialchars($annonce['nom_utilisateur']); ?></p>
+                    <p>À partir de <?= htmlspecialchars($annonce['tarif_annonce']); ?> €</p>
                 </div>
             <?php endforeach; ?>
         <?php else: ?>
-            <p>Aucun prestataire trouvé.</p>
+            <p>Aucune annonce trouvée.</p>
         <?php endif; ?>
     </div>
 </div>
@@ -160,13 +162,15 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Ajout des marqueurs pour chaque prestataire
-        const locations = <?= json_encode($prestataires ?? []); ?>;
+        // Ajout des marqueurs pour chaque annonce
+        const annonces = <?= json_encode($annonces ?? []); ?>;
 
-        if (locations.length > 0) {
-            locations.forEach((location) => {
-                L.marker([location.latitude, location.longitude]).addTo(map)
-                    .bindPopup(`<b>${location.nom}</b><br>${location.tarif} € par promenade`);
+        if (annonces.length > 0) {
+            annonces.forEach((annonce) => {
+                if (annonce.latitude && annonce.longitude) {
+                    L.marker([annonce.latitude, annonce.longitude]).addTo(map)
+                        .bindPopup(`<b>${annonce.titre_annonce}</b><br>${annonce.prenom_utilisateur} ${annonce.nom_utilisateur}<br>${annonce.tarif_annonce} €`);
+                }
             });
         }
     </script>

@@ -10,10 +10,11 @@ class Database {
 
     private function __construct() {
         try {
-            $this->conn = new PDO("mysql:host={$this->host};dbname={$this->db}", $this->user, $this->pass);
+            $this->conn = new PDO("mysql:host={$this->host};dbname={$this->db};charset=utf8mb4", $this->user, $this->pass);
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
-            echo 'Connection failed: ' . $e->getMessage();
+            echo 'Erreur de connexion à la base de données : ' . $e->getMessage();
+            exit;
         }
     }
 
