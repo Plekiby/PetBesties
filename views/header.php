@@ -23,12 +23,14 @@ if (session_status() == PHP_SESSION_NONE) {
         <a href="#" class="dropbtn">🐕 PetSitter</a>
         <div class="dropdown-content">
             <a href="/PetBesties/petsitter">Voir les annonces</a>
+            <a href="/PetBesties/poster_annonce">Poster une annonce</a>
         </div>
     </div>
     <div class="dropdown">
         <a href="#" class="dropbtn">🐾 PetOwner</a>
         <div class="dropdown-content">
             <a href="/PetBesties/petowner">Voir les annonces</a>
+            <a href="/PetBesties/poster_annonce">Poster une annonce</a>
         </div>
     </div>
     <a href="/PetBesties/contact">Contact</a>

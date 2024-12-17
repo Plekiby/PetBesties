@@ -60,5 +60,21 @@ class Adresse {
             return false;
         }
     }
+
+    public function getUserAddresses($userId) {
+        try {
+            $sql = "SELECT adresse.Id_Adresse, adresse.numero_adresse, adresse.rue_adresse, adresse.nom_adresse 
+                    FROM adresse
+                    JOIN utilisateur_adresse ON adresse.Id_Adresse = utilisateur_adresse.Id_Adresse
+                    WHERE utilisateur_adresse.Id_utilisateur = :userId";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Erreur lors de la récupération des adresses : ' . $e->getMessage());
+            return [];
+        }
+    }
 }
 ?>

@@ -45,8 +45,8 @@ class Annonce {
         try {
             $this->conn->beginTransaction();
 
-            $sql = "INSERT INTO annonce (titre_annonce, description_annonce, dateDebut_annonce, duree_annonce, tarif_annonce, Id_Statut, Id_utilisateur, datePublication_annonce, Id_Adresse) 
-                    VALUES (:titre, :description, :dateDebut, :duree, :tarif, :id_statut, :id_utilisateur, NOW(), :adresseId)";
+            $sql = "INSERT INTO annonce (titre_annonce, description_annonce, dateDebut_annonce, duree_annonce, tarif_annonce, Id_Statut, Id_utilisateur, datePublication_annonce, Id_Adresse, type_annonce) 
+                    VALUES (:titre, :description, :dateDebut, :duree, :tarif, :id_statut, :id_utilisateur, NOW(), :adresseId, :type_annonce)";
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':titre', $titre);
             $stmt->bindParam(':description', $description);
@@ -56,9 +56,11 @@ class Annonce {
             $stmt->bindValue(':id_statut', 1, PDO::PARAM_INT); // Statut par défaut
             $stmt->bindParam(':id_utilisateur', $id_utilisateur, PDO::PARAM_INT);
             $stmt->bindParam(':adresseId', $adresseId, PDO::PARAM_INT);
+            $stmt->bindParam(':type_annonce', $type, PDO::PARAM_STR);
             $stmt->execute();
             $annonceId = $this->conn->lastInsertId();
 
+            // Gérer les types d'annonce
             if ($type === 'promenade') {
                 $sqlPromenade = "INSERT INTO promenade (Id_Promenade, details_promenade) VALUES (:annonceId, :details)";
                 $stmtPromenade = $this->conn->prepare($sqlPromenade);

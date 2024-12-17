@@ -131,6 +131,49 @@ class Utilisateur {
         }
     }
 
+    public function getUserAnimals($userId) {
+        try {
+            $sql = "SELECT Id_Animal, nom_animal, race_animal FROM animal WHERE Id_utilisateur = :userId";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Erreur lors de la récupération des animaux : ' . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function getUserAddresses($userId) {
+        try {
+            $sql = "SELECT adresse.Id_Adresse, adresse.numero_adresse, adresse.rue_adresse, adresse.nom_adresse 
+                    FROM adresse
+                    JOIN utilisateur_adresse ON adresse.Id_Adresse = utilisateur_adresse.Id_Adresse
+                    WHERE utilisateur_adresse.Id_utilisateur = :userId";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Erreur lors de la récupération des adresses : ' . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function getAnimalById($animalId) {
+        try {
+            $sql = "SELECT Id_Animal, nom_animal, race_animal FROM animal WHERE Id_Animal = :animalId AND Id_utilisateur = :userId";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':animalId', $animalId, PDO::PARAM_INT);
+            $stmt->bindParam(':userId', $_SESSION['user_id'], PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Erreur lors de la récupération de l\'animal : ' . $e->getMessage());
+            return false;
+        }
+    }
+
     public function beginTransaction() {
         $this->conn->beginTransaction();
     }

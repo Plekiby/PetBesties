@@ -151,6 +151,13 @@ $router->add('/coups_de_coeur', function() {
     include __DIR__ . '/views/footer.php';
 });
 
+// Route GET pour afficher le formulaire de création d'annonce
+$router->add('/poster_annonce', function() {
+    require_once __DIR__ . '/controllers/AnnonceController.php';
+    $controller = new AnnonceController();
+    $controller->showPostAnnonceForm();
+}, 'GET');
+
 // Route GET pour afficher le formulaire d'inscription
 $router->add('/inscription', function() {
     include __DIR__ . '/views/header.php';
@@ -270,13 +277,6 @@ $router->add('/api/update-user', function() {
         echo json_encode(["error" => "Méthode non autorisée"]);
     }
 });
-
-// Route GET pour afficher le formulaire de création d'annonce
-$router->add('/poster_annonce', function() {
-    require_once __DIR__ . '/controllers/AnnonceController.php';
-    $controller = new AnnonceController();
-    $controller->showPostAnnonceForm();
-}, 'GET');
 
 // Route POST pour traiter la soumission du formulaire de création d'annonce
 $router->add('/poster_annonce', function() {
