@@ -1,3 +1,34 @@
+<?php
+// Connexion à la base de données
+$host = 'localhost';
+$dbname = 'appg1d_petbesties';
+$username = 'root'; // À remplacer par ton utilisateur MySQL
+$password = 'root'; // Mot de passe MySQL
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Erreur de connexion : " . $e->getMessage());
+}
+
+// Récupération de l'ID utilisateur (par exemple, ID fixe ou passé par GET)
+$id_annonce = 1; // À remplacer dynamiquement selon l'ID de l'annonce
+$query = $pdo->prepare("SELECT Id_utilisateur, titre_annonce FROM annonce WHERE Id_Annonce = :id");
+$query->execute(['id' => $id_annonce]);
+$annonce = $query->fetch();
+
+if ($annonce) {
+    // On récupère le nom de l'utilisateur
+    $user_id = $annonce['Id_utilisateur'];
+    $query_user = $pdo->prepare("SELECT nom_utilisateur FROM utilisateurs WHERE Id_utilisateur = :id_user");
+    $query_user->execute(['id_user' => $user_id]);
+    $user = $query_user->fetch();
+    $nom_utilisateur = $user ? $user['nom_utilisateur'] : "Inconnu";
+} else {
+    $nom_utilisateur = "Inconnu";
+}
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -5,25 +36,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/petbesties/public/css/stylepresta.css">
     <title>Prestations</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
     <div class="rectangle">
         <div class="entête">
-            <h1>Prestations</h1>
-        </div>
-        
+    <h1>Prestations</h1>
+    <p style="font-size: 18px; color: #e0e0e0;">Promenade de : <strong><?php echo htmlspecialchars($nom_utilisateur); ?></strong></p>
+</div>
+
+
         <div class="menu-container">
             <!-- Onglet Choix de l'itinéraire -->
             <div class="sousmenu">
                 <input type="checkbox" id="itineraire" class="sousmenu-toggle">
                 <label for="itineraire" class="sousmenu-label">Choix de l'itinéraire</label>
                 <div class="sousmenu-content" id="contenu">
-                    <input type="text" placeholder="Départ" />
-                    <input type="text" placeholder="Étape 1" />
-                    <input type="text" placeholder="Étape 2" />
-                    <button onclick="ajouterEtape()">Ajouter une étape</button>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5255.5927442908005!2d2.1177804766536705!3d48.80486487132495!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e67d94d7b14c75%3A0x538fcc15f59ce8f!2sCh%C3%A2teau%20de%20Versailles!5e0!3m2!1sfr!2sfr!4v1730648791509!5m2!1sfr!2sfr" width="300" height="200" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                    <button type="button">OK</button>
+                    <div id="itineraire-container">
+                        <input type="text" placeholder="Départ" id="depart" />
+                        <input type="text" placeholder="Étape 1" class="etape" />
+                        <input type="text" placeholder="Arrivée" id="arrivee" />
+                        <button onclick="ajouterEtape()">Ajouter une étape</button>
+                        <button onclick="validerItineraire()">OK</button>
+                    </div>
+                    <div id="map" style="width: 100%; height: 300px; margin-top: 10px;"></div>
                 </div>  
             </div>
 
@@ -82,22 +119,57 @@
     </div>
 
 <script>
-    // Fonction pour ajouter une nouvelle étape
-    function ajouterEtape() {
-    // Crée un nouvel input
-    var nouvelInput = document.createElement("input");
+    let map = L.map("map").setView([48.804864, 2.120355], 13);
+
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "© OpenStreetMap contributors"
+}).addTo(map);
+
+let markers = [];
+
+// Fonction pour ajouter un champ d'étape
+function ajouterEtape() {
+    const container = document.getElementById("itineraire-container");
+    const nouvelInput = document.createElement("input");
     nouvelInput.type = "text";
-    nouvelInput.placeholder = "Ajout d'une étape";
-
-    // Récupère le bouton "Ajouter une étape"
-    var boutonAjouter = document.querySelector("button[onclick='ajouterEtape()']");
-
-    // Insère le nouvel input juste avant le bouton
-    boutonAjouter.parentNode.insertBefore(nouvelInput, boutonAjouter);
+    nouvelInput.placeholder = "Étape " + (document.querySelectorAll(".etape").length + 1);
+    nouvelInput.classList.add("etape");
+    container.insertBefore(nouvelInput, container.children[container.children.length - 2]);
 }
 
+// Fonction pour valider et afficher l'itinéraire
+function validerItineraire() {
+    markers.forEach(marker => map.removeLayer(marker));
+    markers = [];
 
-    // Chronomètre
+    const depart = document.getElementById("depart").value.trim();
+    const arrivee = document.getElementById("arrivee").value.trim();
+    const etapes = Array.from(document.querySelectorAll(".etape")).map(e => e.value.trim());
+    const points = [depart, ...etapes, arrivee].filter(Boolean);
+
+    points.forEach((adresse, index) => {
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(adresse)}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.length > 0) {
+                    const [lat, lon] = [data[0].lat, data[0].lon];
+                    const marker = L.marker([lat, lon])
+                        .addTo(map)
+                        .bindPopup(`${index === 0 ? "Départ" : index === points.length - 1 ? "Arrivée" : `Étape ${index}`}: ${adresse}`);
+                    markers.push(marker);
+                    if (index === 0) map.setView([lat, lon], 13);
+                }
+            });
+    });
+}
+
+// *** Code ajouté ici pour rafraîchir la carte lors de l'ouverture de l'onglet ***
+document.getElementById('itineraire').addEventListener('change', function() {
+    if (this.checked) {
+        setTimeout(() => map.invalidateSize(), 300); // Rafraîchit la taille après affichage
+    }
+});
+// Chronomètre
     let timer; 
     let seconds = 0;
 
