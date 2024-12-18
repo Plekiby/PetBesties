@@ -26,18 +26,33 @@
         <a href="#">Poster une annonce</a>
         <a href="#">Postuler à une annonce</a>
       </div>
-    </div>
-    <a href="#">Contact</a>
+   
   </nav>
 
-  <div class="dropdown">
-    <button class="profile-button">Profil</button>
-    <div class="dropdown-menu">
-      <a href="#">Mes candidatures</a>
-      <a href="#">Mes coups de coeurs</a>
     </div>
   </div>
+  <?php if (isset($_SESSION['user_id'])): ?>
+    <div class="dropdown">
+        <button class="profile-button">Profil</button>
+        <div class="dropdown-menu">
+            <a href="/PetBesties/candidatures">Mes candidatures</a>
+            <a href="/PetBesties/historique">Mon historique</a>
+            <a href="/PetBesties/coups_de_coeur">Mes coups de coeur</a>
+            <a href="/PetBesties/contact">Contact</a>
+            <a href="/PetBesties/logout">Déconnexion</a>
+        </div>
+    </div>
+<?php else: ?>
+    <div class="auth-buttons">
+        <a href="/PetBesties/connexion" class="profile-button">Connexion</a>
+        <a href="/PetBesties/inscription" class="profile-button">Inscription</a>
+    </div>
+<?php endif; ?>
+
 </header>
 
 </body>
 </html>
+
+
+
