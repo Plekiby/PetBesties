@@ -9,7 +9,7 @@
 <body>
 <header class="header">
   <div class="logo">
-    <a href="/PetBesties/home"> 
+    <a href="/PetBesties/Pageaccueil.html"> 
       <img src="/petbesties/public/images/logoPB.jpg" alt="Logo PetBesties">
     </a>
   </div>
