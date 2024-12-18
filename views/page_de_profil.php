@@ -25,17 +25,25 @@
         <!-- code html qui recupere les identifiants du user-->
         <div class="profile-details">
             <form id="update-profile-form">
-                <label for="profile-first-name">First Name</label>
-                <input type="text" id="profile-first-name" name="prenom" value="First Name"><br>
+                <div class="form-group">
+                    <label for="profile-first-name">First Name</label>
+                    <input type="text" id="profile-first-name" name="prenom" value="First Name">
+                </div>
 
-                <label for="profile-last-name">Last Name</label> 
-                <input type="text" id="profile-last-name" name="nom" value="Last Name"><br>
+                <div class="form-group">
+                    <label for="profile-last-name">Last Name</label>
+                    <input type="text" id="profile-last-name" name="nom" value="Last Name">
+                </div>
 
-                <label for="profile-email">Email</label>
-                <input type="email" id="profile-email" name="email" value="email@example.com"><br>
+                <div class="form-group">
+                    <label for="profile-email">Email Address</label>
+                    <input type="email" id="profile-email" name="email" value="email@example.com">
+                </div>
 
-                <label for="profile-phone">Phone_number</label>
-                <input type="text" id="profile-phone" name="telephone" value="Phone Number"><br>
+                <div class="form-group">
+                    <label for="profile-phone">Phone Number</label>
+                    <input type="text" id="profile-phone" name="telephone" value="Phone Number">
+                </div>
 
                 <button type="submit" id="save-profile">Save</button>
                 <p id="update-success" style="color: green; display: none;">Informations mises à jour avec succès !</p>
@@ -43,13 +51,16 @@
             </form>
         </div>
 
+        <!-- page_de_profile.php -->
+
+
+
         <div class="profile-name">
             <input type="text" id="first-name" placeholder="Prénom" />
             <input type="text" id="last-name" placeholder="Nom" />
             <button id="validate-name">Modify</button>
             <p id="name-error" style="color: red; display: none;"></p>
         </div>
-
 
         <div class="profile-type">
             <button id = "pet-sitter" class="active">Pet Sitter</button>
@@ -130,6 +141,8 @@
         </div>
     </div>
 </div>
+
+
 
 <!-- premier script JS qui correspond à "profile-name, creation de profil">  -->
 <script>

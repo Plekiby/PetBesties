@@ -292,4 +292,25 @@ $router->add('/annonce/{id}', function($id) {
     $controller->showAnnonce($id);
 });
 
+/// code pour routage animal infos 
+// fct get values animal
+$router->add('/animal', function() {
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (isset($_SESSION['user_id'])) {
+        $userId = $_SESSION['user_id'];
+        require_once __DIR__ . '/controllers/AnimalController.php';
+        $controllerAnimal = new AnimalController();
+        $animal = $controllerAnimal->fetchAnimal($userId); // Récupérer l'animal de l'utilisateur
+
+        // Inclure les vues avec les données transmises
+        include __DIR__ . '/views/header.php';
+        include __DIR__ . '/views/page_de_profil_animal.php'; // Afficher les infos de l'animal
+        include __DIR__ . '/views/footer.php';
+    } else {
+        exit;
+    }
+});
+
 
