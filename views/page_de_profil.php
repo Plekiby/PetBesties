@@ -22,7 +22,7 @@
 
 
 
-        <!-- code html qui recupere les identifiants du user-->
+        
         <div class="profile-details">
             <form id="update-profile-form">
                 <label for="profile-first-name">First Name</label>
@@ -34,7 +34,7 @@
                 <label for="profile-email">Email</label>
                 <input type="email" id="profile-email" name="email" value="email@example.com"><br>
 
-                <label for="profile-phone">Phone_number</label>
+                <label for="profile-phone">Phone</label>
                 <input type="text" id="profile-phone" name="telephone" value="Phone Number"><br>
 
                 <button type="submit" id="save-profile">Save</button>
@@ -43,13 +43,12 @@
             </form>
         </div>
 
-        <div class="profile-name">
+        <!-- <div class="profile-name">
             <input type="text" id="first-name" placeholder="Prénom" />
             <input type="text" id="last-name" placeholder="Nom" />
             <button id="validate-name">Modify</button>
             <p id="name-error" style="color: red; display: none;"></p>
-        </div>
-
+        </div>  -->
 
         <div class="profile-type">
             <button id = "pet-sitter" class="active">Pet Sitter</button>
@@ -166,11 +165,11 @@
     // Sélection des éléments
     const firstName = document.getElementById("first-name");
     const lastName = document.getElementById("last-name");
-    const validateBtn = document.getElementById("validate-name");
+    //const validateBtn = document.getElementById("validate-name");
     const errorDisplay = document.getElementById("name-error");
 
     // Fonction de validation
-    validateBtn.addEventListener("click", () => {
+    /*validateBtn.addEventListener("click", () => {
         const firstNameValue = firstName.value.trim();
         const lastNameValue = lastName.value.trim();
 
@@ -181,7 +180,7 @@
             errorDisplay.style.display = "none";
             alert(`Bienvenue ${firstNameValue} ${lastNameValue} !`);
         }
-    });
+    });*/
 
 
     // ==========================
