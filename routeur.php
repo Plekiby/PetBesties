@@ -65,9 +65,10 @@ $router->add('/petsitter', function() {
 
     // Inclure les vues avec les données transmises
     include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/petSitterAnnonce.php'; // Nouvelle vue pour PetSitter
+    include __DIR__ . '/views/petSitterAnnonce.php'; // La vue utilise $annonces
     include __DIR__ . '/views/footer.php';
 });
+
 // fct get values users momo 
 $router->add('/profil', function() {
     if (session_status() == PHP_SESSION_NONE) {
@@ -150,55 +151,73 @@ $router->add('/coups_de_coeur', function() {
     include __DIR__ . '/views/footer.php';
 });
 
+// Route GET pour afficher le formulaire de création d'annonce
+$router->add('/poster_annonce', function() {
+    require_once __DIR__ . '/controllers/AnnonceController.php';
+    $controller = new AnnonceController();
+    $controller->showPostAnnonceForm();
+}, 'GET');
+
+// Route GET pour afficher le formulaire d'inscription
 $router->add('/inscription', function() {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        require_once __DIR__ . '/controllers/UtilisateurController.php';
-        $controller = new UtilisateurController();
-        $data = [
-            'prenom' => $_POST['prenom'],
-            'nom' => $_POST['nom'],
-            'email' => $_POST['email'],
-            'mdp' => $_POST['mdp'],
-            'telephone' => $_POST['telephone'],
-            'type' => 1,
-            'rib' => '',
-            'adresseId' => 4
-        ];
-        if ($controller->register($data)) {
-            header('Location: /PetBesties/'); // Modifiez cette ligne
-            exit;
-        } else {
-            echo "Erreur lors de l'inscription.";
-        }
-    }
     include __DIR__ . '/views/header.php';
     include __DIR__ . '/views/Inscription.php';
     include __DIR__ . '/views/footer.php';
-});
+}, 'GET');
+
+// Route POST pour traiter la soumission du formulaire d'inscription
+$router->add('/inscription', function() {
+    require_once __DIR__ . '/controllers/UtilisateurController.php';
+    $controller = new UtilisateurController();
+
+    $data = [
+        'prenom' => $_POST['prenom'],
+        'nom' => $_POST['nom'],
+        'email' => $_POST['email'],
+        'mdp' => $_POST['mdp'],
+        'telephone' => $_POST['telephone'],
+        'type' => 1,
+        'rib' => '',
+        'age' => isset($_POST['age']) ? $_POST['age'] : 0,
+        'code_postal' => isset($_POST['code_postal']) ? $_POST['code_postal'] : '00000'
+    ];
+
+    if ($controller->register($data)) {
+        header('Location: /PetBesties/');
+        exit;
+    } else {
+        $error = "Erreur lors de l'inscription.";
+        include __DIR__ . '/views/header.php';
+        include __DIR__ . '/views/Inscription.php';
+        include __DIR__ . '/views/footer.php';
+    }
+}, 'POST');
+
+// Add separate GET and POST routes for '/connexion'
 
 $router->add('/connexion', function() {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        require_once __DIR__ . '/controllers/UtilisateurController.php';
-        $controller = new UtilisateurController();
-        $email = $_POST['email'];
-        $password = $_POST['password'];
-        $user = $controller->login($email, $password);
-        if ($user) {
-            if (session_status() == PHP_SESSION_NONE) {
-                session_start();
-            }
-            $_SESSION['user_id'] = $user['Id_utilisateur'];
-            $_SESSION['user_email'] = $user['email_utilisateur'];
-            header('Location: /PetBesties/');
-            exit;
-        } else {
-            echo "Email ou mot de passe invalide.";
-        }
-    }
     include __DIR__ . '/views/header.php';
     include __DIR__ . '/views/connexion.php';
     include __DIR__ . '/views/footer.php';
-});
+}, 'GET');
+
+$router->add('/connexion', function() {
+    require_once __DIR__ . '/controllers/UtilisateurController.php';
+    $controller = new UtilisateurController();
+    
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
+    
+    if ($controller->login($email, $password)) {
+        header('Location: /PetBesties/profil');
+        exit;
+    } else {
+        $error = "Email ou mot de passe invalide.";
+        include __DIR__ . '/views/header.php';
+        include __DIR__ . '/views/connexion.php';
+        include __DIR__ . '/views/footer.php';
+    }
+}, 'POST');
 
 $router->add('/logout', function() {
     if (session_status() == PHP_SESSION_NONE) {
@@ -259,17 +278,43 @@ $router->add('/api/update-user', function() {
     }
 });
 
+// Route POST pour traiter la soumission du formulaire de création d'annonce
 $router->add('/poster_annonce', function() {
     require_once __DIR__ . '/controllers/AnnonceController.php';
     $controller = new AnnonceController();
-    $controller->showPostAnnonceForm();
-});
-
-$router->add('/poster_annonce', function() {
-    require_once __DIR__ . '/controllers/AnnonceController.php';
-    $controller = new AnnonceController();
-    $controller->postAnnonce();
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $controller->postAnnonce();
+    } else {
+        $controller->showPostAnnonceForm();
+    }
 }, 'POST');
 
-?>
+// Route pour afficher une annonce spécifique après sa création
+$router->add('/annonce/{id}', function($id) {
+    require_once __DIR__ . '/controllers/AnnonceController.php';
+    $controller = new AnnonceController();
+    $controller->showAnnonce($id);
+});
+
+/// code pour routage animal infos 
+// fct get values animal
+$router->add('/animal', function() {
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (isset($_SESSION['user_id'])) {
+        $userId = $_SESSION['user_id'];
+        require_once __DIR__ . '/controllers/AnimalController.php';
+        $controllerAnimal = new AnimalController();
+        $animal = $controllerAnimal->fetchAnimal($userId); // Récupérer l'animal de l'utilisateur
+
+        // Inclure les vues avec les données transmises
+        include __DIR__ . '/views/header.php';
+        include __DIR__ . '/views/page_de_profil_animal.php'; // Afficher les infos de l'animal
+        include __DIR__ . '/views/footer.php';
+    } else {
+        exit;
+    }
+});
+
 

@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,12 +23,14 @@ if (session_status() == PHP_SESSION_NONE) {
         <a href="#" class="dropbtn">🐕 PetSitter</a>
         <div class="dropdown-content">
             <a href="/PetBesties/petsitter">Voir les annonces</a>
+            <a href="/PetBesties/poster_annonce">Poster une annonce</a>
         </div>
     </div>
     <div class="dropdown">
         <a href="#" class="dropbtn">🐾 PetOwner</a>
         <div class="dropdown-content">
             <a href="/PetBesties/petowner">Voir les annonces</a>
+            <a href="/PetBesties/poster_annonce">Poster une annonce</a>
         </div>
     </div>
     <a href="/PetBesties/contact">Contact</a>
@@ -50,9 +52,11 @@ if (session_status() == PHP_SESSION_NONE) {
     <a href="/PetBesties/connexion" class="profile-button">Connexion</a>
     <a href="/PetBesties/inscription" class="profile-button">Inscription</a>
   <?php endif; ?>
+
+  <?php if(isset($error)) { ?>
+    <div class="error"><?php echo $error; ?></div>
+  <?php } ?>
 </header>
 
-</body>
-</html>
 </body>
 </html>

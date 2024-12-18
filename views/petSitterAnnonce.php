@@ -30,20 +30,16 @@
 
         .content {
             display: flex;
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 10px;
-            gap: 20px; /* Ajouté pour espacer la carte et les résultats */
         }
 
         .map-container {
-            flex: 2;
+            flex: 3; /* Augmenté pour prendre plus de largeur */
             height: 600px;
             margin-right: 20px; /* Augmenté pour plus d'espace à droite */
         }
 
         .results {
-            flex: 1;
+            flex: 2; /* Augmenté pour prendre plus de largeur */
             background-color: #ffffff;
             padding: 20px; /* Augmenté pour plus de confort */
             border-radius: 8px;
@@ -106,13 +102,6 @@
             text-decoration: none;
             border-radius: 5px;
             margin-top: 10px;
-        }
-
-        .content {
-            display: flex;
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 10px;
         }
 
         .map-container {

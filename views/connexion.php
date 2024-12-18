@@ -1,5 +1,5 @@
 <?php
-session_start();
+// session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require_once __DIR__ . '/../controllers/UtilisateurController.php';

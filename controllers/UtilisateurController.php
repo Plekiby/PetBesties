@@ -1,11 +1,17 @@
 <?php
 require_once __DIR__ . '/../models/Utilisateur.php';
+require_once __DIR__ . '/../models/Adresse.php';
+require_once __DIR__ . '/../models/Animal.php';
 
 class UtilisateurController {
     private $model;
+    private $adresseModel;
+    private $animalModel; // Added property
 
     public function __construct() {
         $this->model = new Utilisateur();
+        $this->adresseModel = new Adresse();
+        $this->animalModel = new Animal(); // Instantiate Animal model
     }
 
     public function index() {
@@ -54,56 +60,62 @@ class UtilisateurController {
         $email = $data['email'];
         $mdp = password_hash($data['mdp'], PASSWORD_BCRYPT);
         $telephone = $data['telephone'];
-        $type = $data['type'];
-        $rib = $data['rib'];
-        $adresseId = $data['adresseId'];
+        $type = isset($data['type']) ? $data['type'] : 0; // Valeur par défaut si non défini
+        $rib = isset($data['rib']) ? $data['rib'] : '';
+
+        // Définir des valeurs par défaut pour age et code_postal
+        $age = isset($data['age']) ? (int)$data['age'] : 0; // Valeur par défaut pour age
+        $code_postal = isset($data['code_postal']) ? $data['code_postal'] : '00000'; // Valeur par défaut pour code_postal
 
         // Start transaction
         $this->model->beginTransaction();
 
         try {
-            // Insert new address and get Id_Adresse
-            require_once __DIR__ . '/../models/Adresse.php';
-            $adresseData = [
-                'numero' => $data['adresse_numero'],
-                'rue' => $data['adresse_rue'],
-                'nom' => $data['adresse_nom'],
-                'complement' => $data['adresse_complement'],
-                'latitude' => null, // Set as needed
-                'longitude' => null // Set as needed
-            ];
-            $adresseModel = new Adresse();
-            $adresseId = $adresseModel->create($adresseData);
+            // Log the received data
+            error_log("Registering user with data: " . json_encode($data));
 
-            // Continue with user creation using the new $adresseId
-            $userId = $this->model->create($prenom, $nom, $email, $mdp, $telephone, $type, $rib, $adresseId);
+            // Créer l'utilisateur sans adresse
+            $userId = $this->model->create($prenom, $nom, $email, $mdp, $telephone, $type, $rib, $age, $code_postal);
 
-            // Commit transaction
+            if (!$userId) {
+                throw new Exception('Erreur lors de la création de l\'utilisateur.');
+            }
+
+            // Commit transaction sans adresse
             $this->model->commit();
+            error_log("User with ID $userId created and transaction committed.");
 
             if ($userId) {
                 $_SESSION['user_id'] = $userId;
                 $_SESSION['user_email'] = $email;
                 return true;
             } else {
-                // Ne pas utiliser 'echo' ici si vous prévoyez une redirection après
                 return false;
             }
         } catch (Exception $e) {
             // Rollback transaction on error
             $this->model->rollBack();
+            error_log('Erreur lors de l\'inscription : ' . $e->getMessage());
             echo 'Erreur lors de l\'inscription : ' . $e->getMessage();
             return false;
         }
     }
 
+    // Ensure the login method correctly authenticates users
     public function login($email, $password) {
-        $user = $this->model->getByEmail($email);
-        if ($user && password_verify($password, $user['mdp_utilisateur'])) {
-            // Ne pas initialiser la session ici
-            return $user; // Modifiez cette ligne
+        // Delegate the login process to the Utilisateur model
+        $user = $this->model->login($email, $password);
+        if ($user) {
+            // Start session if not already started
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();
+            }
+            $_SESSION['user_id'] = $user['Id_utilisateur'];
+            $_SESSION['user_email'] = $user['email_utilisateur'];
+            return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     public function updateProfile($id, $data) {
@@ -120,6 +132,10 @@ class UtilisateurController {
 
         // Mettre à jour les informations utilisateur
         return $this->model->update($id, $prenom, $nom, $email, $telephone);
+    }
+
+    public function createAnimal($userId, $nom, $race) {
+        return $this->model->createAnimal($userId, $nom, $race);
     }
 }
 ?>

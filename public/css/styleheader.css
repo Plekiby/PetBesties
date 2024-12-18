@@ -122,3 +122,9 @@ body {
     display: block;
 }
 
+/* Suppression des styles liés aux champs d'adresse
+.adresse-field {
+    display: none;
+}
+*/
+

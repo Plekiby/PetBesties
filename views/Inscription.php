@@ -17,10 +17,8 @@
         <input type="text" name="telephone" placeholder="Téléphone" required>
         <input type="email" name="email" placeholder="Adresse mail" required>
         <input type="password" name="mdp" placeholder="Créer un mot de passe" required>
-        <input type="text" name="adresse_numero" placeholder="Numéro" required>
-        <input type="text" name="adresse_rue" placeholder="Rue" required>
-        <input type="text" name="adresse_nom" placeholder="Ville" required>
-        <input type="text" name="adresse_complement" placeholder="Complément">
+        <input type="hidden" name="age" value="0">
+        <input type="hidden" name="code_postal" value="00000">
         <button type="submit">NEXT</button>
       </form>
       <p class="footer-text">
