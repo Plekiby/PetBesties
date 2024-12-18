@@ -144,21 +144,36 @@ class Utilisateur {
         }
     }
 
+    public function addUserAddress($userId, $adresseId) {
+        try {
+            $sql = "INSERT INTO utilisateur_adresse (Id_utilisateur, Id_Adresse) VALUES (:userId, :adresseId)";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+            $stmt->bindParam(':adresseId', $adresseId, PDO::PARAM_INT);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log('Erreur lors de l\'association adresse-utilisateur : ' . $e->getMessage());
+            return false;
+        }
+    }
+    
+
     public function getUserAddresses($userId) {
         try {
-            $sql = "SELECT adresse.Id_Adresse, adresse.numero_adresse, adresse.rue_adresse, adresse.nom_adresse 
-                    FROM adresse
-                    JOIN utilisateur_adresse ON adresse.Id_Adresse = utilisateur_adresse.Id_Adresse
-                    WHERE utilisateur_adresse.Id_utilisateur = :userId";
+            $sql = "SELECT a.*
+                    FROM adresse a
+                    JOIN utilisateur_adresse ua ON a.Id_Adresse = ua.Id_Adresse
+                    WHERE ua.Id_utilisateur = :userId";
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log('Erreur lors de la récupération des adresses : ' . $e->getMessage());
+            error_log('Erreur lors de la récupération des adresses utilisateur : ' . $e->getMessage());
             return [];
         }
     }
+    
 
     public function getAnimalById($animalId) {
         try {
