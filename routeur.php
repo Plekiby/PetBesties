@@ -282,7 +282,11 @@ $router->add('/api/update-user', function() {
 $router->add('/poster_annonce', function() {
     require_once __DIR__ . '/controllers/AnnonceController.php';
     $controller = new AnnonceController();
-    $controller->postAnnonce();
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $controller->postAnnonce();
+    } else {
+        $controller->showPostAnnonceForm();
+    }
 }, 'POST');
 
 // Route pour afficher une annonce spécifique après sa création

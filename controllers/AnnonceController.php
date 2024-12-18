@@ -1,14 +1,17 @@
 <?php
 require_once __DIR__ . '/../models/Annonce.php';
-require_once __DIR__ . '/../models/Utilisateur.php'; // Added to use Utilisateur model
+require_once __DIR__ . '/../models/Utilisateur.php';
+require_once __DIR__ . '/../models/Animal.php'; // Ajout du modèle Animal
 
 class AnnonceController {
     private $model;
     private $utilisateurModel; // Added property
+    private $animalModel;
 
     public function __construct() {
         $this->model = new Annonce();
         $this->utilisateurModel = new Utilisateur(); // Instantiate Utilisateur model
+        $this->animalModel = new Animal();
     }
 
     public function index() {
@@ -29,35 +32,24 @@ class AnnonceController {
         }
     }
 
-    public function showPostAnnonceForm() {
-        // Fetch gardiennage options
+    public function showPostAnnonceForm($error = null, $success = null) {
         require_once __DIR__ . '/../models/Gardiennage.php';
         $gardiennageModel = new Gardiennage();
         $gardiennages = $gardiennageModel->fetchAll();
 
-        // Fetch promenade options
         require_once __DIR__ . '/../models/Promenade.php';
         $promenadeModel = new Promenade();
         $promenades = $promenadeModel->fetchAll();
 
-        // Fetch existing addresses
-        require_once __DIR__ . '/../models/Adresse.php';
-        $adresseModel = new Adresse();
-        $adresses = $adresseModel->fetchAll();
-
-        // Start session if not already started
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
 
         if (isset($_SESSION['user_id'])) {
             $userId = $_SESSION['user_id'];
-            // Fetch user's animals using Utilisateur model
             $animals = $this->utilisateurModel->getUserAnimals($userId);
-            // Fetch user's addresses using Utilisateur model
             $adresses = $this->utilisateurModel->getUserAddresses($userId);
         } else {
-            // Redirect to login if not authenticated
             header('Location: /PetBesties/connexion');
             exit;
         }
@@ -69,97 +61,67 @@ class AnnonceController {
 
     public function postAnnonce() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Start session if not already started
             if (session_status() == PHP_SESSION_NONE) {
                 session_start();
             }
-
-            if (isset($_SESSION['user_id'])) {
-                // Récupérer et valider les données du formulaire
-                $type = $_POST['type_annonce'] ?? null; // Type: garde ou promenade
-                $animalId = $_POST['Id_Animal'] ?? null;
-                $addAnimal = isset($_POST['add_animal']) && $_POST['add_animal'] == 'on';
-                $adresseId = $_POST['Id_Adresse'] ?? null;
-                $details = $_POST['details_annonce'] ?? null;
-
-                // Handle new animal creation if requested
-                if ($addAnimal) {
-                    $nomAnimal = $_POST['nom_animal'] ?? null;
-                    $raceAnimal = $_POST['race_animal'] ?? null;
-
-                    if ($nomAnimal && $raceAnimal) {
-                        // Create the new animal
-                        $newAnimalId = $this->utilisateurModel->createAnimal($_SESSION['user_id'], $nomAnimal, $raceAnimal);
-                        if ($newAnimalId) {
-                            $animalId = $newAnimalId;
-                        } else {
-                            $error = "Erreur lors de la création de l'animal.";
-                        }
+    
+            if (!isset($_SESSION['user_id'])) {
+                header('Location: /PetBesties/connexion');
+                exit;
+            }
+    
+            $userId = $_SESSION['user_id'];
+            $action = $_POST['action'] ?? '';
+    
+            if ($action == 'create_animal') {
+                // Logique pour créer un animal
+            } elseif ($action == 'create_address') {
+                // Logique pour créer une adresse
+                require_once __DIR__ . '/../models/Adresse.php';
+                $adresseModel = new Adresse();
+    
+                $numero = $_POST['numero_adresse'] ?? null;
+                $rue = $_POST['rue_adresse'] ?? null;
+                $nom = $_POST['nom_adresse'] ?? null;
+                $complement = $_POST['complement_adresse'] ?? null;
+                $latitude = $_POST['latitude'] ?? null;
+                $longitude = $_POST['longitude'] ?? null;
+    
+                if ($numero && $rue && $nom) {
+                    $adresseData = [
+                        'numero' => $numero,
+                        'rue' => $rue,
+                        'nom' => $nom,
+                        'complement' => $complement,
+                        'latitude' => $latitude,
+                        'longitude' => $longitude
+                    ];
+    
+                    $newAdresseId = $adresseModel->create($adresseData);
+                    if ($newAdresseId) {
+                        // Associer l'adresse à l'utilisateur
+                        $this->utilisateurModel->addUserAddress($userId, $newAdresseId);
+                        // Une fois créée, on peut recharger la page
+                        header('Location: /PetBesties/poster_annonce');
+                        exit;
                     } else {
-                        $error = "Nom et race de l'animal sont requis.";
-                    }
-                }
-
-                // Générer le titre basé sur le type et le nom de l'animal
-                if ($animalId && $type) {
-                    // Récupérer le nom de l'animal
-                    $animal = $this->utilisateurModel->getAnimalById($animalId); // Assurez-vous que cette méthode existe
-                    if ($animal) {
-                        $titre = ucfirst($type) . ' de ' . $animal['nom_animal'];
-                    } else {
-                        $error = "Animal sélectionné invalide.";
+                        $error = "Erreur lors de la création de l'adresse.";
+                        $this->showPostAnnonceForm($error);
                     }
                 } else {
-                    $error = "Type d'annonce et animal sont requis.";
+                    $error = "Veuillez renseigner au moins le numéro, la rue et la ville.";
+                    $this->showPostAnnonceForm($error);
                 }
-
-                // Vérifier si une nouvelle adresse doit être créée
-                if (!$adresseId) {
-                    $adresseId = $this->createNewAdresse($_POST);
-                    if (!$adresseId) {
-                        $error = "Adresse invalide ou incomplète.";
-                    }
-                }
-
-                // Vérifier que toutes les données nécessaires sont présentes
-                if (isset($titre) && isset($details) && isset($adresseId)) {
-                    // Appeler le modèle pour créer l'annonce avec les paramètres requis
-                    $result = $this->model->createAnnonce(
-                        $titre,
-                        $details, // Description remplacée par détails
-                        date('Y-m-d'), // Date de début actuelle
-                        0, // Durée par défaut, ajustez si nécessaire
-                        0, // Tarif par défaut, ajustez si nécessaire
-                        $_SESSION['user_id'],
-                        $type,
-                        $details,
-                        $adresseId,
-                        $animalId // Pass the animal ID if needed
-                    );
-
-                    if ($result) {
-                        $success = "Annonce postée avec succès!";
-                    } else {
-                        $error = "Erreur lors de la publication de l'annonce. Veuillez réessayer.";
-                    }
-                } else {
-                    if (!isset($error)) {
-                        $error = "Tous les champs sont obligatoires.";
-                    }
-                }
-
-                include __DIR__ . '/../views/header.php';
-                include __DIR__ . '/../views/poster_annonce.php';
-                include __DIR__ . '/../views/footer.php';
+    
+            } elseif ($action == 'post_annonce') {
+                // Logique pour poster une annonce
             } else {
                 header('Location: /PetBesties/connexion');
                 exit;
             }
-        } else {
-            header('Location: /PetBesties/poster_annonce');
-            exit;
         }
     }
+    
 
     public function showAnnonce($id) {
         try {
@@ -196,9 +158,9 @@ class AnnonceController {
                 'numero' => $postData['numero_adresse'],
                 'rue' => $postData['rue_adresse'],
                 'nom' => $postData['nom_adresse'],
-                'complement' => $postData['complement_adresse'],
-                'latitude' => $postData['latitude'],
-                'longitude' => $postData['longitude']
+                'complement' => $postData['complement_adresse'] ?? null,
+                'latitude' => $postData['latitude'] ?? null,
+                'longitude' => $postData['longitude'] ?? null
             ];
             return $adresseModel->create($adresseData);
         }

@@ -1,4 +1,3 @@
-
 <?php
 require_once __DIR__ . '/../db/database.php';
 
@@ -31,10 +30,27 @@ class Animal {
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log('Erreur lors de la récupération de l\'animal : ' . $e->getMessage());
+            error_log('Erreur lors de la récupération de l animal : ' . $e->getMessage());
             return false;
         }
     }
+    
+
+    public function createAnimal($userId, $nomAnimal, $raceAnimal) {
+        try {
+            $sql = "INSERT INTO animal (nom_animal, race_animal, Id_utilisateur) VALUES (:nom, :race, :userId)";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':nom', $nomAnimal);
+            $stmt->bindParam(':race', $raceAnimal);
+            $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+            $stmt->execute();
+            return $this->conn->lastInsertId();
+        } catch (PDOException $e) {
+            error_log('Erreur lors de la création de l\'animal : ' . $e->getMessage());
+            return false;
+        }
+    }
+    
 
     // ...additional methods as needed...
 }
