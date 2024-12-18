@@ -1,33 +1,4 @@
-<?php
-// Connexion à la base de données
-$host = 'localhost';
-$dbname = 'appg1d_petbesties';
-$username = 'root'; // À remplacer par ton utilisateur MySQL
-$password = 'root'; // Mot de passe MySQL
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Erreur de connexion : " . $e->getMessage());
-}
 
-// Récupération de l'ID utilisateur (par exemple, ID fixe ou passé par GET)
-$id_annonce = 1; // À remplacer dynamiquement selon l'ID de l'annonce
-$query = $pdo->prepare("SELECT Id_utilisateur, titre_annonce FROM annonce WHERE Id_Annonce = :id");
-$query->execute(['id' => $id_annonce]);
-$annonce = $query->fetch();
-
-if ($annonce) {
-    // On récupère le nom de l'utilisateur
-    $user_id = $annonce['Id_utilisateur'];
-    $query_user = $pdo->prepare("SELECT nom_utilisateur FROM utilisateurs WHERE Id_utilisateur = :id_user");
-    $query_user->execute(['id_user' => $user_id]);
-    $user = $query_user->fetch();
-    $nom_utilisateur = $user ? $user['nom_utilisateur'] : "Inconnu";
-} else {
-    $nom_utilisateur = "Inconnu";
-}
-?>
 
 <!DOCTYPE html>
 <html lang="fr">

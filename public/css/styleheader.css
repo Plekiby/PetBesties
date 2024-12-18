@@ -71,10 +71,6 @@ body {
     font-family: Arial, sans-serif;
 }
 
-.dropdown-menu a:hover {
-    background-color: #f1f1f1;
-    text-decoration: none;
-}
 
 .dropdown:hover .dropdown-menu {
     display: block; /* Affiche le menu au survol */

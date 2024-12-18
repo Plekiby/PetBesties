@@ -9,7 +9,9 @@
 <body>
 <header class="header">
   <div class="logo">
-    <img src="/petbesties/public/images/logoPB.jpg">
+    <a href="/PetBesties/home"> 
+      <img src="/petbesties/public/images/logoPB.jpg" alt="Logo PetBesties">
+    </a>
   </div>
 
   <nav class="navigation">
