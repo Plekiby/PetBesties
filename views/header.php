@@ -32,20 +32,24 @@
     </div>
   </div>
   <?php if (isset($_SESSION['user_id'])): ?>
-    <div class="dropdown">
-        <button class="profile-button">Profil</button>
+    <div class="auth-buttons">
+        <a href="/PetBesties/connexion" class="profile-button">Profil</a>
+        <a href="/PetBesties/conversation" class="profile-button">Conversations</a>
         <div class="dropdown-menu">
             <a href="/PetBesties/candidatures">Mes candidatures</a>
             <a href="/PetBesties/historique">Mon historique</a>
             <a href="/PetBesties/coups_de_coeur">Mes coups de coeur</a>
             <a href="/PetBesties/contact">Contact</a>
             <a href="/PetBesties/logout">Déconnexion</a>
+
         </div>
     </div>
 <?php else: ?>
     <div class="auth-buttons">
         <a href="/PetBesties/connexion" class="profile-button">Connexion</a>
         <a href="/PetBesties/inscription" class="profile-button">Inscription</a>
+        
+        
     </div>
 <?php endif; ?>
 
