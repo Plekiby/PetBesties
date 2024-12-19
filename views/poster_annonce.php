@@ -127,6 +127,7 @@
     </div>
 
     <!-- Formulaire pour poster l'annonce -->
+<!-- Formulaire pour poster l'annonce -->
 <div class="form-block">
     <h2>Poster une Nouvelle Annonce</h2>
     <form method="POST" action="/PetBesties/poster_annonce">
@@ -159,6 +160,15 @@
             <?php endforeach; ?>
         </select>
 
+        <label for="date_debut_annonce">Date de début:</label>
+        <input type="date" id="date_debut_annonce" name="date_debut_annonce" required>
+
+        <label for="duree_annonce">Durée (heures):</label>
+        <input type="number" id="duree_annonce" name="duree_annonce" min="1" required>
+
+        <label for="price_annonce">Prix (€):</label>
+        <input type="number" id="price_annonce" name="price_annonce" min="0" step="0.01" required>
+
         <label for="details_annonce">Détails:</label>
         <textarea name="details_annonce" id="details_annonce" required></textarea>
 
@@ -172,6 +182,7 @@
         <?php endif; ?>
     </form>
 </div>
+
 
 <script>
 document.getElementById('geocodeBtn').addEventListener('click', function() {

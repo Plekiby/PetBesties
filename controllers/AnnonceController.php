@@ -63,6 +63,34 @@ class AnnonceController {
         include __DIR__ . '/../views/footer.php';
     }
 
+    
+    public function showAnnonce($id) {
+        try {
+            // Valider et nettoyer l'ID
+            $id = intval($id);
+            if ($id <= 0) {
+                throw new Exception("ID d'annonce invalide.");
+            }
+
+            // Récupérer l'annonce par ID
+            $annonce = $this->model->getAnnonceById($id);
+
+            if ($annonce) {
+                include __DIR__ . '/../views/header.php';
+                include __DIR__ . '/../views/afficher_annonce.php';
+                include __DIR__ . '/../views/footer.php';
+            } else {
+                // Gérer le cas où l'annonce n'existe pas
+                http_response_code(404);
+                echo "Annonce non trouvée.";
+            }
+        } catch (Exception $e) {
+            error_log('Erreur dans showAnnonce : ' . $e->getMessage());
+            http_response_code(500);
+            echo "Erreur interne du serveur.";
+        }
+    }
+
     public function postAnnonce() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (session_status() == PHP_SESSION_NONE) {
@@ -132,42 +160,65 @@ class AnnonceController {
                 $Id_Animal = $_POST['Id_Animal'] ?? '';
                 $Id_Adresse = $_POST['Id_Adresse'] ?? '';
                 $details_annonce = $_POST['details_annonce'] ?? '';
+                $price_annonce = $_POST['price_annonce'] ?? '';
+                $date_debut_annonce = $_POST['date_debut_annonce'] ?? '';
+                $duree_annonce = $_POST['duree_annonce'] ?? '';
 
                 // Valider les données
-                if (empty($type_annonce) || empty($Id_Animal) || empty($Id_Adresse) || empty($details_annonce)) {
+                if (empty($type_annonce) || empty($Id_Animal) || empty($Id_Adresse) || empty($details_annonce) || empty($price_annonce) || empty($date_debut_annonce) || empty($duree_annonce)) {
                     $error = "Veuillez remplir tous les champs de l'annonce.";
                     error_log("Validation échouée pour l'annonce : champs manquants.");
                 } else {
-                    // Préparer les données pour l'insertion
-                    $titre_annonce = "Annonce " . date('Y-m-d H:i:s'); // Personnaliser le titre
-                    $description_annonce = $details_annonce;
-                    $dateDebut_annonce = date('Y-m-d', strtotime('+1 day')); // Un jour après la publication
-                    $duree_annonce = '30'; // Durée en jours
-                    $tarif_annonce = 20.00; // Tarif
-                    $typeAnnonce = ($type_annonce === 'gardiennage') ? 'gardiennage' : 'promenade'; // Conversion en chaîne
-
-                    // Appeler le modèle pour créer l'annonce
-                    error_log("Tentative de création d'une annonce de type {$typeAnnonce}.");
-
-                    $result = $this->model->createAnnonce(
-                        $titre_annonce,
-                        $description_annonce,
-                        $dateDebut_annonce,
-                        $duree_annonce,
-                        $tarif_annonce,
-                        $userId,
-                        $typeAnnonce,
-                        $details_annonce,
-                        $Id_Adresse,
-                        $Id_Animal
-                    );
-
-                    if ($result) {
-                        $success = "Annonce créée avec succès !";
-                        error_log("Annonce créée avec l'ID {$result}.");
+                    // Valider que type_annonce est 1 ou 0
+                    if (!in_array($type_annonce, ['1', '0'], true)) {
+                        $error = "Type d'annonce invalide.";
+                        error_log("Type_annonce invalide : {$type_annonce}");
+                    } 
+                    // Fetch the animal's name
+                    $animal = $this->animalModel->getAnimalById($Id_Animal, $userId);
+                    if (!$animal) {
+                        $error = "Animal sélectionné invalide.";
                     } else {
-                        $error = "Erreur lors de la création de l'annonce.";
-                        error_log("Erreur lors de la création de l'annonce pour l'utilisateur ID {$userId}.");
+                        $animalName = $animal['nom_animal'];
+
+                        // Générer le titre
+                        if ($type_annonce === '1') {
+                            $typeAnnonceText = 'Garde';
+                        } else {
+                            $typeAnnonceText = 'Promenade';
+                        }
+                        $titre_annonce = "{$typeAnnonceText} de " . ucfirst(strtolower($animalName));
+
+                        // Préparer les données pour l'insertion
+                        $description_annonce = $details_annonce;
+                        $dateDebut_annonce = date('Y-m-d', strtotime($date_debut_annonce)); // Assurez-vous du format
+                        $duree_annonce = intval($duree_annonce); // Convertir en entier
+                        $tarif_annonce = floatval($price_annonce); // Convertir en float
+                        $typeAnnonce = intval($type_annonce);// Conversion en chaîne
+
+                        // Appeler le modèle pour créer l'annonce
+                        error_log("Tentative de création d'une annonce de type {$typeAnnonce}.");
+
+                        $result = $this->model->createAnnonce(
+                            $titre_annonce,
+                            $description_annonce,
+                            $dateDebut_annonce,
+                            $duree_annonce,
+                            $tarif_annonce,
+                            $userId,
+                            $typeAnnonce,
+                            $details_annonce,
+                            $Id_Adresse,
+                            $Id_Animal
+                        );
+
+                        if ($result) {
+                            $success = "Annonce créée avec succès !";
+                            error_log("Annonce créée avec l'ID {$result}.");
+                        } else {
+                            $error = "Erreur lors de la création de l'annonce.";
+                            error_log("Erreur lors de la création de l'annonce pour l'utilisateur ID {$userId}.");
+                        }
                     }
                 }
             } else {
@@ -185,33 +236,6 @@ class AnnonceController {
         } else {
             header('Location: /PetBesties/connexion');
             exit;
-        }
-    }
-
-    public function showAnnonce($id) {
-        try {
-            // Valider et nettoyer l'ID
-            $id = intval($id);
-            if ($id <= 0) {
-                throw new Exception("ID d'annonce invalide.");
-            }
-
-            // Récupérer l'annonce par ID
-            $annonce = $this->model->getAnnonceById($id);
-
-            if ($annonce) {
-                include __DIR__ . '/../views/header.php';
-                include __DIR__ . '/../views/afficher_annonce.php';
-                include __DIR__ . '/../views/footer.php';
-            } else {
-                // Gérer le cas où l'annonce n'existe pas
-                http_response_code(404);
-                echo "Annonce non trouvée.";
-            }
-        } catch (Exception $e) {
-            error_log('Erreur dans showAnnonce : ' . $e->getMessage());
-            http_response_code(500);
-            echo "Erreur interne du serveur.";
         }
     }
 
