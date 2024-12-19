@@ -105,11 +105,42 @@ $router->add('/historique', function() {
 });
 
 $router->add('/prestations', function() {
+    // Démarrer la session si ce n'est pas déjà fait
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    // Vérifier si l'utilisateur est connecté
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: /PetBesties/connexion');
+        exit;
+    }
+
+    $userId = $_SESSION['user_id'];
+
+    // Inclure le contrôleur AnnonceController
+    require_once __DIR__ . '/controllers/AnnonceController.php';
+    $controllerann = new AnnonceController();
+
+    // Utiliser la méthode publique pour récupérer les données de l'utilisateur
+    $utilisateur = $controllerann->getUserData($userId);
+    if ($utilisateur) {
+        $nom_utilisateur = $utilisateur['nom_utilisateur'];
+    } else {
+        // Si l'utilisateur n'est pas trouvé, rediriger ou gérer l'erreur
+        header('Location: /PetBesties/connexion');
+        exit;
+    }
+
+    // Récupérer les annonces (ajustez selon vos besoins)
+    $annonces = $controllerann->fetchAll(); // Ou une méthode spécifique comme getAnnoncesByUser($userId)
+
     // Inclure les vues avec les données transmises
     include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/prestations.php'; // La vue utilise $prestataires
+    include __DIR__ . '/views/prestations.php'; 
     include __DIR__ . '/views/footer.php';
 });
+
 
 
 $router->add('/candidatures', function() {

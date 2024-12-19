@@ -26,6 +26,11 @@ class AnnonceController {
         return $annonces;
     }
 
+    // Méthode publique pour accéder aux données de l'utilisateur
+    public function getUserData($userId) {
+        return $this->utilisateurModel->fetchOne($userId);
+    }
+    
     public function getAnnoncesByType($type) {
         try {
             // Utiliser la méthode fetchByUserType du modèle
