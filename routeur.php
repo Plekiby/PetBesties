@@ -47,27 +47,47 @@ $router->add('/', function() {
 });
 
 
-$router->add('/petowner', function() {
-    require_once __DIR__ . '/controllers/AnnonceController.php';
-    $controller = new AnnonceController();
-    $annonces = $controller->getAnnoncesByType(0); // type_utilisateur = 0 pour PetOwner
-
-    // Inclure les vues avec les données transmises
-    include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/petOwnerAnnonce.php'; // La vue utilise $annonces
-    include __DIR__ . '/views/footer.php';
-});
-
 $router->add('/petsitter', function() {
     require_once __DIR__ . '/controllers/AnnonceController.php';
     $controller = new AnnonceController();
-    $annonces = $controller->getAnnoncesByType(1); // type_utilisateur = 1 pour PetSitter
+    
+    // Récupérer les paramètres GET
+    $filters = [
+        'type_annonce' => isset($_GET['type_annonce']) ? $_GET['type_annonce'] : [],
+        'prix_max' => isset($_GET['prix_max']) ? (float)$_GET['prix_max'] : 200.00,
+        'type_animal' => isset($_GET['type_animal']) ? $_GET['type_animal'] : []
+    ];
+    
+    $annonces = $controller->getAnnoncesByTypeAndFilters(1, $filters); // type_utilisateur = 0 pour PetOwner
 
     // Inclure les vues avec les données transmises
     include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/petSitterAnnonce.php'; // La vue utilise $annonces
+    include __DIR__ . '/views/petSitterAnnonce.php';
     include __DIR__ . '/views/footer.php';
 });
+
+
+
+$router->add('/petowner', function() {
+    require_once __DIR__ . '/controllers/AnnonceController.php';
+    $controller = new AnnonceController();
+    
+    // Récupérer les paramètres GET
+    $filters = [
+        'type_annonce' => isset($_GET['type_annonce']) ? $_GET['type_annonce'] : [],
+        'prix_max' => isset($_GET['prix_max']) ? (float)$_GET['prix_max'] : 200.00,
+        'type_animal' => isset($_GET['type_animal']) ? $_GET['type_animal'] : []
+    ];
+    
+    $annonces = $controller->getAnnoncesByTypeAndFilters(0, $filters); // type_utilisateur = 0 pour PetOwner
+
+    // Inclure les vues avec les données transmises
+    include __DIR__ . '/views/header.php';
+    include __DIR__ . '/views/petOwnerAnnonce.php';
+    include __DIR__ . '/views/footer.php';
+});
+
+
 
 // fct get values users momo 
 $router->add('/profil', function() {
@@ -377,7 +397,7 @@ $router->add('/ajouter_animal', function() {
     $userId = $_SESSION['user_id'];
 
     if (!empty($nomAnimal) && !empty($raceAnimal)) {
-        $newId = $controllerAnimal->addAnimal($userId, $nomAnimal, $raceAnimal);
+        $newId = $controllerAnimal->addAnimal($userId, $nomAnimal, $raceAnimal, $ageAnimal, $infoAnimal);
         if ($newId) {
             // Redirection vers le profil
             header('Location: /PetBesties/profil');

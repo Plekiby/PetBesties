@@ -83,12 +83,33 @@
             <input type="text" id="nom_animal" name="nom_animal" required>
 
             <label for="race_animal">Race de l'animal:</label>
-            <input type="text" id="race_animal" name="race_animal" required>
+            <select id="race_animal" name="race_animal" required>
+                <option value="">Sélectionnez la race</option>
+                <option value="Chien">Chien</option>
+                <option value="Chat">Chat</option>
+                <option value="Oiseau">Oiseau</option>
+                <option value="Rongeur">Rongeur</option>
+                <option value="Lapin">Lapin</option>
+                <option value="Furet">Furet</option>
+                <option value="Hamster">Hamster</option>
+                <option value="Serpent">Serpent</option>
+                <option value="Tortue">Tortue</option>
+                <!-- Ajoutez d'autres races prédéfinies ici -->
+            </select>
+
+            <label for="age_animal">Âge de l'animal (ans):</label>
+            <input type="number" id="age_animal" name="age_animal" min="0" required>
+
+            <label for="info_animal">Informations sur l'animal:</label>
+            <textarea id="info_animal" name="info_animal" required></textarea>
 
             <button type="submit">Créer l'animal</button>
 
             <?php if (isset($error) && strpos($error, 'animal') !== false): ?>
                 <p class="message error"><?php echo htmlspecialchars($error); ?></p>
+            <?php endif; ?>
+            <?php if (isset($success) && strpos($success, 'animal') !== false): ?>
+                <p class="message success"><?php echo htmlspecialchars($success); ?></p>
             <?php endif; ?>
         </form>
     </div>
@@ -123,97 +144,100 @@
             <?php if (isset($error) && strpos($error, 'adresse') !== false): ?>
                 <p class="message error"><?php echo htmlspecialchars($error); ?></p>
             <?php endif; ?>
+            <?php if (isset($success) && strpos($success, 'adresse') !== false): ?>
+                <p class="message success"><?php echo htmlspecialchars($success); ?></p>
+            <?php endif; ?>
         </form>
     </div>
 
     <!-- Formulaire pour poster l'annonce -->
-<!-- Formulaire pour poster l'annonce -->
-<div class="form-block">
-    <h2>Poster une Nouvelle Annonce</h2>
-    <form method="POST" action="/PetBesties/poster_annonce">
-        <input type="hidden" name="action" value="post_annonce">
+    <div class="form-block">
+        <h2>Poster une Nouvelle Annonce</h2>
+        <form method="POST" action="/PetBesties/poster_annonce">
+            <input type="hidden" name="action" value="post_annonce">
 
-        <label for="type_annonce">Type d'annonce:</label>
-        <select id="type_annonce" name="type_annonce" required>
-            <option value="">Sélectionnez le type</option>
-            <option value="gardiennage">Garde</option>
-            <option value="promenade">Promenade</option>
-        </select>
+            <label for="type_annonce">Type d'annonce:</label>
+            <select id="type_annonce" name="type_annonce" required>
+                <option value="">Sélectionnez le type</option>
+                <option value="gardiennage">Garde</option>
+                <option value="promenade">Promenade</option>
+            </select>
 
-        <label for="animal">Sélectionnez votre animal:</label>
-        <select id="animal" name="Id_Animal" required>
-            <option value="">Sélectionnez un animal</option>
-            <?php foreach ($animals as $animal): ?>
-                <option value="<?php echo htmlspecialchars($animal['Id_Animal']); ?>">
-                    <?php echo htmlspecialchars($animal['nom_animal'] . ' (' . $animal['race_animal'] . ')'); ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
+            <label for="animal">Sélectionnez votre animal:</label>
+            <select id="animal" name="Id_Animal" required>
+                <option value="">Sélectionnez un animal</option>
+                <?php foreach ($animals as $animal): ?>
+                    <option value="<?php echo htmlspecialchars($animal['Id_Animal']); ?>">
+                        <?php echo htmlspecialchars($animal['nom_animal'] . ' (' . $animal['race_animal'] . ')'); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
 
-        <label for="adresse">Sélectionnez votre adresse:</label>
-        <select id="adresse" name="Id_Adresse" required>
-            <option value="">Sélectionnez une adresse</option>
-            <?php foreach ($adresses as $adresse): ?>
-                <option value="<?php echo htmlspecialchars($adresse['Id_Adresse']); ?>">
-                    <?php echo htmlspecialchars($adresse['numero_adresse'] . ' ' . $adresse['rue_adresse'] . ', ' . $adresse['nom_adresse']); ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
+            <label for="adresse">Sélectionnez votre adresse:</label>
+            <select id="adresse" name="Id_Adresse" required>
+                <option value="">Sélectionnez une adresse</option>
+                <?php foreach ($adresses as $adresse): ?>
+                    <option value="<?php echo htmlspecialchars($adresse['Id_Adresse']); ?>">
+                        <?php echo htmlspecialchars($adresse['numero_adresse'] . ' ' . $adresse['rue_adresse'] . ', ' . $adresse['nom_adresse']); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
 
-        <label for="date_debut_annonce">Date de début:</label>
-        <input type="date" id="date_debut_annonce" name="date_debut_annonce" required>
+            <label for="date_debut_annonce">Date de début:</label>
+            <input type="date" id="date_debut_annonce" name="date_debut_annonce" required>
 
-        <label for="duree_annonce">Durée (heures):</label>
-        <input type="number" id="duree_annonce" name="duree_annonce" min="1" required>
+            <label for="duree_annonce">Durée (heures):</label>
+            <input type="number" id="duree_annonce" name="duree_annonce" min="1" required>
 
-        <label for="price_annonce">Prix (€):</label>
-        <input type="number" id="price_annonce" name="price_annonce" min="0" step="0.01" required>
+            <label for="price_annonce">Prix (€):</label>
+            <input type="number" id="price_annonce" name="price_annonce" min="0" step="0.01" required>
 
-        <label for="details_annonce">Détails:</label>
-        <textarea name="details_annonce" id="details_annonce" required></textarea>
+            <label for="details_annonce">Détails:</label>
+            <textarea name="details_annonce" id="details_annonce" required></textarea>
 
-        <button type="submit">Poster l'annonce</button>
+            <button type="submit">Poster l'annonce</button>
 
-        <?php if (isset($success)): ?>
-            <p class="message success"><?php echo htmlspecialchars($success); ?></p>
-        <?php endif; ?>
-        <?php if (isset($error) && !$success && strpos($error, 'annonce') !== false): ?>
-            <p class="message error"><?php echo htmlspecialchars($error); ?></p>
-        <?php endif; ?>
-    </form>
+            <?php if (isset($success) && strpos($success, 'annonce') !== false): ?>
+                <p class="message success"><?php echo htmlspecialchars($success); ?></p>
+            <?php endif; ?>
+            <?php if (isset($error) && !$success && strpos($error, 'annonce') !== false): ?>
+                <p class="message error"><?php echo htmlspecialchars($error); ?></p>
+            <?php endif; ?>
+        </form>
+    </div>
+
+
+    <script>
+    document.getElementById('geocodeBtn').addEventListener('click', function() {
+        const numero = document.getElementById('numero').value;
+        const rue = document.getElementById('rue').value;
+        const ville = document.getElementById('nom').value;
+
+        if (!numero || !rue || !ville) {
+            alert("Veuillez renseigner le numéro, la rue et la ville avant de géocoder.");
+            return;
+        }
+
+        const query = encodeURIComponent(`${numero} ${rue} ${ville}`);
+
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.length > 0) {
+                    const result = data[0];
+                    document.getElementById('latitude').value = result.lat;
+                    document.getElementById('longitude').value = result.lon;
+                } else {
+                    alert("Aucune coordonnée trouvée pour cette adresse.");
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Erreur lors du géocodage. Vérifiez votre connexion ou réessayez plus tard.");
+            });
+    });
+    </script>
+
 </div>
-
-
-<script>
-document.getElementById('geocodeBtn').addEventListener('click', function() {
-    const numero = document.getElementById('numero').value;
-    const rue = document.getElementById('rue').value;
-    const ville = document.getElementById('nom').value;
-
-    if (!numero || !rue || !ville) {
-        alert("Veuillez renseigner le numéro, la rue et la ville avant de géocoder.");
-        return;
-    }
-
-    const query = encodeURIComponent(`${numero} ${rue} ${ville}`);
-
-    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data && data.length > 0) {
-                const result = data[0];
-                document.getElementById('latitude').value = result.lat;
-                document.getElementById('longitude').value = result.lon;
-            } else {
-                alert("Aucune coordonnée trouvée pour cette adresse.");
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            alert("Erreur lors du géocodage. Vérifiez votre connexion ou réessayez plus tard.");
-        });
-});
-</script>
-
 </body>
 </html>

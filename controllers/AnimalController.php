@@ -8,8 +8,8 @@ class AnimalController {
         return $animalModel->fetchAllByUser($userId);
     }
 
-    public function addAnimal($userId, $nomAnimal, $raceAnimal) {
+    public function addAnimal($userId, $nomAnimal, $raceAnimal, $ageAnimal, $infoAnimal) {
         $animalModel = new Animal();
-        return $animalModel->createAnimal($userId, $nomAnimal, $raceAnimal);
+        return $animalModel->createAnimal($userId, $nomAnimal, $raceAnimal, $ageAnimal, $infoAnimal);
     }
 }

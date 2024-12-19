@@ -41,6 +41,80 @@ class Annonce {
         }
     }
 
+    public function fetchFilteredAnnonces($type_utilisateur, $filters) {
+        try {
+            // Base de la requête
+            $sql = "SELECT 
+                        a.*, 
+                        u.prenom_utilisateur, 
+                        u.nom_utilisateur, 
+                        u.Id_utilisateur, 
+                        ad.latitude, 
+                        ad.longitude, 
+                        an.nom_animal, 
+                        an.race_animal
+                    FROM annonce a
+                    JOIN utilisateur u ON a.Id_utilisateur = u.Id_utilisateur
+                    JOIN adresse ad ON a.Id_Adresse = ad.Id_Adresse
+                    LEFT JOIN animal an ON a.Id_Animal = an.Id_Animal
+                    WHERE u.type_utilisateur = :type_utilisateur";
+
+            $params = ['type_utilisateur' => $type_utilisateur];
+
+            // Filtrer par type d'annonce (Promenade, Gardiennage)
+            if (!empty($filters['type_annonce'])) {
+                $placeholders = [];
+                foreach ($filters['type_annonce'] as $index => $type) {
+                    $key = ":type_annonce_$index";
+                    $placeholders[] = $key;
+                    $params[$key] = $type;
+                }
+                $sql .= " AND a.type_annonce IN (" . implode(',', $placeholders) . ")";
+            }
+
+            // Filtrer par prix maximal
+            if (!empty($filters['prix_max'])) {
+                $sql .= " AND a.tarif_annonce <= :prix_max";
+                $params[':prix_max'] = $filters['prix_max'];
+            }
+
+            // Filtrer par type d'animal
+            if (!empty($filters['type_animal'])) {
+                $placeholders = [];
+                foreach ($filters['type_animal'] as $index => $type_animal) {
+                    $key = ":type_animal_$index";
+                    $placeholders[] = $key;
+                    $params[$key] = $type_animal;
+                }
+                $sql .= " AND an.race_animal IN (" . implode(',', $placeholders) . ")";
+            }
+
+            // Préparer la requête
+            $stmt = $this->conn->prepare($sql);
+
+            // Liaison des paramètres
+            foreach ($params as $key => $value) {
+                if ($key === ':type_utilisateur') {
+                    $stmt->bindValue($key, $value, PDO::PARAM_INT);
+                } elseif (strpos($key, 'type_annonce_') === 0) {
+                    $stmt->bindValue($key, $value, PDO::PARAM_INT);
+                } elseif (strpos($key, 'type_animal_') === 0) {
+                    $stmt->bindValue($key, $value, PDO::PARAM_STR); // Correction ici
+                } else {
+                    $stmt->bindValue($key, $value, PDO::PARAM_STR);
+                }
+            }
+
+            // Exécution de la requête
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Erreur lors de la récupération des annonces filtrées : ' . $e->getMessage());
+            return [];
+        }
+    }
+    
+
     public function createAnnonce($titre, $description, $dateDebut, $duree, $tarif, $id_utilisateur, $type, $details, $adresseId, $animalId) {
         try {
             $this->conn->beginTransaction();
