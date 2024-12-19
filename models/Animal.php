@@ -30,11 +30,10 @@ class Animal {
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log('Erreur lors de la récupération de l animal : ' . $e->getMessage());
+            error_log('Erreur lors de la récupération de l\'animal : ' . $e->getMessage());
             return false;
         }
     }
-    
 
     public function createAnimal($userId, $nomAnimal, $raceAnimal) {
         try {
@@ -50,8 +49,32 @@ class Animal {
             return false;
         }
     }
-    
 
-    // ...additional methods as needed...
+    public function updateAnimal($userId, $animalId, $nomAnimal, $raceAnimal) {
+        try {
+            $sql = "UPDATE animal SET nom_animal = :nom, race_animal = :race WHERE Id_Animal = :animalId AND Id_utilisateur = :userId";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':nom', $nomAnimal);
+            $stmt->bindParam(':race', $raceAnimal);
+            $stmt->bindParam(':animalId', $animalId, PDO::PARAM_INT);
+            $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log('Erreur lors de la mise à jour de l\'animal : ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function deleteAnimal($userId, $animalId) {
+        try {
+            $sql = "DELETE FROM animal WHERE Id_Animal = :animalId AND Id_utilisateur = :userId";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':animalId', $animalId, PDO::PARAM_INT);
+            $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log('Erreur lors de la suppression de l\'animal : ' . $e->getMessage());
+            return false;
+        }
+    }
 }
-?>

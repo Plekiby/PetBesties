@@ -151,13 +151,6 @@ $router->add('/coups_de_coeur', function() {
     include __DIR__ . '/views/footer.php';
 });
 
-// Route GET pour afficher le formulaire de création d'annonce
-$router->add('/poster_annonce', function() {
-    require_once __DIR__ . '/controllers/AnnonceController.php';
-    $controller = new AnnonceController();
-    $controller->showPostAnnonceForm();
-}, 'GET');
-
 // Route GET pour afficher le formulaire d'inscription
 $router->add('/inscription', function() {
     include __DIR__ . '/views/header.php';
@@ -278,16 +271,45 @@ $router->add('/api/update-user', function() {
     }
 });
 
-// Route POST pour traiter la soumission du formulaire de création d'annonce
+// Route GET pour afficher le formulaire de "poster_annonce"
+$router->add('/poster_annonce', function() {
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    // Vérifier si l'utilisateur est connecté
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: /PetBesties/connexion');
+        exit;
+    }
+
+    require_once __DIR__ . '/controllers/AnimalController.php';
+    require_once __DIR__ . '/controllers/AdresseController.php';
+    // require_once __DIR__ . '/controllers/AnnonceController.php'; // seulement si besoin
+
+    $animalController = new AnimalController();
+    $adresseController = new AdresseController();
+
+    // Récupérer les données nécessaires pour le formulaire
+    $animals = $animalController->fetchAnimals($_SESSION['user_id']);
+    $adresses = $adresseController->fetchAdressesByUser($_SESSION['user_id']);
+
+    $error = null;
+    $success = null;
+
+    include __DIR__ . '/views/header.php';
+    include __DIR__ . '/views/poster_annonce.php'; 
+    include __DIR__ . '/views/footer.php';
+}, 'GET');
+
+// Route POST pour traiter les formulaires de "poster_annonce"
 $router->add('/poster_annonce', function() {
     require_once __DIR__ . '/controllers/AnnonceController.php';
     $controller = new AnnonceController();
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $controller->postAnnonce();
-    } else {
-        $controller->showPostAnnonceForm();
-    }
+    $controller->postAnnonce();
 }, 'POST');
+
+
 
 // Route pour afficher une annonce spécifique après sa création
 $router->add('/annonce/{id}', function($id) {
@@ -295,5 +317,51 @@ $router->add('/annonce/{id}', function($id) {
     $controller = new AnnonceController();
     $controller->showAnnonce($id);
 });
+
+$router->add('/ajouter_animal', function() {
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: /PetBesties/connexion');
+        exit;
+    }
+
+    // Afficher le formulaire
+    include __DIR__ . '/views/header.php';
+    include __DIR__ . '/views/ajouter_animal.php';
+    include __DIR__ . '/views/footer.php';
+}, 'GET');
+
+$router->add('/ajouter_animal', function() {
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: /PetBesties/connexion');
+        exit;
+    }
+
+    require_once __DIR__ . '/controllers/AnimalController.php';
+    $controllerAnimal = new AnimalController();
+
+    $nomAnimal = $_POST['nom_animal'] ?? '';
+    $raceAnimal = $_POST['race_animal'] ?? '';
+    $userId = $_SESSION['user_id'];
+
+    if (!empty($nomAnimal) && !empty($raceAnimal)) {
+        $newId = $controllerAnimal->addAnimal($userId, $nomAnimal, $raceAnimal);
+        if ($newId) {
+            // Redirection vers le profil
+            header('Location: /PetBesties/profil');
+            exit;
+        } else {
+            echo "Erreur lors de la création de l'animal.";
+        }
+    } else {
+        echo "Veuillez remplir tous les champs.";
+    }
+}, 'POST');
+
 
 
