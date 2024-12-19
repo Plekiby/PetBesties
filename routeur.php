@@ -97,13 +97,6 @@ $router->add('/contact', function() {
     include __DIR__ . '/views/footer.php';
 });
 
-$router->add('/historique', function() {
-    // Inclure les vues avec les données transmises
-    include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/monhistorique.php'; // La vue utilise $prestataires
-    include __DIR__ . '/views/footer.php';
-});
-
 $router->add('/prestations', function() {
     // Démarrer la session si ce n'est pas déjà fait
     if (session_status() == PHP_SESSION_NONE) {
@@ -144,20 +137,11 @@ $router->add('/prestations', function() {
 
 
 $router->add('/candidatures', function() {
-    if (session_status() == PHP_SESSION_NONE) {
-        session_start();
-    }
-    if (isset($_SESSION['user_id'])) {
-        $userId = $_SESSION['user_id'];
-    } else {
-        // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
-        header('Location: /PetBesties/connexion');
-        exit;
-    }
+    $userId = $_SESSION['user_id'] ?? 1;
 
     require_once __DIR__ . '/controllers/AnnonceController.php';
     $controller = new AnnonceController();
-    $annonces = $controller->index();
+    $annonces = $controller->index($userId);
 
     require_once __DIR__ . '/controllers/PostuleController.php';
     $controllerpostu = new PostuleController();
@@ -168,8 +152,7 @@ $router->add('/candidatures', function() {
 
     // Inclure les vues avec les données transmises
     include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/mescandidatures.php'; // La vue utilise $annonces et $candidatures
-    include __DIR__ . '/views/footer.php';
+    include __DIR__ . '/views/mescandidatures.php'; // La vue utilise $prestataires
 });
 
 $router->add('/coups_de_coeur', function() {
@@ -178,7 +161,7 @@ $router->add('/coups_de_coeur', function() {
     $controlleraime = new AimeController();
     $favoris = $controlleraime->index();
     include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/coupsdecoeur.php'; // La vue utilise $prestataires
+    include __DIR__ . '/views/coupsdecoeur.php'; 
     include __DIR__ . '/views/footer.php';
 });
 
@@ -341,6 +324,19 @@ $router->add('/poster_annonce', function() {
 }, 'POST');
 
 
+$router->add('/historique', function() {
+session_start(); // Démarre la session pour récupérer l'ID utilisateur
+$userId = $_SESSION['user_id'] ?? 1;
+    
+require_once __DIR__ . '/controllers/HistoriqueController.php';
+$controller = new HistoriqueController();
+$historique = $controller->index($userId);
+    
+        include __DIR__ . '/views/header.php';
+        include __DIR__ . '/views/monhistorique.php';
+        include __DIR__ . '/views/footer.php';
+});
+    
 
 // Route pour afficher une annonce spécifique après sa création
 $router->add('/annonce/{id}', function($id) {
