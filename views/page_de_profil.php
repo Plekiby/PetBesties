@@ -22,28 +22,20 @@
 
 
 
-        <!-- code html qui recupere les identifiants du user-->
+        
         <div class="profile-details">
             <form id="update-profile-form">
-                <div class="form-group">
-                    <label for="profile-first-name">First Name</label>
-                    <input type="text" id="profile-first-name" name="prenom" value="First Name">
-                </div>
+                <label for="profile-first-name">First Name</label>
+                <input type="text" id="profile-first-name" name="prenom" value="First Name"><br>
 
-                <div class="form-group">
-                    <label for="profile-last-name">Last Name</label>
-                    <input type="text" id="profile-last-name" name="nom" value="Last Name">
-                </div>
+                <label for="profile-last-name">Last Name</label> 
+                <input type="text" id="profile-last-name" name="nom" value="Last Name"><br>
 
-                <div class="form-group">
-                    <label for="profile-email">Email Address</label>
-                    <input type="email" id="profile-email" name="email" value="email@example.com">
-                </div>
+                <label for="profile-email">Email</label>
+                <input type="email" id="profile-email" name="email" value="email@example.com"><br>
 
-                <div class="form-group">
-                    <label for="profile-phone">Phone Number</label>
-                    <input type="text" id="profile-phone" name="telephone" value="Phone Number">
-                </div>
+                <label for="profile-phone">Phone</label>
+                <input type="text" id="profile-phone" name="telephone" value="Phone Number"><br>
 
                 <button type="submit" id="save-profile">Save</button>
                 <p id="update-success" style="color: green; display: none;">Informations mises à jour avec succès !</p>
@@ -51,16 +43,12 @@
             </form>
         </div>
 
-        <!-- page_de_profile.php -->
-
-
-
-        <div class="profile-name">
+        <!-- <div class="profile-name">
             <input type="text" id="first-name" placeholder="Prénom" />
             <input type="text" id="last-name" placeholder="Nom" />
             <button id="validate-name">Modify</button>
             <p id="name-error" style="color: red; display: none;"></p>
-        </div>
+        </div>  -->
 
         <div class="profile-type">
             <button id = "pet-sitter" class="active">Pet Sitter</button>
@@ -142,8 +130,6 @@
     </div>
 </div>
 
-
-
 <!-- premier script JS qui correspond à "profile-name, creation de profil">  -->
 <script>
  // ceci est le code responsible de la partie description de mon code en liason avec les deux boutons 
@@ -179,11 +165,11 @@
     // Sélection des éléments
     const firstName = document.getElementById("first-name");
     const lastName = document.getElementById("last-name");
-    const validateBtn = document.getElementById("validate-name");
+    //const validateBtn = document.getElementById("validate-name");
     const errorDisplay = document.getElementById("name-error");
 
     // Fonction de validation
-    validateBtn.addEventListener("click", () => {
+    /*validateBtn.addEventListener("click", () => {
         const firstNameValue = firstName.value.trim();
         const lastNameValue = lastName.value.trim();
 
@@ -194,7 +180,7 @@
             errorDisplay.style.display = "none";
             alert(`Bienvenue ${firstNameValue} ${lastNameValue} !`);
         }
-    });
+    });*/
 
 
     // ==========================
