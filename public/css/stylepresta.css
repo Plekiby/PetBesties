@@ -169,3 +169,36 @@ body {
     font-size: 12px;
 }
 
+#chrono {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+button {
+    margin: 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+#map {
+    width: 100%;
+    height: 790px; /* Garde une hauteur fixe */
+    margin-top: 10px;
+    border-radius: 4px;
+}
+
