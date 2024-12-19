@@ -70,6 +70,7 @@ $router->add('/petsitter', function() {
 });
 
 // fct get values users momo 
+
 $router->add('/profil', function() {
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
@@ -79,15 +80,19 @@ $router->add('/profil', function() {
         require_once __DIR__ . '/controllers/UtilisateurController.php';
         $controlleruti = new UtilisateurController();
         $utilisateur = $controlleruti->fetchOne($userId);
-
-        // Inclure les vues avec les données transmises
+ 
+        require_once __DIR__ . '/controllers/AnimalController.php';
+        $controllerAnimal = new AnimalController();
+        // On récupère TOUS les animaux de l'utilisateur
+        $animals = $controllerAnimal->fetchAnimals($userId);
+ 
         include __DIR__ . '/views/header.php';
-        include __DIR__ . '/views/page_de_profil.php'; // La vue utilise $prestataires
+        // On transmet $animals à la vue
+        include __DIR__ . '/views/page_de_profil.php';
         include __DIR__ . '/views/footer.php';
     } else {
         exit;
     }
-    
 });
 
 $router->add('/contact', function() {
@@ -297,7 +302,7 @@ $router->add('/annonce/{id}', function($id) {
 });
 
 /// code pour routage animal infos 
-// fct get values animal
+
 $router->add('/animal', function() {
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
@@ -306,11 +311,9 @@ $router->add('/animal', function() {
         $userId = $_SESSION['user_id'];
         require_once __DIR__ . '/controllers/AnimalController.php';
         $controllerAnimal = new AnimalController();
-        $animal = $controllerAnimal->fetchAnimal($userId); // Récupérer l'animal de l'utilisateur
-
-        // Inclure les vues avec les données transmises
+        $animal = $controllerAnimal->fetchAnimal($userId);
         include __DIR__ . '/views/header.php';
-        include __DIR__ . '/views/page_de_profil_animal.php'; // Afficher les infos de l'animal
+        include __DIR__ . '/views/page_de_profil_animal.php'; 
         include __DIR__ . '/views/footer.php';
     } else {
         exit;

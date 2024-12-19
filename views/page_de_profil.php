@@ -22,7 +22,7 @@
 
 
 
-        
+        <!-- code html qui recupere les identifiants du user-->
         <div class="profile-details">
             <form id="update-profile-form">
                 <label for="profile-first-name">First Name</label>
@@ -48,7 +48,7 @@
             <input type="text" id="last-name" placeholder="Nom" />
             <button id="validate-name">Modify</button>
             <p id="name-error" style="color: red; display: none;"></p>
-        </div>  -->
+        </div>-->
 
         <div class="profile-type">
             <button id = "pet-sitter" class="active">Pet Sitter</button>
