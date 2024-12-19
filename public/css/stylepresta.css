@@ -47,6 +47,7 @@ body {
     overflow-y: auto;
     margin-top: 80px;
     padding-bottom: 20px;
+    margin-bottom: 40px; /* Ajout de l'espace en bas */
 }
 
 /* En-tête de la section */
