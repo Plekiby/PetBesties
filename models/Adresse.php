@@ -22,7 +22,7 @@ class Adresse {
 
     public function createAdresse($numero, $rue, $nom, $complement, $latitude, $longitude) {
         try {
-            $sql = "INSERT INTO adresse (numero_adresse, rue_adresse, nom_adresse, complement_adresse, latitude, longitude) 
+            $sql = "INSERT INTO adresse (numero_adresse, rue_adresse, nom_adresse, complement_adresse, latitude, longitude)
                     VALUES (:numero, :rue, :nom, :complement, :latitude, :longitude)";
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':numero', $numero);
@@ -41,6 +41,7 @@ class Adresse {
             return false;
         }
     }
+    
 
     public function create($data) {
         try {
@@ -76,5 +77,28 @@ class Adresse {
             return [];
         }
     }
+
+    public function fetchAllByUser($userId) {
+        $sql = "SELECT * FROM adresse WHERE Id_utilisateur = :userId";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function linkUserToAdresse($userId, $adresseId) {
+        try {
+            $sql = "INSERT INTO utilisateur_adresse (Id_utilisateur, Id_Adresse) VALUES (:userId, :adresseId)";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+            $stmt->bindParam(':adresseId', $adresseId, PDO::PARAM_INT);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log('Erreur lors de la liaison utilisateur/adresse : ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    
 }
 ?>

@@ -126,52 +126,63 @@
         </form>
     </div>
 
-    <!-- Formulaire pour créer l'annonce -->
-    <div class="form-block">
-        <h2>Poster une Nouvelle Annonce</h2>
-        <form method="POST" action="/PetBesties/poster_annonce">
-            <input type="hidden" name="action" value="post_annonce">
+    <!-- Formulaire pour poster l'annonce -->
+<!-- Formulaire pour poster l'annonce -->
+<div class="form-block">
+    <h2>Poster une Nouvelle Annonce</h2>
+    <form method="POST" action="/PetBesties/poster_annonce">
+        <input type="hidden" name="action" value="post_annonce">
 
-            <label for="type_annonce">Type d'annonce:</label>
-            <select id="type_annonce" name="type_annonce" required>
-                <option value="">Sélectionnez le type</option>
-                <option value="gardiennage">Garde</option>
-                <option value="promenade">Promenade</option>
-            </select>
+        <label for="type_annonce">Type d'annonce:</label>
+        <select id="type_annonce" name="type_annonce" required>
+            <option value="">Sélectionnez le type</option>
+            <option value="gardiennage">Garde</option>
+            <option value="promenade">Promenade</option>
+        </select>
 
-            <label for="animal">Sélectionnez votre animal:</label>
-            <select id="animal" name="Id_Animal" required>
-                <option value="">Sélectionnez un animal</option>
-                <?php foreach ($animals as $animal): ?>
-                    <option value="<?php echo htmlspecialchars($animal['Id_Animal']); ?>">
-                        <?php echo htmlspecialchars($animal['nom_animal'] . ' (' . $animal['race_animal'] . ')'); ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+        <label for="animal">Sélectionnez votre animal:</label>
+        <select id="animal" name="Id_Animal" required>
+            <option value="">Sélectionnez un animal</option>
+            <?php foreach ($animals as $animal): ?>
+                <option value="<?php echo htmlspecialchars($animal['Id_Animal']); ?>">
+                    <?php echo htmlspecialchars($animal['nom_animal'] . ' (' . $animal['race_animal'] . ')'); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
 
-            <label for="adresse">Sélectionnez votre adresse:</label>
-            <select id="adresse" name="Id_Adresse" required>
-                <?php foreach ($adresses as $adresse): ?>
-                    <option value="<?php echo htmlspecialchars($adresse['Id_Adresse']); ?>">
-                        <?php echo htmlspecialchars($adresse['numero_adresse'] . ' ' . $adresse['rue_adresse'] . ', ' . $adresse['nom_adresse']); ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+        <label for="adresse">Sélectionnez votre adresse:</label>
+        <select id="adresse" name="Id_Adresse" required>
+            <option value="">Sélectionnez une adresse</option>
+            <?php foreach ($adresses as $adresse): ?>
+                <option value="<?php echo htmlspecialchars($adresse['Id_Adresse']); ?>">
+                    <?php echo htmlspecialchars($adresse['numero_adresse'] . ' ' . $adresse['rue_adresse'] . ', ' . $adresse['nom_adresse']); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
 
-            <label for="details_annonce">Détails:</label>
-            <textarea name="details_annonce" id="details_annonce" required></textarea>
+        <label for="date_debut_annonce">Date de début:</label>
+        <input type="date" id="date_debut_annonce" name="date_debut_annonce" required>
 
-            <button type="submit">Poster l'annonce</button>
+        <label for="duree_annonce">Durée (heures):</label>
+        <input type="number" id="duree_annonce" name="duree_annonce" min="1" required>
 
-            <?php if (isset($success)): ?>
-                <p class="message success"><?php echo htmlspecialchars($success); ?></p>
-            <?php endif; ?>
-            <?php if (isset($error) && !$success && strpos($error, 'annonce') !== false): ?>
-                <p class="message error"><?php echo htmlspecialchars($error); ?></p>
-            <?php endif; ?>
-        </form>
-    </div>
+        <label for="price_annonce">Prix (€):</label>
+        <input type="number" id="price_annonce" name="price_annonce" min="0" step="0.01" required>
+
+        <label for="details_annonce">Détails:</label>
+        <textarea name="details_annonce" id="details_annonce" required></textarea>
+
+        <button type="submit">Poster l'annonce</button>
+
+        <?php if (isset($success)): ?>
+            <p class="message success"><?php echo htmlspecialchars($success); ?></p>
+        <?php endif; ?>
+        <?php if (isset($error) && !$success && strpos($error, 'annonce') !== false): ?>
+            <p class="message error"><?php echo htmlspecialchars($error); ?></p>
+        <?php endif; ?>
+    </form>
 </div>
+
 
 <script>
 document.getElementById('geocodeBtn').addEventListener('click', function() {
