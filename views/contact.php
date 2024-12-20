@@ -7,6 +7,20 @@
     <link rel="stylesheet" href="/Petbesties/public/css/style_contact.css">
 </head>
 <body>
+<div class="container">
+</div>
+<div class="container">
+</div>
+<div class="container">
+</div>
+<div class="container">
+</div>
+<div class="container">
+</div><div class="container">
+</div><div class="container">
+</div><div class="container">
+</div><div class="container">
+</div>
     <div class="container">
         <h1>Contactez-nous</h1>
         <form class="contact-form">
