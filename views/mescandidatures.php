@@ -61,28 +61,54 @@
             color: #128f8b;
         }
 
+        /* Conteneur principal utilisant Flexbox */
         .container {
             display: flex;
-            flex-direction: column;
-            gap: 20px; 
+            flex-direction: row;
+            gap: 20px; /* Espace entre les deux sections */
             margin-top: 40px;
-            width: 80%;
-            max-width: 1000px;
+            width: 90%;
+            max-width: 1200px;
         }
 
-        .sous-titre {
-            text-align: center;
-            font-family: Arial, sans-serif;
-            margin-top: 20px;
-            color: #ffffff;
-        }
-
+        /* Styles pour chaque cadre de candidature */
         .premier_carre {
             background-color: #128f8b; 
             padding: 20px;
             border-radius: 5px;
+            flex: 1; /* Chaque cadre prend une part égale de l'espace disponible */
+            max-height: 60vh; /* Hauteur maximale relative à la fenêtre */
+            overflow-y: auto; /* Ajoute une barre de défilement verticale si nécessaire */
         }
 
+        /* Personnalisation de la barre de défilement pour les navigateurs WebKit */
+        .premier_carre::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .premier_carre::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+            border-radius: 10px;
+        }
+
+        .premier_carre::-webkit-scrollbar-thumb {
+            background: #888; 
+            border-radius: 10px;
+        }
+
+        .premier_carre::-webkit-scrollbar-thumb:hover {
+            background: #555; 
+        }
+
+        /* Sous-titre pour chaque section */
+        .sous-titre {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+
+        /* Styles pour les candidatures individuelles */
         .sous-carre {
             display: flex;
             align-items: center;
@@ -101,9 +127,28 @@
         }
 
         .details h6 {
-            margin: 0;
+            margin: 5px 0 0 0;
             font-size: 12px;
             color: #555;
+        }
+
+        /* Styles pour les messages lorsque aucune candidature n'est trouvée */
+        .no-candidature {
+            text-align: center;
+            color: #ffffff;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        /* Responsivité : empiler les sections verticalement sur les petits écrans */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .premier_carre {
+                max-height: 50vh;
+            }
         }
     </style>
 </head>
@@ -130,7 +175,9 @@
                 <?php endforeach; ?>
             </div>
         <?php else: ?>
-            <p>Aucune candidature envoyée trouvée.</p>
+            <div class="premier_carre">
+                <p class="no-candidature">Aucune candidature envoyée trouvée.</p>
+            </div>
         <?php endif; ?>
             
         <!-- Candidatures reçues -->
@@ -152,7 +199,9 @@
                 <?php endforeach; ?>
             </div>
         <?php else: ?>
-            <p>Aucune candidature reçue trouvée.</p>
+            <div class="premier_carre">
+                <p class="no-candidature">Aucune candidature reçue trouvée.</p>
+            </div>
         <?php endif; ?>
     </div>   
 </body>

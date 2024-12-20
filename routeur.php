@@ -139,41 +139,42 @@ $router->add('/contact', function() {
     include __DIR__ . '/views/footer.php';
 });
 
-$router->add('/postuler', function() {
-    if (session_status() === PHP_SESSION_NONE) {
+$router->add('/prestations', function() {
+    // Démarrer la session si ce n'est pas déjà fait
+    if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
 
+    // Vérifier si l'utilisateur est connecté
     if (!isset($_SESSION['user_id'])) {
-        header('Location: /PetBesties/connexion?error=Veuillez+vous+connecter+pour+postuler.');
+        header('Location: /PetBesties/connexion');
         exit;
     }
 
     $userId = $_SESSION['user_id'];
-    $annonceId = intval($_POST['annonce_id'] ?? 0);
 
-    if ($annonceId <= 0) {
-        // ID d'annonce invalide
-        header('Location: /PetBesties/profil?error=Annonce+invalide');
-        exit;
-    }
+    // Inclure le contrôleur AnnonceController
+    require_once __DIR__ . '/controllers/AnnonceController.php';
+    $controllerann = new AnnonceController();
 
-    // Inclure le contrôleur des candidatures
-    require_once __DIR__ . '/controllers/CandidatureController.php';
-    $controller = new CandidatureController();
-    $result = $controller->postuler($userId, $annonceId);
-
-    if ($result) {
-        // Redirection avec succès
-        header('Location: /PetBesties/profil?success=Postulation+réussie');
-        exit;
+    // Utiliser la méthode publique pour récupérer les données de l'utilisateur
+    $utilisateur = $controllerann->getUserData($userId);
+    if ($utilisateur) {
+        $nom_utilisateur = $utilisateur['nom_utilisateur'];
     } else {
-        // Redirection avec une erreur
-        header('Location: /PetBesties/profil?error=Erreur+de+postulation');
+        // Si l'utilisateur n'est pas trouvé, rediriger ou gérer l'erreur
+        header('Location: /PetBesties/connexion');
         exit;
     }
-}, 'POST');
 
+    // Récupérer les annonces (ajustez selon vos besoins)
+    $annonces = $controllerann->fetchAll(); // Ou une méthode spécifique comme getAnnoncesByUser($userId)
+
+    // Inclure les vues avec les données transmises
+    include __DIR__ . '/views/header.php';
+    include __DIR__ . '/views/prestations.php'; 
+    include __DIR__ . '/views/footer.php';
+});
 
 
 
