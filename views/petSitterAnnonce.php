@@ -145,7 +145,7 @@
 
 <body>
     <div class="filter-bar">
-        <form method="GET" action="/PetBesties/petowner">
+        <form method="GET" action="/PetBesties/petsitter">
             <div>
                 <label><input type="checkbox" name="type_annonce[]" value="0" <?= isset($_GET['type_annonce']) && in_array('0', $_GET['type_annonce']) ? 'checked' : '' ?>> Promenade</label>
                 <label><input type="checkbox" name="type_annonce[]" value="1" <?= isset($_GET['type_annonce']) && in_array('1', $_GET['type_annonce']) ? 'checked' : '' ?>> Gardiennage</label>
