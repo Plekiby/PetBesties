@@ -59,14 +59,14 @@
                                 <p>Durée : <?= htmlspecialchars($annonce['duree_annonce']); ?> jours</p>
                                 <p>Type : <?= $annonce['type_annonce'] == 1 ? 'Gardiennage' : 'Promenade'; ?></p>
                                 <!-- Bouton pour postuler à l'annonce -->
-                                <?php if (isset($_SESSION['user_id'])): ?>
-                                    <form action="/PetBesties/postuler" method="POST">
-                                        <input type="hidden" name="annonce_id" value="<?= htmlspecialchars($annonce['Id_Annonce']); ?>">
-                                        <button type="submit" class="postuler-btn">Postuler</button>
-                                    </form>
-                                <?php else: ?>
-                                    <p>Veuillez vous connecter pour postuler.</p>
-                                <?php endif; ?>
+                            <?php if (isset($_SESSION['user_id'])): ?>
+                                <form action="/PetBesties/postuler" method="POST">
+                                    <input type="hidden" name="annonce_id" value="<?= htmlspecialchars($annonce['Id_Annonce']); ?>">
+                                    <button type="submit" class="postuler-btn">Postuler</button>
+                                </form>
+                            <?php else: ?>
+                                <p>Veuillez vous connecter pour postuler.</p>
+                            <?php endif; ?>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -79,6 +79,11 @@
 
     <!-- Scripts JavaScript (si nécessaire) -->
     <!-- Vous pouvez ajouter des scripts ici si vous avez besoin d'interactivité supplémentaire -->
-
+    <script>// Fonction pour gérer la postulation (actuellement sans action)
+        function postulerAnnonce() {
+            alert('Candidature Soumise !');
+            // Vous pouvez rediriger vers une page de postulation ou ouvrir un modal ici.
+        }
+    </script>
 </body>
 </html>

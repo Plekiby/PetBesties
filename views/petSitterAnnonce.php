@@ -5,8 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pet Owner Annonce</title>
+    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <!-- MarkerCluster CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
     <style>
+        /* Votre CSS existant */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -98,22 +103,29 @@
             margin-top: 10px;
         }
 
-        /* Ajoutez ceci dans votre balise <style> ou dans votre fichier CSS */
-        .voir-profil-btn {
-            display: inline-block;
+        /* Styles for Popup Buttons */
+        .popup-button {
+            border: none;
             padding: 8px 12px;
-            background-color: #128f8b;
-            color: #ffffff;
-            text-decoration: none;
             border-radius: 5px;
-            margin-top: 10px;
-            transition: background-color 0.3s ease;
+            cursor: pointer;
+            font-size: 0.9em;
+            color: #ffffff;
+            transition: opacity 0.3s ease;
         }
 
-        .voir-profil-btn:hover {
-            background-color: #0f6a68;
+        .popup-button.profil {
+            background-color: #128f8b;
+            margin-right: 5px;
         }
 
+        .popup-button.postuler {
+            background-color: #ff9800;
+        }
+
+        .popup-button:hover {
+            opacity: 0.9;
+        }
 
         /* Responsive Design */
         @media (max-width: 768px) {
@@ -121,7 +133,8 @@
                 flex-direction: column;
             }
 
-            .map-container, .results {
+            .map-container,
+            .results {
                 margin-right: 0;
                 margin-bottom: 20px;
                 height: 400px;
@@ -132,7 +145,7 @@
 
 <body>
     <div class="filter-bar">
-            <form method="GET" action="/PetBesties/petsitter">
+        <form method="GET" action="/PetBesties/petowner">
             <div>
                 <label><input type="checkbox" name="type_annonce[]" value="0" <?= isset($_GET['type_annonce']) && in_array('0', $_GET['type_annonce']) ? 'checked' : '' ?>> Promenade</label>
                 <label><input type="checkbox" name="type_annonce[]" value="1" <?= isset($_GET['type_annonce']) && in_array('1', $_GET['type_annonce']) ? 'checked' : '' ?>> Gardiennage</label>
@@ -181,44 +194,62 @@
         </div>
     </div>
 
-    <!-- Leaflet CSS and JS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
-    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+    <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <!-- MarkerCluster JS -->
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
 
     <script>
-    document.getElementById('prix_max').addEventListener('input', function() {
-        document.getElementById('prix_max_val').textContent = this.value + ' €';
-    });
-
-    // Initialisation de la carte avec Leaflet et OpenStreetMap
-    const map = L.map('map').setView([48.8566, 2.3522], 12); // Coordonnées de Paris
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-    // Ajout des marqueurs pour chaque annonce
-    const annonces = <?= json_encode($annonces ?? []); ?>;
-
-    if (annonces.length > 0) {
-        annonces.forEach((annonce) => {
-            if (annonce.latitude && annonce.longitude) {
-                const popupContent = `
-                    <b>${annonce.titre_annonce}</b><br>
-                    ${annonce.prenom_utilisateur} ${annonce.nom_utilisateur}<br>
-                    Race de l'animal: ${annonce.race_animal}<br>
-                    À partir de ${annonce.tarif_annonce} €<br>
-                    <a href="/PetBesties/profil/${annonce.Id_utilisateur}" class="voir-profil-btn">Voir le profil</a>
-                `;
-                L.marker([annonce.latitude, annonce.longitude]).addTo(map)
-                    .bindPopup(popupContent);
-            }
+        document.getElementById('prix_max').addEventListener('input', function() {
+            document.getElementById('prix_max_val').textContent = this.value + ' €';
         });
-    }
-</script>
 
+        // Initialisation de la carte avec Leaflet et OpenStreetMap
+        const map = L.map('map').setView([48.8566, 2.3522], 12); // Coordonnées de Paris
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Ajout des marqueurs pour chaque annonce
+        const annonces = <?= json_encode($annonces ?? []); ?>;
+
+        if (annonces.length > 0) {
+            const markers = L.markerClusterGroup();
+
+            annonces.forEach((annonce) => {
+                if (annonce.latitude && annonce.longitude) {
+                    const popupContent = `
+                        <div style="font-family: Arial, sans-serif;">
+                            <b>${annonce.titre_annonce}</b><br>
+                            ${annonce.prenom_utilisateur} ${annonce.nom_utilisateur}<br>
+                            Race de l'animal: ${annonce.race_animal}<br>
+                            À partir de ${annonce.tarif_annonce} €<br>
+                            <div style="margin-top: 10px;">
+                                <button class="popup-button profil" onclick="window.location.href='/PetBesties/profil/${annonce.Id_utilisateur}'">
+                                    Voir le profil
+                                </button>
+                                <button class="popup-button postuler" onclick="postulerAnnonce(${annonce.Id_Annonce})">
+                                    Postuler
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    const marker = L.marker([annonce.latitude, annonce.longitude])
+                        .bindPopup(popupContent);
+                    markers.addLayer(marker);
+                }
+            });
+
+            map.addLayer(markers);
+        }
+
+        // Fonction pour gérer la postulation (actuellement sans action)
+        function postulerAnnonce(annonceId) {
+            alert('Candidature Soumise !');
+            // Vous pouvez rediriger vers une page de postulation ou ouvrir un modal ici.
+        }
+    </script>
 
 </body>
 

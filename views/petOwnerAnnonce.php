@@ -5,8 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pet Owner Annonce</title>
+    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <!-- MarkerCluster CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
     <style>
+        /* Votre CSS existant */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -98,13 +103,38 @@
             margin-top: 10px;
         }
 
+        /* Styles for Popup Buttons */
+        .popup-button {
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            color: #ffffff;
+            transition: opacity 0.3s ease;
+        }
+
+        .popup-button.profil {
+            background-color: #128f8b;
+            margin-right: 5px;
+        }
+
+        .popup-button.postuler {
+            background-color: #ff9800;
+        }
+
+        .popup-button:hover {
+            opacity: 0.9;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .content {
                 flex-direction: column;
             }
 
-            .map-container, .results {
+            .map-container,
+            .results {
                 margin-right: 0;
                 margin-bottom: 20px;
                 height: 400px;
@@ -164,11 +194,10 @@
         </div>
     </div>
 
-    <!-- Leaflet CSS and JS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
-    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+    <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <!-- MarkerCluster JS -->
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
 
     <script>
         document.getElementById('prix_max').addEventListener('input', function() {
@@ -186,19 +215,39 @@
         const annonces = <?= json_encode($annonces ?? []); ?>;
 
         if (annonces.length > 0) {
+            const markers = L.markerClusterGroup();
+
             annonces.forEach((annonce) => {
                 if (annonce.latitude && annonce.longitude) {
                     const popupContent = `
-                        <b>${annonce.titre_annonce}</b><br>
-                        ${annonce.prenom_utilisateur} ${annonce.nom_utilisateur}<br>
-                        Race de l'animal: ${annonce.race_animal}<br>
-                        À partir de ${annonce.tarif_annonce} €<br>
-                        <button onclick="window.location.href='/PetBesties/profil/${annonce.Id_utilisateur}'">Voir le profil</button>
+                        <div style="font-family: Arial, sans-serif;">
+                            <b>${annonce.titre_annonce}</b><br>
+                            ${annonce.prenom_utilisateur} ${annonce.nom_utilisateur}<br>
+                            Race de l'animal: ${annonce.race_animal}<br>
+                            À partir de ${annonce.tarif_annonce} €<br>
+                            <div style="margin-top: 10px;">
+                                <button class="popup-button profil" onclick="window.location.href='/PetBesties/profil/${annonce.Id_utilisateur}'">
+                                    Voir le profil
+                                </button>
+                                <button class="popup-button postuler" onclick="postulerAnnonce(${annonce.Id_Annonce})">
+                                    Postuler
+                                </button>
+                            </div>
+                        </div>
                     `;
-                    L.marker([annonce.latitude, annonce.longitude]).addTo(map)
+                    const marker = L.marker([annonce.latitude, annonce.longitude])
                         .bindPopup(popupContent);
+                    markers.addLayer(marker);
                 }
             });
+
+            map.addLayer(markers);
+        }
+
+        // Fonction pour gérer la postulation (actuellement sans action)
+        function postulerAnnonce(annonceId) {
+            alert('Candidature Soumise !');
+            // Vous pouvez rediriger vers une page de postulation ou ouvrir un modal ici.
         }
     </script>
 

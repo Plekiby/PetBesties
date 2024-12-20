@@ -139,42 +139,41 @@ $router->add('/contact', function() {
     include __DIR__ . '/views/footer.php';
 });
 
-$router->add('/prestations', function() {
-    // Démarrer la session si ce n'est pas déjà fait
-    if (session_status() == PHP_SESSION_NONE) {
+$router->add('/postuler', function() {
+    if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
 
-    // Vérifier si l'utilisateur est connecté
     if (!isset($_SESSION['user_id'])) {
-        header('Location: /PetBesties/connexion');
+        header('Location: /PetBesties/connexion?error=Veuillez+vous+connecter+pour+postuler.');
         exit;
     }
 
     $userId = $_SESSION['user_id'];
+    $annonceId = intval($_POST['annonce_id'] ?? 0);
 
-    // Inclure le contrôleur AnnonceController
-    require_once __DIR__ . '/controllers/AnnonceController.php';
-    $controllerann = new AnnonceController();
-
-    // Utiliser la méthode publique pour récupérer les données de l'utilisateur
-    $utilisateur = $controllerann->getUserData($userId);
-    if ($utilisateur) {
-        $nom_utilisateur = $utilisateur['nom_utilisateur'];
-    } else {
-        // Si l'utilisateur n'est pas trouvé, rediriger ou gérer l'erreur
-        header('Location: /PetBesties/connexion');
+    if ($annonceId <= 0) {
+        // ID d'annonce invalide
+        header('Location: /PetBesties/profil?error=Annonce+invalide');
         exit;
     }
 
-    // Récupérer les annonces (ajustez selon vos besoins)
-    $annonces = $controllerann->fetchAll(); // Ou une méthode spécifique comme getAnnoncesByUser($userId)
+    // Inclure le contrôleur des candidatures
+    require_once __DIR__ . '/controllers/CandidatureController.php';
+    $controller = new CandidatureController();
+    $result = $controller->postuler($userId, $annonceId);
 
-    // Inclure les vues avec les données transmises
-    include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/prestations.php'; 
-    include __DIR__ . '/views/footer.php';
-});
+    if ($result) {
+        // Redirection avec succès
+        header('Location: /PetBesties/profil?success=Postulation+réussie');
+        exit;
+    } else {
+        // Redirection avec une erreur
+        header('Location: /PetBesties/profil?error=Erreur+de+postulation');
+        exit;
+    }
+}, 'POST');
+
 
 
 
@@ -411,7 +410,6 @@ $router->add('/ajouter_animal', function() {
     include __DIR__ . '/views/footer.php';
 }, 'GET');
 
-// Route POST pour gérer la postulation à une annonce
 $router->add('/postuler', function() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Vérifier si l'utilisateur est connecté
@@ -426,7 +424,7 @@ $router->add('/postuler', function() {
 
         if ($annonceId <= 0) {
             // ID d'annonce invalide
-            header('Location: /PetBesties/profil/' . $annonceId . '?error=Annonce+invalide');
+            header('Location: /PetBesties/profil?error=Annonce+invalide');
             exit;
         }
 
@@ -436,12 +434,24 @@ $router->add('/postuler', function() {
         $result = $controller->postuler($userId, $annonceId);
 
         if ($result) {
-            // Rediriger avec succès
-            header('Location: /PetBesties/profil/' . $annonceId . '?success=Postulation+réussie');
-            exit;
+            // Récupérer l'ID de l'utilisateur propriétaire de l'annonce
+            require_once __DIR__ . '/controllers/AnnonceController.php';
+            $annonceController = new AnnonceController();
+            $annonce = $annonceController->fetchOne($annonceId);
+
+            if ($annonce && isset($annonce['Id_utilisateur'])) {
+                $annonceOwnerId = $annonce['Id_utilisateur'];
+                // Rediriger vers le profil du propriétaire de l'annonce
+                header('Location: /PetBesties/profil/' . $annonceOwnerId . '?success=Postulation+réussie');
+                exit;
+            } else {
+                // Si l'annonce ou l'utilisateur n'est pas trouvé
+                header('Location: /PetBesties/profil?success=Postulation+réussie');
+                exit;
+            }
         } else {
             // Rediriger avec une erreur
-            header('Location: /PetBesties/profil/' . $annonceId . '?error=Erreur+de+postulation');
+            header('Location: /PetBesties/profil?error=Erreur+de+postulation');
             exit;
         }
     } else {
@@ -449,6 +459,7 @@ $router->add('/postuler', function() {
         echo "Méthode non autorisée.";
     }
 });
+
 
 $router->add('/postuler', function() {
     echo "Cette page est destinée à recevoir des candidatures via une requête POST.";

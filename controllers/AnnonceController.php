@@ -46,6 +46,16 @@ class AnnonceController {
         }
     }
 
+    /**
+     * Récupère une annonce spécifique par son ID.
+     *
+     * @param int $annonceId L'ID de l'annonce à récupérer.
+     * @return array|false Les données de l'annonce ou false en cas d'erreur.
+     */
+    public function fetchOne($annonceId) {
+        return $this->model->fetchOne($annonceId);
+    }
+
     public function showPostAnnonceForm($error = null, $success = null) {
         require_once __DIR__ . '/../models/Gardiennage.php';
         $gardiennageModel = new Gardiennage();
