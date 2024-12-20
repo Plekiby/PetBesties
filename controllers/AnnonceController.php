@@ -9,12 +9,14 @@ class AnnonceController {
     private $utilisateurModel; // Added property
     private $animalModel;
     private $adresseModel;
+    private $conn;
 
     public function __construct() {
         $this->model = new Annonce();
         $this->utilisateurModel = new Utilisateur(); // Instantiate Utilisateur model
         $this->animalModel = new Animal();
         $this->adresseModel = new Adresse();
+        $this->conn = Database::getInstance()->getConnection();
     }
 
     public function index() {
@@ -272,6 +274,34 @@ class AnnonceController {
                 return [];
             }
         }
+
+        public function fetchAnnoncesByUser($userId) {
+            try {
+                $sql = "SELECT 
+                            a.*, 
+                            u.prenom_utilisateur, 
+                            u.nom_utilisateur, 
+                            ad.latitude, 
+                            ad.longitude,
+                            an.nom_animal, 
+                            an.race_animal
+                        FROM annonce a
+                        JOIN utilisateur u ON a.Id_utilisateur = u.Id_utilisateur
+                        JOIN adresse ad ON a.Id_Adresse = ad.Id_Adresse
+                        LEFT JOIN animal an ON a.Id_Animal = an.Id_Animal
+                        WHERE a.Id_utilisateur = :user_id
+                        ORDER BY a.datePublication_annonce DESC";
+                
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+                $stmt->execute();
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } catch (PDOException $e) {
+                error_log('Erreur lors de la récupération des annonces de l\'utilisateur : ' . $e->getMessage());
+                return [];
+            }
+        }
+        
 
         // Ajouter une méthode pour récupérer un animal par ID
         public function getAnimalById($animalId) {

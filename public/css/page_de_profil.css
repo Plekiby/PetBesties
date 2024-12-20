@@ -1,50 +1,92 @@
-
-/* ...existing styles... */
-
-.profile-details {
-    width: 100%; /* S'adapte au conteneur parent */
-    max-width: 500px; /* Optionnel : largeur maximale */
-    margin: 0 auto; 
-}
-.form-group {
-    display: flex; /* Utilise un flexbox */
-    align-items: center; /* Centre verticalement */
-    justify-content: space-between; /* Sépare label et input */
-    margin-bottom: 15px; /* Espacement entre les champs */
+/* =======================
+   1. Règles Générales
+   ======================= */
+   * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-label {
-    flex: 1; /* Prend un espace proportionnel */
-    text-align: right; /* Aligne le texte à droite */
-    margin-right: 10px; /* Ajoute un espace entre le label et l'input */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f0f4f8;
 }
-
-input {
-    flex: 2; /* Plus d'espace pour l'input */
-    padding: 5px; /* Espacement interne */
-    border: 1px solid #ccc; /* Bordure grise */
-    border-radius: 4px; /* Coins arrondis */
-    width: 100%; /* S'adapte au conteneur */
-    box-sizing: border-box; /* Inclut le padding et la bordure */
-}
-
-.profile-details input {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-/* ...existing styles... */
 
 /* =======================
-   Profil - Détails Utilisateur
+   2. Conteneur Principal
    ======================= */
-   .profile-details {
+.profile-container {
+    max-width: 1200px;
+    width: 90%;
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
+    overflow: hidden;
+    transition: none;
+}
+
+/* =======================
+   3. En-tête du Profil
+   ======================= */
+.profile-header {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 50px;
+    margin-bottom: 30px;
+}
+
+.profile-image {
+    position: relative;
+}
+
+.profile-image img {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ccc;
+}
+
+.profile-image img:hover {
+    border-color: #ddd;
+}
+
+/* =======================
+   4. Bouton Ajouter Image
+   ======================= */
+.add-image {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: #128f8b;
+    color: #ffffff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.8em;
+    transition: background-color 0.3s ease;
+}
+
+.add-image:hover {
+    background-color: #4d3653;
+}
+
+/* =======================
+   5. Détails du Profil
+   ======================= */
+.profile-details {
+    width: 100%;
     max-width: 500px;
-    margin: 0 auto ;
+    margin: 0 auto;
+    display: flex;
     flex-direction: column;
-    gap: 1px;
+    gap: 15px;
     background-color: #f9f9f9;
     padding: 15px;
     border-radius: 8px;
@@ -58,6 +100,29 @@ input {
     margin-bottom: 5px;
 }
 
+.profile-details input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #000000;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.profile-details input:focus {
+    background-color: #e7f5f5;
+    outline: none;
+    border-color: #128f8b;
+    box-shadow: 0 0 5px rgba(18, 143, 139, 0.5);
+}
+
+.profile-details input[readonly] {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+}
+
 .profile-details button {
     background-color: #128f8b;
     color: white;
@@ -66,189 +131,36 @@ input {
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    margin-top : 5px;
     transition: background-color 0.3s;
 }
 
-.profile-details input {
-    width: 250px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-    color: #000000;
-    background-color: #f9f9f9;
-    transition: background-color 0.3s ease;
-}
-
-.profile-details input:focus {
-    background-color: #e7f5f5;
-    outline: none;
-}
-
-.profile-details input[readonly] {
-    background-color: #f0f0f0;
-    cursor: not-allowed;
-}
-
-/* Effet de survol */
-.profile-details input:hover {
-    border-color: #128f8b;
-}
-
-.profile-details input:focus {
-    border-color: #128f8b;
-    box-shadow: 0 0 5px rgba(18, 143, 139, 0.5);
-}
-
-
-
-
-/* =======================
-   1. Règles Générales
-   ======================= */
-   * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-}
-
-/* =======================
-   2. Conteneur Principal
-   ======================= */
-.profile-container {
-    width: 1400px;
-    background-color: #ffffff;
-    border-radius: 15px;
-    padding: 20px;
-    margin: 0 auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 40px;
-    overflow: hidden;
-    transition: transform 0.3s ease-in-out;
-}
-
-.profile-container:hover {
-    transform: scale(1.02); 
-}
-
-/* =======================
-   3. En-tête du Profil
-   ======================= */
-.profile-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* Espacement équilibré */
-    gap: 50px; /* Espacement entre les blocs */
-    gap: 100px;
-    margin-bottom: 30px;
-}
-
-.profile-image img {
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.profile-image img:hover {
-    border-color: #ddd;
-}
-
-/* =======================
-   4. Bouton Ajouter Image
-   ======================= */
-.add-image {
-    display: inline-block;
-    color: #ffffff;
-    background-color: #128f8b;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9em;
-    transition: background-color 0.3s ease;
-}
-
-.add-image:hover {
+.profile-details button:hover {
     background-color: #4d3653;
-    color: #ffffff;
-}
-
-/* =======================
-   5. Nom du Profil
-   ======================= */
-.profile-name {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    margin-top: 20px;
-}
-.profile-name .profile-label {
-    color: #4d3653; /* Couleur violet */
-    font-size: 16px; /* Taille du texte */
-    font-weight: bold; /* Texte en gras */
-    margin-bottom: 5px; /* Espacement sous chaque titre */
-    display: block; /* Place chaque titre sur une nouvelle ligne */
-    text-align: center; /* Centre les titres */
-}
-
-.profile-name input {
-    width: 250px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-    color: #4d3653;
-    background-color: #f9f9f9;
-}
-
-.profile-name button {
-    background-color: #128f8b;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top : 5px;
-    transition: background-color 0.3s;
-}
-
-.profile-name button:hover {
-    background-color: #4d3653;
-    color : #ffffff;
-
-}
-
-#name-error {
-    font-size: 14px;
-    color: rgb(124, 39, 39);
-    margin-top: 5px;
 }
 
 /* =======================
    6. Type de Profil
    ======================= */
+.profile-type {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
 .profile-type button {
-    padding: 8px 16px;
-    border: 1px solid #128f8b;
+    padding: 10px 20px;
+    border: 2px solid #128f8b;
     background-color: transparent;
     color: #128f8b;
     border-radius: 5px;
     cursor: pointer;
-    margin: 5px;
     transition: background-color 0.3s, color 0.3s;
+    font-size: 1em;
 }
 
 .profile-type button:hover {
-    background-color: #4d3653;
+    background-color: #128f8b;
     color: #ffffff;
 }
 
@@ -266,15 +178,14 @@ body {
     padding: 20px;
     border-radius: 8px;
     border: 1px solid #ddd;
+    color: #ffffff;
 }
 
 .profile-description p {
     margin-bottom: 10px;
-    color: #ffffff;
     text-align: justify;
 }
 
-/* Style pour le message de confirmation */
 #confirmation-message {
     margin-top: 10px;
     font-size: 14px;
@@ -294,14 +205,12 @@ body {
     border-radius: 5px;
     font-family: Arial, sans-serif; 
     font-size: 14px; 
-    color: #4d3653
-
+    color: #4d3653;
 }
 
 .mission-form label {
     font-weight: bold;
     margin-bottom: 5px;
-    
 }
 
 .mission-form input,
@@ -332,45 +241,46 @@ body {
 }
 
 /* =======================
-   9. Annonces
+   9. Animaux et Annonces
    ======================= */
-.annonces {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
+.animaux, .annonces {
+    margin-top: 30px;
 }
 
-.annonces h3 {
+.animaux h3, .annonces h3 {
     color: #4d3653;
     margin-bottom: 15px;
+    text-align: center;
 }
 
-.annonce {
+.animaux-list, .annonces-list {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+.animal, .annonce {
     background-color: #f9f9fb;
     padding: 15px;
     border-radius: 8px;
     width: 150px;
     text-align: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+    flex-shrink: 0;
 }
 
-.annonce-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 10px;
+.animal img, .annonce-header img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
 }
 
-.annonce-header img {
-    width: 150px;
-    height: 120px;
-    margin-bottom: 5px;
-}
-
-.annonce p {
+.animal p, .annonce p {
+    margin-top: 10px;
     color: #4d3653;
-    font-size: 0.9em;
+    font-weight: bold;
 }
 
 /* =======================
@@ -384,9 +294,28 @@ body {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
+    margin-top: 10px;
 }
 
 .submit:hover {
     background-color: #ffffff;
-    color : #128f8b;
+    color: #128f8b;
+}
+
+/* =======================
+   11. Responsivité
+   ======================= */
+@media (max-width: 768px) {
+    .profile-header {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .animaux-list, .annonces-list {
+        gap: 15px;
+    }
+
+    .animal, .annonce {
+        width: 150px;
+    }
 }

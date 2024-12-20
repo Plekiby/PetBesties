@@ -82,15 +82,14 @@ class Utilisateur {
 
     public function fetchOne($id) {
         try {
-            $sql = "SELECT * FROM utilisateur WHERE Id_utilisateur = $id";
+            $sql = "SELECT * FROM utilisateur WHERE Id_utilisateur = :id";
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $stmt->fetch(PDO::FETCH_ASSOC); // Utilisez fetch() au lieu de fetchAll()
         } catch (PDOException $e) {
-            // Logger l'erreur en production au lieu d'afficher directement
-            error_log('Erreur lors de la récupération des utilisateurs : ' . $e->getMessage());
-            return [];
+            error_log('Erreur lors de la récupération de l\'utilisateur : ' . $e->getMessage());
+            return false;
         }
     }
 

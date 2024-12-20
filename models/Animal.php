@@ -10,9 +10,9 @@ class Animal {
 
     public function fetchAllByUser($userId) {
         try {
-            $sql = "SELECT Id_Animal, nom_animal, race_animal, age_animal, info_animal FROM animal WHERE Id_utilisateur = :userId";
+            $sql = "SELECT * FROM animal WHERE Id_utilisateur = :user_id";
             $stmt = $this->conn->prepare($sql);
-            $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+            $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {

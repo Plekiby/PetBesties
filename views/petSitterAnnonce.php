@@ -98,6 +98,23 @@
             margin-top: 10px;
         }
 
+        /* Ajoutez ceci dans votre balise <style> ou dans votre fichier CSS */
+        .voir-profil-btn {
+            display: inline-block;
+            padding: 8px 12px;
+            background-color: #128f8b;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .voir-profil-btn:hover {
+            background-color: #0f6a68;
+        }
+
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .content {
@@ -171,36 +188,37 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
     <script>
-        document.getElementById('prix_max').addEventListener('input', function() {
-            document.getElementById('prix_max_val').textContent = this.value + ' €';
+    document.getElementById('prix_max').addEventListener('input', function() {
+        document.getElementById('prix_max_val').textContent = this.value + ' €';
+    });
+
+    // Initialisation de la carte avec Leaflet et OpenStreetMap
+    const map = L.map('map').setView([48.8566, 2.3522], 12); // Coordonnées de Paris
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Ajout des marqueurs pour chaque annonce
+    const annonces = <?= json_encode($annonces ?? []); ?>;
+
+    if (annonces.length > 0) {
+        annonces.forEach((annonce) => {
+            if (annonce.latitude && annonce.longitude) {
+                const popupContent = `
+                    <b>${annonce.titre_annonce}</b><br>
+                    ${annonce.prenom_utilisateur} ${annonce.nom_utilisateur}<br>
+                    Race de l'animal: ${annonce.race_animal}<br>
+                    À partir de ${annonce.tarif_annonce} €<br>
+                    <a href="/PetBesties/profil/${annonce.Id_utilisateur}" class="voir-profil-btn">Voir le profil</a>
+                `;
+                L.marker([annonce.latitude, annonce.longitude]).addTo(map)
+                    .bindPopup(popupContent);
+            }
         });
+    }
+</script>
 
-        // Initialisation de la carte avec Leaflet et OpenStreetMap
-        const map = L.map('map').setView([48.8566, 2.3522], 12); // Coordonnées de Paris
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-        // Ajout des marqueurs pour chaque annonce
-        const annonces = <?= json_encode($annonces ?? []); ?>;
-
-        if (annonces.length > 0) {
-            annonces.forEach((annonce) => {
-                if (annonce.latitude && annonce.longitude) {
-                    const popupContent = `
-                        <b>${annonce.titre_annonce}</b><br>
-                        ${annonce.prenom_utilisateur} ${annonce.nom_utilisateur}<br>
-                        Race de l'animal: ${annonce.race_animal}<br>
-                        À partir de ${annonce.tarif_annonce} €<br>
-                        <button onclick="window.location.href='/PetBesties/profil/${annonce.Id_utilisateur}'">Voir le profil</button>
-                    `;
-                    L.marker([annonce.latitude, annonce.longitude]).addTo(map)
-                        .bindPopup(popupContent);
-                }
-            });
-        }
-    </script>
 
 </body>
 

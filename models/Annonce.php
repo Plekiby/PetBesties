@@ -114,6 +114,33 @@ class Annonce {
         }
     }
     
+    public function fetchAnnoncesByUser($userId) {
+        try {
+            $sql = "SELECT 
+                        a.*, 
+                        u.prenom_utilisateur, 
+                        u.nom_utilisateur, 
+                        ad.latitude, 
+                        ad.longitude,
+                        an.nom_animal, 
+                        an.race_animal
+                    FROM annonce a
+                    JOIN utilisateur u ON a.Id_utilisateur = u.Id_utilisateur
+                    JOIN adresse ad ON a.Id_Adresse = ad.Id_Adresse
+                    LEFT JOIN animal an ON a.Id_Animal = an.Id_Animal
+                    WHERE a.Id_utilisateur = :user_id
+                    ORDER BY a.datePublication_annonce DESC";
+            
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Erreur lors de la récupération des annonces de l\'utilisateur : ' . $e->getMessage());
+            return [];
+        }
+    }
+    
 
     public function createAnnonce($titre, $description, $dateDebut, $duree, $tarif, $id_utilisateur, $type, $details, $adresseId, $animalId) {
         try {
@@ -203,6 +230,38 @@ class Annonce {
                     WHERE a.Id_Annonce = :id";
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Erreur lors de la récupération de l\'annonce : ' . $e->getMessage());
+            return false;
+        }
+    }
+    /**
+     * Récupère une annonce spécifique par son ID.
+     *
+     * @param int $annonceId L'ID de l'annonce à récupérer.
+     * @return array|false Les données de l'annonce ou false en cas d'erreur.
+     */
+    public function fetchOne($annonceId) {
+        try {
+            $sql = "SELECT 
+                        a.*, 
+                        u.prenom_utilisateur, 
+                        u.nom_utilisateur, 
+                        ad.latitude, 
+                        ad.longitude,
+                        an.nom_animal, 
+                        an.race_animal
+                    FROM annonce a
+                    JOIN utilisateur u ON a.Id_utilisateur = u.Id_utilisateur
+                    JOIN adresse ad ON a.Id_Adresse = ad.Id_Adresse
+                    LEFT JOIN animal an ON a.Id_Animal = an.Id_Animal
+                    WHERE a.Id_Annonce = :annonce_id
+                    LIMIT 1";
+            
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':annonce_id', $annonceId, PDO::PARAM_INT);
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {

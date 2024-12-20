@@ -27,8 +27,13 @@ class Router {
         foreach ($this->routes[$requestMethod] as $path => $callback) {
             $normalizedPath = trim($path, '/'); 
     
-            if ($normalizedPath === $normalizedUri) {
-                return call_user_func($callback);
+            // Convert route path with parameters to a regex pattern
+            $routePattern = preg_replace('/\{[^}]+\}/', '([^/]+)', $normalizedPath);
+            $routePattern = "@^" . $routePattern . "$@";
+    
+            if (preg_match($routePattern, $normalizedUri, $matches)) {
+                array_shift($matches); // Remove the full match
+                return call_user_func_array($callback, $matches);
             }
         }
     
@@ -89,26 +94,43 @@ $router->add('/petowner', function() {
 
 
 
-// fct get values users momo 
 $router->add('/profil', function() {
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
     if (isset($_SESSION['user_id'])) {
         $userId = $_SESSION['user_id'];
+        
+        // Inclure les contrôleurs nécessaires
         require_once __DIR__ . '/controllers/UtilisateurController.php';
-        $controlleruti = new UtilisateurController();
-        $utilisateur = $controlleruti->fetchOne($userId);
-
+        require_once __DIR__ . '/controllers/AnimalController.php';
+        require_once __DIR__ . '/controllers/AnnonceController.php';
+        
+        // Instancier les contrôleurs
+        $utilisateurController = new UtilisateurController();
+        $animalController = new AnimalController();
+        $annonceController = new AnnonceController();
+        
+        // Récupérer les données de l'utilisateur
+        $utilisateur = $utilisateurController->fetchOne($userId);
+        
+        // Récupérer les animaux de l'utilisateur
+        $animaux = $animalController->fetchAnimals($userId);
+        
+        // Récupérer les annonces de l'utilisateur
+        $annonces = $annonceController->fetchAnnoncesByUser($userId);
+        
         // Inclure les vues avec les données transmises
         include __DIR__ . '/views/header.php';
-        include __DIR__ . '/views/page_de_profil.php'; // La vue utilise $prestataires
+        include __DIR__ . '/views/page_de_profil.php';
         include __DIR__ . '/views/footer.php';
     } else {
+        // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
+        header('Location: /PetBesties/connexion');
         exit;
     }
-    
 });
+
 
 $router->add('/contact', function() {
     // Inclure les vues avec les données transmises
@@ -157,22 +179,23 @@ $router->add('/prestations', function() {
 
 
 $router->add('/candidatures', function() {
-    $userId = $_SESSION['user_id'] ?? 1;
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: /PetBesties/connexion');
+        exit;
+    }
 
-    require_once __DIR__ . '/controllers/AnnonceController.php';
-    $controller = new AnnonceController();
-    $annonces = $controller->index($userId);
+    $userId = $_SESSION['user_id'];
 
     require_once __DIR__ . '/controllers/PostuleController.php';
-    $controllerpostu = new PostuleController();
-    $candidatures = $controllerpostu->index($userId);
+    $controller = new PostuleController();
+    $candidatures = $controller->index($userId);
 
-    require_once __DIR__ . '/controllers/UtilisateurController.php';
-    $controlleruti = new UtilisateurController();
-
-    // Inclure les vues avec les données transmises
     include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/mescandidatures.php'; // La vue utilise $prestataires
+    include __DIR__ . '/views/mescandidatures.php';
+    include __DIR__ . '/views/footer.php';
 });
 
 $router->add('/coups_de_coeur', function() {
@@ -219,6 +242,14 @@ $router->add('/inscription', function() {
         include __DIR__ . '/views/footer.php';
     }
 }, 'POST');
+
+// Route pour afficher le profil public d'un utilisateur spécifique
+$router->add('/profil/{id}', function($id) {
+    require_once __DIR__ . '/controllers/PublicProfileController.php';
+    $controller = new PublicProfileController();
+    $controller->showProfile($id);
+});
+
 
 // Add separate GET and POST routes for '/connexion'
 
@@ -380,6 +411,50 @@ $router->add('/ajouter_animal', function() {
     include __DIR__ . '/views/footer.php';
 }, 'GET');
 
+// Route POST pour gérer la postulation à une annonce
+$router->add('/postuler', function() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Vérifier si l'utilisateur est connecté
+        session_start();
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /PetBesties/connexion');
+            exit;
+        }
+
+        $userId = $_SESSION['user_id'];
+        $annonceId = intval($_POST['annonce_id'] ?? 0);
+
+        if ($annonceId <= 0) {
+            // ID d'annonce invalide
+            header('Location: /PetBesties/profil/' . $annonceId . '?error=Annonce+invalide');
+            exit;
+        }
+
+        // Inclure le contrôleur des candidatures
+        require_once __DIR__ . '/controllers/CandidatureController.php';
+        $controller = new CandidatureController();
+        $result = $controller->postuler($userId, $annonceId);
+
+        if ($result) {
+            // Rediriger avec succès
+            header('Location: /PetBesties/profil/' . $annonceId . '?success=Postulation+réussie');
+            exit;
+        } else {
+            // Rediriger avec une erreur
+            header('Location: /PetBesties/profil/' . $annonceId . '?error=Erreur+de+postulation');
+            exit;
+        }
+    } else {
+        http_response_code(405);
+        echo "Méthode non autorisée.";
+    }
+});
+
+$router->add('/postuler', function() {
+    echo "Cette page est destinée à recevoir des candidatures via une requête POST.";
+}, 'GET');
+
+
 $router->add('/ajouter_animal', function() {
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
@@ -409,6 +484,4 @@ $router->add('/ajouter_animal', function() {
         echo "Veuillez remplir tous les champs.";
     }
 }, 'POST');
-
-
 
