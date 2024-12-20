@@ -10,9 +10,9 @@ class Animal {
 
     public function fetchAllByUser($userId) {
         try {
-            $sql = "SELECT Id_Animal, nom_animal, race_animal FROM animal WHERE Id_utilisateur = :userId";
+            $sql = "SELECT * FROM animal WHERE Id_utilisateur = :user_id";
             $stmt = $this->conn->prepare($sql);
-            $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+            $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
@@ -23,7 +23,7 @@ class Animal {
 
     public function getAnimalById($animalId, $userId) {
         try {
-            $sql = "SELECT Id_Animal, nom_animal, race_animal FROM animal WHERE Id_Animal = :animalId AND Id_utilisateur = :userId";
+            $sql = "SELECT Id_Animal, nom_animal, race_animal, age_animal, info_animal FROM animal WHERE Id_Animal = :animalId AND Id_utilisateur = :userId";
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':animalId', $animalId, PDO::PARAM_INT);
             $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
@@ -35,12 +35,14 @@ class Animal {
         }
     }
 
-    public function createAnimal($userId, $nomAnimal, $raceAnimal) {
+    public function createAnimal($userId, $nomAnimal, $raceAnimal, $ageAnimal, $infoAnimal) {
         try {
-            $sql = "INSERT INTO animal (nom_animal, race_animal, Id_utilisateur) VALUES (:nom, :race, :userId)";
+            $sql = "INSERT INTO animal (nom_animal, race_animal, age_animal, info_animal, Id_utilisateur) VALUES (:nom, :race, :age, :info, :userId)";
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':nom', $nomAnimal);
             $stmt->bindParam(':race', $raceAnimal);
+            $stmt->bindParam(':age', $ageAnimal, PDO::PARAM_INT);
+            $stmt->bindParam(':info', $infoAnimal);
             $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
             $stmt->execute();
             return $this->conn->lastInsertId();
@@ -50,12 +52,14 @@ class Animal {
         }
     }
 
-    public function updateAnimal($userId, $animalId, $nomAnimal, $raceAnimal) {
+    public function updateAnimal($userId, $animalId, $nomAnimal, $raceAnimal, $ageAnimal, $infoAnimal) {
         try {
-            $sql = "UPDATE animal SET nom_animal = :nom, race_animal = :race WHERE Id_Animal = :animalId AND Id_utilisateur = :userId";
+            $sql = "UPDATE animal SET nom_animal = :nom, race_animal = :race, age_animal = :age, info_animal = :info WHERE Id_Animal = :animalId AND Id_utilisateur = :userId";
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':nom', $nomAnimal);
             $stmt->bindParam(':race', $raceAnimal);
+            $stmt->bindParam(':age', $ageAnimal, PDO::PARAM_INT);
+            $stmt->bindParam(':info', $infoAnimal);
             $stmt->bindParam(':animalId', $animalId, PDO::PARAM_INT);
             $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
             return $stmt->execute();
@@ -78,3 +82,4 @@ class Animal {
         }
     }
 }
+?>

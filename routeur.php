@@ -27,8 +27,13 @@ class Router {
         foreach ($this->routes[$requestMethod] as $path => $callback) {
             $normalizedPath = trim($path, '/'); 
     
-            if ($normalizedPath === $normalizedUri) {
-                return call_user_func($callback);
+            // Convert route path with parameters to a regex pattern
+            $routePattern = preg_replace('/\{[^}]+\}/', '([^/]+)', $normalizedPath);
+            $routePattern = "@^" . $routePattern . "$@";
+    
+            if (preg_match($routePattern, $normalizedUri, $matches)) {
+                array_shift($matches); // Remove the full match
+                return call_user_func_array($callback, $matches);
             }
         }
     
@@ -47,48 +52,85 @@ $router->add('/', function() {
 });
 
 
-$router->add('/petowner', function() {
-    require_once __DIR__ . '/controllers/AnnonceController.php';
-    $controller = new AnnonceController();
-    $annonces = $controller->getAnnoncesByType(0); // type_utilisateur = 0 pour PetOwner
-
-    // Inclure les vues avec les données transmises
-    include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/petOwnerAnnonce.php'; // La vue utilise $annonces
-    include __DIR__ . '/views/footer.php';
-});
-
 $router->add('/petsitter', function() {
     require_once __DIR__ . '/controllers/AnnonceController.php';
     $controller = new AnnonceController();
-    $annonces = $controller->getAnnoncesByType(1); // type_utilisateur = 1 pour PetSitter
+    
+    // Récupérer les paramètres GET
+    $filters = [
+        'type_annonce' => isset($_GET['type_annonce']) ? $_GET['type_annonce'] : [],
+        'prix_max' => isset($_GET['prix_max']) ? (float)$_GET['prix_max'] : 200.00,
+        'type_animal' => isset($_GET['type_animal']) ? $_GET['type_animal'] : []
+    ];
+    
+    $annonces = $controller->getAnnoncesByTypeAndFilters(0, $filters); // type_utilisateur = 0 pour PetOwner
 
     // Inclure les vues avec les données transmises
     include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/petSitterAnnonce.php'; // La vue utilise $annonces
+    include __DIR__ . '/views/petSitterAnnonce.php';
     include __DIR__ . '/views/footer.php';
 });
 
-// fct get values users momo 
+
+
+$router->add('/petowner', function() {
+    require_once __DIR__ . '/controllers/AnnonceController.php';
+    $controller = new AnnonceController();
+    
+    // Récupérer les paramètres GET
+    $filters = [
+        'type_annonce' => isset($_GET['type_annonce']) ? $_GET['type_annonce'] : [],
+        'prix_max' => isset($_GET['prix_max']) ? (float)$_GET['prix_max'] : 200.00,
+        'type_animal' => isset($_GET['type_animal']) ? $_GET['type_animal'] : []
+    ];
+    
+    $annonces = $controller->getAnnoncesByTypeAndFilters(1, $filters); // type_utilisateur = 0 pour PetOwner
+
+    // Inclure les vues avec les données transmises
+    include __DIR__ . '/views/header.php';
+    include __DIR__ . '/views/petOwnerAnnonce.php';
+    include __DIR__ . '/views/footer.php';
+});
+
+
+
 $router->add('/profil', function() {
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
     if (isset($_SESSION['user_id'])) {
         $userId = $_SESSION['user_id'];
+        
+        // Inclure les contrôleurs nécessaires
         require_once __DIR__ . '/controllers/UtilisateurController.php';
-        $controlleruti = new UtilisateurController();
-        $utilisateur = $controlleruti->fetchOne($userId);
-
+        require_once __DIR__ . '/controllers/AnimalController.php';
+        require_once __DIR__ . '/controllers/AnnonceController.php';
+        
+        // Instancier les contrôleurs
+        $utilisateurController = new UtilisateurController();
+        $animalController = new AnimalController();
+        $annonceController = new AnnonceController();
+        
+        // Récupérer les données de l'utilisateur
+        $utilisateur = $utilisateurController->fetchOne($userId);
+        
+        // Récupérer les animaux de l'utilisateur
+        $animaux = $animalController->fetchAnimals($userId);
+        
+        // Récupérer les annonces de l'utilisateur
+        $annonces = $annonceController->fetchAnnoncesByUser($userId);
+        
         // Inclure les vues avec les données transmises
         include __DIR__ . '/views/header.php';
-        include __DIR__ . '/views/page_de_profil.php'; // La vue utilise $prestataires
+        include __DIR__ . '/views/page_de_profil.php';
         include __DIR__ . '/views/footer.php';
     } else {
+        // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
+        header('Location: /PetBesties/connexion');
         exit;
     }
-    
 });
+
 
 $router->add('/contact', function() {
     // Inclure les vues avec les données transmises
@@ -97,47 +139,62 @@ $router->add('/contact', function() {
     include __DIR__ . '/views/footer.php';
 });
 
-$router->add('/historique', function() {
+$router->add('/prestations', function() {
+    // Démarrer la session si ce n'est pas déjà fait
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    // Vérifier si l'utilisateur est connecté
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: /PetBesties/connexion');
+        exit;
+    }
+
+    $userId = $_SESSION['user_id'];
+
+    // Inclure le contrôleur AnnonceController
+    require_once __DIR__ . '/controllers/AnnonceController.php';
+    $controllerann = new AnnonceController();
+
+    // Utiliser la méthode publique pour récupérer les données de l'utilisateur
+    $utilisateur = $controllerann->getUserData($userId);
+    if ($utilisateur) {
+        $nom_utilisateur = $utilisateur['nom_utilisateur'];
+    } else {
+        // Si l'utilisateur n'est pas trouvé, rediriger ou gérer l'erreur
+        header('Location: /PetBesties/connexion');
+        exit;
+    }
+
+    // Récupérer les annonces (ajustez selon vos besoins)
+    $annonces = $controllerann->fetchAll(); // Ou une méthode spécifique comme getAnnoncesByUser($userId)
+
     // Inclure les vues avec les données transmises
     include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/monhistorique.php'; // La vue utilise $prestataires
+    include __DIR__ . '/views/prestations.php'; 
     include __DIR__ . '/views/footer.php';
 });
 
-$router->add('/prestations', function() {
-    // Inclure les vues avec les données transmises
-    include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/prestations.php'; // La vue utilise $prestataires
-    include __DIR__ . '/views/footer.php';
-});
 
 
 $router->add('/candidatures', function() {
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
-    if (isset($_SESSION['user_id'])) {
-        $userId = $_SESSION['user_id'];
-    } else {
-        // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
+    if (!isset($_SESSION['user_id'])) {
         header('Location: /PetBesties/connexion');
         exit;
     }
 
-    require_once __DIR__ . '/controllers/AnnonceController.php';
-    $controller = new AnnonceController();
-    $annonces = $controller->index();
+    $userId = $_SESSION['user_id'];
 
     require_once __DIR__ . '/controllers/PostuleController.php';
-    $controllerpostu = new PostuleController();
-    $candidatures = $controllerpostu->index($userId);
+    $controller = new PostuleController();
+    $candidatures = $controller->index($userId);
 
-    require_once __DIR__ . '/controllers/UtilisateurController.php';
-    $controlleruti = new UtilisateurController();
-
-    // Inclure les vues avec les données transmises
     include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/mescandidatures.php'; // La vue utilise $annonces et $candidatures
+    include __DIR__ . '/views/mescandidatures.php';
     include __DIR__ . '/views/footer.php';
 });
 
@@ -147,7 +204,7 @@ $router->add('/coups_de_coeur', function() {
     $controlleraime = new AimeController();
     $favoris = $controlleraime->index();
     include __DIR__ . '/views/header.php';
-    include __DIR__ . '/views/coupsdecoeur.php'; // La vue utilise $prestataires
+    include __DIR__ . '/views/coupsdecoeur.php'; 
     include __DIR__ . '/views/footer.php';
 });
 
@@ -185,6 +242,14 @@ $router->add('/inscription', function() {
         include __DIR__ . '/views/footer.php';
     }
 }, 'POST');
+
+// Route pour afficher le profil public d'un utilisateur spécifique
+$router->add('/profil/{id}', function($id) {
+    require_once __DIR__ . '/controllers/PublicProfileController.php';
+    $controller = new PublicProfileController();
+    $controller->showProfile($id);
+});
+
 
 // Add separate GET and POST routes for '/connexion'
 
@@ -310,6 +375,19 @@ $router->add('/poster_annonce', function() {
 }, 'POST');
 
 
+$router->add('/historique', function() {
+session_start(); // Démarre la session pour récupérer l'ID utilisateur
+$userId = $_SESSION['user_id'] ?? 1;
+    
+require_once __DIR__ . '/controllers/HistoriqueController.php';
+$controller = new HistoriqueController();
+$historique = $controller->index($userId);
+    
+        include __DIR__ . '/views/header.php';
+        include __DIR__ . '/views/monhistorique.php';
+        include __DIR__ . '/views/footer.php';
+});
+    
 
 // Route pour afficher une annonce spécifique après sa création
 $router->add('/annonce/{id}', function($id) {
@@ -333,6 +411,71 @@ $router->add('/ajouter_animal', function() {
     include __DIR__ . '/views/footer.php';
 }, 'GET');
 
+$router->add('/postuler', function() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        echo "Route POST /postuler atteinte.<br>";
+        error_log("Route POST /postuler atteinte.");
+
+        session_start();
+        if (!isset($_SESSION['user_id'])) {
+            error_log("Utilisateur non connecté.");
+            header('Location: /PetBesties/connexion');
+            exit;
+        }
+
+        $userId = $_SESSION['user_id'];
+        $annonceId = intval($_POST['annonce_id'] ?? 0);
+
+        echo "User ID: " . htmlspecialchars($userId) . "<br>";
+        echo "Annonce ID: " . htmlspecialchars($annonceId) . "<br>";
+        error_log("User ID: " . $userId);
+        error_log("Annonce ID: " . $annonceId);
+
+        if ($annonceId <= 0) {
+            error_log("ID d'annonce invalide : " . $annonceId);
+            header('Location: /PetBesties/profil?error=Annonce+invalide');
+            exit;
+        }
+
+        // Inclure le contrôleur des candidatures
+        require_once __DIR__ . '/controllers/CandidatureController.php';
+        $controller = new CandidatureController();
+        $result = $controller->postuler($userId, $annonceId);
+
+        if ($result) {
+            // Récupérer l'ID du propriétaire de l'annonce
+            require_once __DIR__ . '/controllers/AnnonceController.php';
+            $annonceController = new AnnonceController();
+            $annonce = $annonceController->fetchOne($annonceId);
+
+            if ($annonce && isset($annonce['Id_utilisateur'])) {
+                $annonceOwnerId = $annonce['Id_utilisateur'];
+                error_log("Postulation réussie vers le propriétaire de l'annonce ID : " . $annonceOwnerId);
+                header('Location: /PetBesties/profil/' . $annonceOwnerId . '?success=Postulation+réussie');
+                exit;
+            } else {
+                error_log("Annonce ou propriétaire non trouvé pour l'ID : " . $annonceId);
+                header('Location: /PetBesties/profil?success=Postulation+réussie');
+                exit;
+            }
+        } else {
+            error_log("Erreur lors de la postulation pour l'annonce ID : " . $annonceId);
+            header('Location: /PetBesties/profil?error=Erreur+de+postulation');
+            exit;
+        }
+    } else {
+        http_response_code(405);
+        echo "Méthode non autorisée.";
+    }
+}, 'POST');
+
+
+
+$router->add('/postuler', function() {
+    echo "Cette page est destinée à recevoir des candidatures via une requête POST.";
+}, 'GET');
+
+
 $router->add('/ajouter_animal', function() {
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
@@ -350,7 +493,7 @@ $router->add('/ajouter_animal', function() {
     $userId = $_SESSION['user_id'];
 
     if (!empty($nomAnimal) && !empty($raceAnimal)) {
-        $newId = $controllerAnimal->addAnimal($userId, $nomAnimal, $raceAnimal);
+        $newId = $controllerAnimal->addAnimal($userId, $nomAnimal, $raceAnimal, $ageAnimal, $infoAnimal);
         if ($newId) {
             // Redirection vers le profil
             header('Location: /PetBesties/profil');
@@ -362,6 +505,4 @@ $router->add('/ajouter_animal', function() {
         echo "Veuillez remplir tous les champs.";
     }
 }, 'POST');
-
-
 

@@ -1,0 +1,147 @@
+/* =======================
+   Règles Générales
+======================= */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f4f8;
+    color: #333;
+}
+
+.profile-container {
+    max-width: 1200px;
+    width: 90%;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+}
+
+.profile-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 20px;
+}
+
+.profile-image img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #128f8b;
+}
+
+.profile-details h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: #128f8b;
+}
+
+.profile-details p {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+.animaux, .annonces {
+    margin-top: 40px;
+}
+
+.animaux h3, .annonces h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333333;
+    text-align: center;
+}
+
+.animaux-list, .annonces-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.animal, .annonce {
+    background-color: #f9f9fb;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    width: 280px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding: 15px;
+    box-sizing: border-box;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.animal:hover, .annonce:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.animal img, .annonce-header img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.animal p, .annonce h4, .annonce-body p {
+    margin: 5px 0;
+    color: #555555;
+}
+
+.annonce-header h4 {
+    font-size: 20px;
+    color: #128f8b;
+    margin-bottom: 10px;
+}
+
+.annonce-body p {
+    font-size: 14px;
+    color: #555555;
+}
+
+.postuler-btn {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #128f8b;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+.postuler-btn:hover {
+    background-color: #0f6a68;
+}
+
+/* =======================
+   Responsivité
+======================= */
+@media (max-width: 768px) {
+    .profile-header {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profile-image img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .profile-details h2 {
+        font-size: 24px;
+    }
+
+    .animal, .annonce {
+        width: 90%;
+    }
+}

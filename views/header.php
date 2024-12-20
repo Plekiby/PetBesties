@@ -14,21 +14,22 @@ if (session_status() == PHP_SESSION_NONE) {
 <body>
 <header class="header">
   <div class="logo">
-    	<img src="/petbesties/public/images/logoPB.jpg">
-    		
+    <a href="/PetBesties/"> 
+      <img src="/petbesties/public/images/logoPB.jpg" alt="Logo PetBesties">
+    </a>
   </div>
 
   <nav class="navigation">
     <div class="dropdown">
         <a href="#" class="dropbtn">🐕 PetSitter</a>
-        <div class="dropdown-content">
+        <div class="dropdown-menu">
             <a href="/PetBesties/petsitter">Voir les annonces</a>
             <a href="/PetBesties/poster_annonce">Poster une annonce</a>
         </div>
     </div>
     <div class="dropdown">
         <a href="#" class="dropbtn">🐾 PetOwner</a>
-        <div class="dropdown-content">
+        <div class="dropdown-menu">
             <a href="/PetBesties/petowner">Voir les annonces</a>
             <a href="/PetBesties/poster_annonce">Poster une annonce</a>
         </div>
@@ -39,7 +40,7 @@ if (session_status() == PHP_SESSION_NONE) {
   <?php if (isset($_SESSION['user_id'])): ?>
     <div class="dropdown">
         <button class="profile-button">Profil</button>
-        <div class="dropdown-content">
+        <div class="dropdown-menu">
             <a href="/PetBesties/profil">Profil</a>
             <a href="/PetBesties/candidatures">Mes candidatures</a>
             <a href="/PetBesties/historique">Mon historique</a>
@@ -60,3 +61,6 @@ if (session_status() == PHP_SESSION_NONE) {
 
 </body>
 </html>
+
+
+

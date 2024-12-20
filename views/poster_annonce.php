@@ -49,7 +49,7 @@
 
         .form-block button {
             padding: 12px;
-            background-color: #4CAF50;
+            background-color: #009688;
             color: white;
             border: none;
             border-radius: 4px;
@@ -59,7 +59,7 @@
         }
 
         .form-block button:hover {
-            background-color: #45a049;
+            background-color: #513b56;
         }
 
         .message {

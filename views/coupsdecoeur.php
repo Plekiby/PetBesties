@@ -1,32 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Mes coups de coeur</title>
-    <link rel="stylesheet" type="text/css" href="/petbesties/public/css/coupsdecoeur.css">
+    <title>Mes coups de cœur</title>
+    <link rel="stylesheet" type="text/css" href="/PetBesties/public/css/coupsdecoeur.css">
 </head>
 <body>
-    <h1 class="titre">Mes coups de coeur</h1>
-    <div class="premier_carre">
-        <div class="sous-carre">
-            <div class="profil">
-                <span class="initiales">LK</span>
+    <h1 class="titre">Mes coups de cœur</h1>
+        <?php if (!empty($favoris)): ?>
+            <div class="premier_carre">
+                <?php foreach ($favoris as $favori): ?>
+                    <?php if ($favori['favoris'] == '1'): ?>
+                    <div class="sous-carre">
+                        <div class="profil">
+                            <span class="initiales">
+                                <?= strtoupper($favori['prenom_utilisateur'][0] . $favori['nom_utilisateur'][0]); ?>
+                            </span>
+                        </div>
+                        <div class="details">
+                            <h4><?= htmlspecialchars($favori['titre_annonce']); ?><br><?= htmlspecialchars($favori['datePublication_annonce']); ?></h4>
+                            <h6><?= htmlspecialchars($favori['prenom_utilisateur']); ?> <?= htmlspecialchars($favori['nom_utilisateur']); ?></h6>  
+                            <h6><?= htmlspecialchars($favori['date_favoris']); ?></h6> 
+                        </div>
+                        <button class="coeur">❤</button>
+                    </div>
+                    <?php else: ?>
+                        <p>Aucun favori trouvé </p>
+                    <?php endif; ?>
+                <?php endforeach; ?>
             </div>
-            <div class="details">
-                <h4>Hébergement 06/11/24</h4>
-                <h6>Lucille K.</h6>
-            </div>
-            <button class="coeur">❤</button>
-        </div>
-        <div class="sous-carre">
-            <div class="profil">
-                <img src="C:\Users\apoll\OneDrive\Images\Captures d’écran\Capture d'écran 2024-10-26 192352.png" alt="Photo de profil">
-            </div>
-            <div class="details">
-                <h4>Hébergement 06/11/24</h4>
-                <h6>Karine M.</h6>
-            </div>
-            <button class="coeur">❤</button>
-        </div>
-    </div>
+        <?php else: ?>
+            <p>Aucun favori trouvé</p>
+        <?php endif; ?>
 </body>
 </html>
