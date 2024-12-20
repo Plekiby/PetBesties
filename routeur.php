@@ -63,7 +63,7 @@ $router->add('/petsitter', function() {
         'type_animal' => isset($_GET['type_animal']) ? $_GET['type_animal'] : []
     ];
     
-    $annonces = $controller->getAnnoncesByTypeAndFilters(1, $filters); // type_utilisateur = 0 pour PetOwner
+    $annonces = $controller->getAnnoncesByTypeAndFilters(0, $filters); // type_utilisateur = 0 pour PetOwner
 
     // Inclure les vues avec les données transmises
     include __DIR__ . '/views/header.php';
@@ -84,7 +84,7 @@ $router->add('/petowner', function() {
         'type_animal' => isset($_GET['type_animal']) ? $_GET['type_animal'] : []
     ];
     
-    $annonces = $controller->getAnnoncesByTypeAndFilters(0, $filters); // type_utilisateur = 0 pour PetOwner
+    $annonces = $controller->getAnnoncesByTypeAndFilters(1, $filters); // type_utilisateur = 0 pour PetOwner
 
     // Inclure les vues avec les données transmises
     include __DIR__ . '/views/header.php';
