@@ -29,6 +29,10 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
+        .left-column .form-block {
+            display: block;
+        }
+
         .form-block h2 {
             margin-top: 0;
             margin-bottom: 20px;
@@ -73,6 +77,50 @@
 
         .message.success {
             color: green;
+        }
+
+        /* Styles pour les boutons d'accordéon */
+        .accordion {
+            background-color: #009688;
+            color: white;
+            cursor: pointer;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 18px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .accordion:hover, .accordion.active {
+            background-color: #513b56;
+        }
+
+        /* Indicateur d'état */
+        .accordion::after {
+            content: '\002B'; /* Plus */
+            font-size: 20px;
+            float: right;
+        }
+
+        .accordion.active::after {
+            content: '\2212'; /* Moins */
+        }
+
+        /* Animation pour l'accordéon */
+        .panel {
+            padding: 0 15px;
+            max-height: 0;
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            background-color: #f1f1f1;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .panel.show {
+            max-height: 1000px; /* Une valeur suffisamment grande pour contenir le contenu */
         }
     </style>
 </head>
@@ -139,115 +187,136 @@
 
         <!-- Colonne de droite pour créer un animal et une adresse -->
         <div class="right-column">
-            <!-- Formulaire pour créer un nouvel animal -->
-            <div class="form-block">
-                <h2>Créer un Nouvel Animal</h2>
-                <form method="POST" action="/PetBesties/poster_annonce">
-                    <input type="hidden" name="action" value="create_animal">
+            <!-- Accordéon pour créer un nouvel animal -->
+            <button class="accordion">Créer un Nouvel Animal</button>
+            <div class="panel">
+                <div class="form-block">
+                    <form method="POST" action="/PetBesties/poster_annonce">
+                        <input type="hidden" name="action" value="create_animal">
 
-                    <label for="nom_animal">Nom de l'animal:</label>
-                    <input type="text" id="nom_animal" name="nom_animal" required>
+                        <label for="nom_animal">Nom de l'animal:</label>
+                        <input type="text" id="nom_animal" name="nom_animal" required>
 
-                    <label for="race_animal">Race de l'animal:</label>
-                    <select id="race_animal" name="race_animal" required>
-                        <option value="">Sélectionnez la race</option>
-                        <option value="Chien">Chien</option>
-                        <option value="Chat">Chat</option>
-                        <option value="Oiseau">Oiseau</option>
-                        <option value="Rongeur">Rongeur</option>
-                        <option value="Lapin">Lapin</option>
-                        <option value="Furet">Furet</option>
-                        <option value="Hamster">Hamster</option>
-                        <option value="Serpent">Serpent</option>
-                        <option value="Tortue">Tortue</option>
-                        <!-- Ajoutez d'autres races prédéfinies ici -->
-                    </select>
+                        <label for="race_animal">Race de l'animal:</label>
+                        <select id="race_animal" name="race_animal" required>
+                            <option value="">Sélectionnez la race</option>
+                            <option value="Chien">Chien</option>
+                            <option value="Chat">Chat</option>
+                            <option value="Oiseau">Oiseau</option>
+                            <option value="Rongeur">Rongeur</option>
+                            <option value="Lapin">Lapin</option>
+                            <option value="Furet">Furet</option>
+                            <option value="Hamster">Hamster</option>
+                            <option value="Serpent">Serpent</option>
+                            <option value="Tortue">Tortue</option>
+                            <!-- Ajoutez d'autres races prédéfinies ici -->
+                        </select>
 
-                    <label for="age_animal">Âge de l'animal (ans):</label>
-                    <input type="number" id="age_animal" name="age_animal" min="0" required>
+                        <label for="age_animal">Âge de l'animal (ans):</label>
+                        <input type="number" id="age_animal" name="age_animal" min="0" required>
 
-                    <label for="info_animal">Informations sur l'animal:</label>
-                    <textarea id="info_animal" name="info_animal" required></textarea>
+                        <label for="info_animal">Informations sur l'animal:</label>
+                        <textarea id="info_animal" name="info_animal" required></textarea>
 
-                    <button type="submit">Créer l'animal</button>
+                        <button type="submit">Créer l'animal</button>
 
-                    <?php if (isset($error) && strpos($error, 'animal') !== false): ?>
-                        <p class="message error"><?php echo htmlspecialchars($error); ?></p>
-                    <?php endif; ?>
-                    <?php if (isset($success) && strpos($success, 'animal') !== false): ?>
-                        <p class="message success"><?php echo htmlspecialchars($success); ?></p>
-                    <?php endif; ?>
-                </form>
+                        <?php if (isset($error) && strpos($error, 'animal') !== false): ?>
+                            <p class="message error"><?php echo htmlspecialchars($error); ?></p>
+                        <?php endif; ?>
+                        <?php if (isset($success) && strpos($success, 'animal') !== false): ?>
+                            <p class="message success"><?php echo htmlspecialchars($success); ?></p>
+                        <?php endif; ?>
+                    </form>
+                </div>
             </div>
 
-            <!-- Formulaire pour créer une nouvelle adresse -->
-            <div class="form-block">
-                <h2>Créer une Nouvelle Adresse</h2>
-                <form method="POST" action="/PetBesties/poster_annonce">
-                    <input type="hidden" name="action" value="create_address">
+            <!-- Accordéon pour créer une nouvelle adresse -->
+            <button class="accordion">Créer une Nouvelle Adresse</button>
+            <div class="panel">
+                <div class="form-block">
+                    <form method="POST" action="/PetBesties/poster_annonce">
+                        <input type="hidden" name="action" value="create_address">
 
-                    <label for="numero">Numéro:</label>
-                    <input type="number" id="numero" name="numero_adresse" required>
+                        <label for="numero">Numéro:</label>
+                        <input type="number" id="numero" name="numero_adresse" required>
 
-                    <label for="rue">Rue:</label>
-                    <input type="text" id="rue" name="rue_adresse" required>
+                        <label for="rue">Rue:</label>
+                        <input type="text" id="rue" name="rue_adresse" required>
 
-                    <label for="nom">Ville:</label>
-                    <input type="text" id="nom" name="nom_adresse" required>
+                        <label for="nom">Ville:</label>
+                        <input type="text" id="nom" name="nom_adresse" required>
 
-                    <label for="complement">Complément:</label>
-                    <input type="text" id="complement" name="complement_adresse">
+                        <label for="complement">Complément:</label>
+                        <input type="text" id="complement" name="complement_adresse">
 
-                    <label for="latitude">Latitude:</label>
-                    <input type="text" id="latitude" name="latitude" readonly>
+                        <label for="latitude">Latitude:</label>
+                        <input type="text" id="latitude" name="latitude" readonly>
 
-                    <label for="longitude">Longitude:</label>
-                    <input type="text" id="longitude" name="longitude" readonly>
+                        <label for="longitude">Longitude:</label>
+                        <input type="text" id="longitude" name="longitude" readonly>
 
-                    <button type="button" id="geocodeBtn">Géocoder l'adresse</button>
-                    <button type="submit">Créer l'adresse</button>
+                        <button type="button" id="geocodeBtn">Géocoder l'adresse</button>
+                        <button type="submit">Créer l'adresse</button>
 
-                    <?php if (isset($error) && strpos($error, 'adresse') !== false): ?>
-                        <p class="message error"><?php echo htmlspecialchars($error); ?></p>
-                    <?php endif; ?>
-                    <?php if (isset($success) && strpos($success, 'adresse') !== false): ?>
-                        <p class="message success"><?php echo htmlspecialchars($success); ?></p>
-                    <?php endif; ?>
-                </form>
+                        <?php if (isset($error) && strpos($error, 'adresse') !== false): ?>
+                            <p class="message error"><?php echo htmlspecialchars($error); ?></p>
+                        <?php endif; ?>
+                        <?php if (isset($success) && strpos($success, 'adresse') !== false): ?>
+                            <p class="message success"><?php echo htmlspecialchars($success); ?></p>
+                        <?php endif; ?>
+                    </form>
+                </div>
             </div>
         </div>
 
     </div>
 
     <script>
-    document.getElementById('geocodeBtn').addEventListener('click', function() {
-        const numero = document.getElementById('numero').value;
-        const rue = document.getElementById('rue').value;
-        const ville = document.getElementById('nom').value;
+        // Fonction pour gérer les accordéons avec animation
+        document.querySelectorAll('.accordion').forEach(button => {
+            button.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const panel = this.nextElementSibling;
+                panel.classList.toggle('show');
 
-        if (!numero || !rue || !ville) {
-            alert("Veuillez renseigner le numéro, la rue et la ville avant de géocoder.");
-            return;
-        }
-
-        const query = encodeURIComponent(`${numero} ${rue} ${ville}`);
-
-        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data && data.length > 0) {
-                    const result = data[0];
-                    document.getElementById('latitude').value = result.lat;
-                    document.getElementById('longitude').value = result.lon;
+                // Ajuster la hauteur maximale pour l'animation
+                if (panel.classList.contains('show')) {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
                 } else {
-                    alert("Aucune coordonnée trouvée pour cette adresse.");
+                    panel.style.maxHeight = null;
                 }
-            })
-            .catch(err => {
-                console.error(err);
-                alert("Erreur lors du géocodage. Vérifiez votre connexion ou réessayez plus tard.");
             });
-    });
+        });
+
+        // Gestion du géocodage pour la première adresse
+        document.getElementById('geocodeBtn').addEventListener('click', function() {
+            const numero = document.getElementById('numero').value;
+            const rue = document.getElementById('rue').value;
+            const ville = document.getElementById('nom').value;
+
+            if (!numero || !rue || !ville) {
+                alert("Veuillez renseigner le numéro, la rue et la ville avant de géocoder.");
+                return;
+            }
+
+            const query = encodeURIComponent(`${numero} ${rue} ${ville}`);
+
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.length > 0) {
+                        const result = data[0];
+                        document.getElementById('latitude').value = result.lat;
+                        document.getElementById('longitude').value = result.lon;
+                    } else {
+                        alert("Aucune coordonnée trouvée pour cette adresse.");
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("Erreur lors du géocodage. Vérifiez votre connexion ou réessayez plus tard.");
+                });
+        });
     </script>
 
 </body>
